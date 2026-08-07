@@ -12,13 +12,12 @@
     "test:prepare": "npm run db:migrate:test",
     "test:full": "npm run test:prepare && npm test",
     "lint": "eslint .",
-    "db:migrate": "sequelize-cli db:migrate",
-    "db:migrate:test": "sequelize-cli db:migrate --env test",
-    "db:migrate:undo": "sequelize-cli db:migrate:undo",
-    "db:migrate:test:undo": "sequelize-cli db:migrate:undo --env test",
-    "db:seed": "sequelize-cli db:seed:all",
-    "db:seed:undo": "sequelize-cli db:seed:undo:all",
-    "jobs:expire": "node src/scripts/closeExpiredJobs.js"
+    "db:migrate": "sequelize-cli db:migrate --config src/config/sequelize-cli.cjs --migrations-path src/migrations",
+    "db:migrate:test": "sequelize-cli db:migrate --env test --config src/config/sequelize-cli.cjs --migrations-path src/migrations",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo --config src/config/sequelize-cli.cjs --migrations-path src/migrations",
+    "db:migrate:test:undo": "sequelize-cli db:migrate:undo --env test --config src/config/sequelize-cli.cjs --migrations-path src/migrations",
+    "db:seed": "sequelize-cli db:seed:all --config src/config/sequelize-cli.cjs --seeders-path src/seeders",
+    "db:seed:undo": "sequelize-cli db:seed:undo:all --config src/config/sequelize-cli.cjs --seeders-path src/seeders"
   },
   "keywords": [
     "careerforge",
