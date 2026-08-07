@@ -34,7 +34,9 @@ const commonConfig = {
   logging: false
 };
 
-const productionCaPath = "/etc/secrets/ca.pem";
+const productionCaPath =
+  process.env.DB_CA_CERT_PATH ||
+  "/etc/secrets/ca.pem";
 
 const productionConfig = {
   ...commonConfig,
