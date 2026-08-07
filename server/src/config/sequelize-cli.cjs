@@ -34,15 +34,21 @@ const commonConfig = {
   logging: false
 };
 
+const productionCaPath = "/etc/secrets/ca.pem";
+
 const productionConfig = {
   ...commonConfig,
 
   dialectOptions: {
     ssl: {
-      ca: fs.readFileSync(
-        "/etc/secrets/ca.pem",
-        "utf8"
-      ),
+      ...(fs.existsSync(productionCaPath)
+        ? {
+          ca: fs.readFileSync(
+            productionCaPath,
+            "utf8"
+          )
+        }
+        : {}),
       rejectUnauthorized: true
     }
   }
