@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const fs = require("fs");
+
 const developmentDatabase =
   process.env.DB_NAME;
 
@@ -37,6 +39,10 @@ const productionConfig = {
 
   dialectOptions: {
     ssl: {
+      ca: fs.readFileSync(
+        "/etc/secrets/ca.pem",
+        "utf8"
+      ),
       rejectUnauthorized: true
     }
   }
