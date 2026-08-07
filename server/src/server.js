@@ -33,7 +33,7 @@ const shutdownServer = async (
       sessionCleanupInterval = null;
 
       console.log(
-        "✅ Session cleanup interval stopped"
+        "Session cleanup interval stopped"
       );
     }
 
@@ -49,19 +49,23 @@ const shutdownServer = async (
         });
       });
 
-      console.log("✅ HTTP server closed");
+      httpServer = null;
+
+      console.log(
+        "HTTP server closed"
+      );
     }
 
     await closeDatabase();
 
     console.log(
-      "✅ CareerForge shutdown completed"
+      "CareerForge shutdown completed"
     );
 
     process.exit(exitCode);
   } catch (error) {
     console.error(
-      "❌ Error during graceful shutdown:",
+      "Error during graceful shutdown:",
       error.message
     );
 
@@ -71,10 +75,59 @@ const shutdownServer = async (
 
 const startServer = async () => {
   try {
+    /*
+     * Bind the HTTP server first.
+     *
+     * Render requires the application to open its assigned port
+     * within the deployment startup window.
+     */
+    httpServer = app.listen(
+      env.port,
+      "0.0.0.0",
+      () => {
+        console.log(
+          `CareerForge Server Running on Port ${env.port}`
+        );
+      }
+    );
+
+    httpServer.on("error", (error) => {
+      if (error.code === "EADDRINUSE") {
+        console.error(
+          `Port ${env.port} is already in use`
+        );
+      } else if (error.code === "EACCES") {
+        console.error(
+          `Permission denied while using port ${env.port}`
+        );
+      } else {
+        console.error(
+          "HTTP server error:",
+          error.message
+        );
+      }
+
+      void shutdownServer(
+        "HTTP_SERVER_ERROR",
+        1
+      );
+    });
+
+    /*
+     * Connect to MySQL after the Render port is open.
+     * Startup still fails if the database connection fails.
+     */
     await connectDatabase();
 
+    /*
+     * Run the initial session cleanup after the database
+     * connection has been established.
+     */
     await runSessionCleanup();
 
+    /*
+     * Run session cleanup every hour.
+     */
     sessionCleanupInterval = setInterval(
       () => {
         void runSessionCleanup();
@@ -84,44 +137,34 @@ const startServer = async () => {
 
     sessionCleanupInterval.unref();
 
-    httpServer = app.listen(env.port, () => {
-      console.log(
-        `🚀 CareerForge Server Running on Port ${env.port}`
-      );
-    });
-
-    httpServer.on("error", (error) => {
-      if (error.code === "EADDRINUSE") {
-        console.error(
-          `❌ Port ${env.port} is already in use`
-        );
-      } else if (error.code === "EACCES") {
-        console.error(
-          `❌ Permission denied while using port ${env.port}`
-        );
-      } else {
-        console.error(
-          "❌ HTTP server error:",
-          error.message
-        );
-      }
-
-      shutdownServer(
-        "HTTP_SERVER_ERROR",
-        1
-      );
-    });
+    console.log(
+      "CareerForge startup completed"
+    );
   } catch (error) {
     console.error(
-      "❌ CareerForge startup failed:",
+      "CareerForge startup failed:",
       error.message
     );
 
     try {
+      if (httpServer) {
+        await new Promise((resolve) => {
+          httpServer.close(() => {
+            resolve();
+          });
+        });
+
+        httpServer = null;
+
+        console.log(
+          "HTTP server closed after startup failure"
+        );
+      }
+
       await closeDatabase();
     } catch (closeError) {
       console.error(
-        "❌ Database cleanup failed:",
+        "Startup cleanup failed:",
         closeError.message
       );
     }
@@ -131,40 +174,46 @@ const startServer = async () => {
 };
 
 process.on("SIGINT", () => {
-  shutdownServer("SIGINT");
+  void shutdownServer("SIGINT");
 });
 
 process.on("SIGTERM", () => {
-  shutdownServer("SIGTERM");
+  void shutdownServer("SIGTERM");
 });
 
-process.on("unhandledRejection", (reason) => {
-  const message =
-    reason instanceof Error
-      ? reason.message
-      : String(reason);
+process.on(
+  "unhandledRejection",
+  (reason) => {
+    const message =
+      reason instanceof Error
+        ? reason.message
+        : String(reason);
 
-  console.error(
-    "❌ Unhandled promise rejection:",
-    message
-  );
+    console.error(
+      "Unhandled promise rejection:",
+      message
+    );
 
-  shutdownServer(
-    "UNHANDLED_REJECTION",
-    1
-  );
-});
+    void shutdownServer(
+      "UNHANDLED_REJECTION",
+      1
+    );
+  }
+);
 
-process.on("uncaughtException", (error) => {
-  console.error(
-    "❌ Uncaught exception:",
-    error.message
-  );
+process.on(
+  "uncaughtException",
+  (error) => {
+    console.error(
+      "Uncaught exception:",
+      error.message
+    );
 
-  shutdownServer(
-    "UNCAUGHT_EXCEPTION",
-    1
-  );
-});
+    void shutdownServer(
+      "UNCAUGHT_EXCEPTION",
+      1
+    );
+  }
+);
 
-startServer();
+void startServer();
