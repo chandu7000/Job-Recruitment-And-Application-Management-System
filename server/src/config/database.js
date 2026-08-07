@@ -57,11 +57,11 @@ const connectDatabase = async () => {
     await sequelize.authenticate();
 
     console.log(
-      `✅ MySQL Connected Successfully using Sequelize: ${env.database.name}`
+      `MySQL Connected Successfully using Sequelize: ${env.database.name}`
     );
   } catch (error) {
     console.error(
-      "❌ Unable to connect to the MySQL database:",
+      "Unable to connect to the MySQL database:",
       error.message
     );
 
