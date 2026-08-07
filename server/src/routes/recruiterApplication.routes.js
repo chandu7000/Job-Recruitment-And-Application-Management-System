@@ -1,0 +1,14 @@
+import { Router } from "express";
+import authenticate from "../middlewares/auth.middleware.js";
+import authorize from "../middlewares/authorize.middleware.js";
+import validateRequest from "../middlewares/validateRequest.middleware.js";
+import { USER_ROLES } from "../constants/app.constants.js";
+import { applicants,applicantDetails,saveNotes,updateStatus,getHistory } from "../controllers/recruiterApplication.controller.js";
+import { applicationIdValidator,applicationListValidator,notesValidator,statusValidator } from "../validators/application.validator.js";
+const router=Router();
+router.get("/",authenticate,authorize(USER_ROLES.RECRUITER),applicationListValidator,validateRequest,applicants);
+router.get("/:applicationId",authenticate,authorize(USER_ROLES.RECRUITER),applicationIdValidator,validateRequest,applicantDetails);
+router.get("/:applicationId/history",authenticate,authorize(USER_ROLES.RECRUITER),applicationIdValidator,validateRequest,getHistory);
+router.put("/:applicationId/notes",authenticate,authorize(USER_ROLES.RECRUITER),notesValidator,validateRequest,saveNotes);
+router.patch("/:applicationId/status",authenticate,authorize(USER_ROLES.RECRUITER),statusValidator,validateRequest,updateStatus);
+export default router;

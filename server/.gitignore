@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+server/.env
+server/.env.*
+!server/.env.example
+
+# Test coverage
+coverage/
+server/coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime files
+*.pid
+*.seed
+*.pid.lock
+
+# Uploads and temporary files
+uploads/*
+server/uploads/*
+!uploads/.gitkeep
+!server/uploads/.gitkeep
+
+# Build and cache
+dist/
+build/
+.cache/
+.eslintcache
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sequelize generated local data
+*.sqlite
+*.sqlite3
+
+# Test artifacts
+test-results/
+junit.xml

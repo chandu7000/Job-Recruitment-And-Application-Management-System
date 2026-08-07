@@ -1,0 +1,13 @@
+import { Router } from "express";
+import authenticate from "../middlewares/auth.middleware.js";
+import authorize from "../middlewares/authorize.middleware.js";
+import validateRequest from "../middlewares/validateRequest.middleware.js";
+import { USER_ROLES } from "../constants/app.constants.js";
+import { applyJob,myApplications,myApplicationDetails,withdrawApplication } from "../controllers/application.controller.js";
+import { applyValidator,applicationIdValidator,applicationListValidator,withdrawValidator } from "../validators/application.validator.js";
+const router=Router();
+router.get("/",authenticate,authorize(USER_ROLES.JOB_SEEKER),applicationListValidator,validateRequest,myApplications);
+router.post("/jobs/:jobId",authenticate,authorize(USER_ROLES.JOB_SEEKER),applyValidator,validateRequest,applyJob);
+router.get("/:applicationId",authenticate,authorize(USER_ROLES.JOB_SEEKER),applicationIdValidator,validateRequest,myApplicationDetails);
+router.patch("/:applicationId/withdraw",authenticate,authorize(USER_ROLES.JOB_SEEKER),withdrawValidator,validateRequest,withdrawApplication);
+export default router;

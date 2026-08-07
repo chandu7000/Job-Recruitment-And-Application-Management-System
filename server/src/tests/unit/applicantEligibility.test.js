@@ -1,0 +1,2 @@
+import { assertApplicantEligibility } from "../../utils/applicantEligibility.js";
+describe("applicant eligibility",()=>{test("accepts active complete applicant",()=>expect(()=>assertApplicantEligibility({user:{status:"ACTIVE"},profile:{firstName:"A",lastName:"B",resumeUrl:"https://resume"}})).not.toThrow());test("requires resume",()=>expect(()=>assertApplicantEligibility({user:{status:"ACTIVE"},profile:{firstName:"A",lastName:"B"}})).toThrow());});

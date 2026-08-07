@@ -1,0 +1,5 @@
+import { sendSuccess } from "../utils/apiResponse.js"; import { applyToJob,getMyApplications,getMyApplication,withdrawMyApplication } from "../services/application.service.js";
+export const applyJob=async(req,res)=>sendSuccess(res,201,"Application submitted successfully.",{application:await applyToJob({candidateId:req.user.id,jobId:req.params.jobId,coverLetter:req.body.coverLetter})});
+export const myApplications=async(req,res)=>{const r=await getMyApplications({candidateId:req.user.id,query:req.query});return sendSuccess(res,200,"Applications retrieved successfully.",{applications:r.items},r.meta);};
+export const myApplicationDetails=async(req,res)=>sendSuccess(res,200,"Application retrieved successfully.",{application:await getMyApplication({candidateId:req.user.id,applicationId:req.params.applicationId})});
+export const withdrawApplication=async(req,res)=>sendSuccess(res,200,"Application withdrawn successfully.",{application:await withdrawMyApplication({candidateId:req.user.id,applicationId:req.params.applicationId,reason:req.body.reason})});

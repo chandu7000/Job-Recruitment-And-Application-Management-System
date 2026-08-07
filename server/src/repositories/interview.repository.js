@@ -1,0 +1,13 @@
+import { Op } from "sequelize";
+import Interview from "../models/interview.model.js"; import InterviewHistory from "../models/interviewHistory.model.js";
+import Application from "../models/application.model.js"; import Job from "../models/job.model.js";
+import { ACTIVE_INTERVIEW_STATUSES } from "../constants/interview.constants.js";
+export const findInterview=(id,options={})=>Interview.findByPk(id,options);
+export const findApplicationForRecruiter=(applicationId,recruiterId,options={})=>Application.findOne({where:{id:applicationId},include:[{model:Job,as:"job",required:true,where:{createdBy:recruiterId},attributes:["id","createdBy"]}],...options});
+export const findActiveForApplication=(applicationId,options={})=>Interview.findOne({where:{applicationId,status:{[Op.in]:ACTIVE_INTERVIEW_STATUSES}},...options});
+export const findConflict=({candidateId,recruiterId,start,end,excludeId},options={})=>Interview.findOne({where:{status:{[Op.in]:ACTIVE_INTERVIEW_STATUSES},...(excludeId&&{id:{[Op.ne]:excludeId}}),[Op.and]:[{scheduledStartAt:{[Op.lt]:end}},{scheduledEndAt:{[Op.gt]:start}},{[Op.or]:[{candidateId},{recruiterId}]}]},...options});
+export const createInterview=(values,options={})=>Interview.create(values,options); export const createHistory=(values,options={})=>InterviewHistory.create(values,options);
+export const getHistory=(interviewId)=>InterviewHistory.findAll({where:{interviewId},order:[["createdAt","ASC"]]});
+const list=(where,o)=>Interview.findAndCountAll({where,limit:o.limit,offset:o.offset,order:[[o.sort||"scheduledStartAt",o.order||"ASC"]]});
+export const listRecruiter=(recruiterId,o)=>list({recruiterId,...(o.status&&{status:o.status}),...(o.meetingType&&{meetingType:o.meetingType}),...(o.jobId&&{jobId:o.jobId}),...(o.companyId&&{companyId:o.companyId}),...((o.from||o.to)&&{scheduledStartAt:{...(o.from&&{[Op.gte]:new Date(o.from)}),...(o.to&&{[Op.lte]:new Date(o.to)})}})},o);
+export const listCandidate=(candidateId,o)=>list({candidateId,...(o.status&&{status:o.status}),...(o.upcoming==="true"&&{scheduledStartAt:{[Op.gte]:new Date()}}),...(o.past==="true"&&{scheduledEndAt:{[Op.lt]:new Date()}})},o);

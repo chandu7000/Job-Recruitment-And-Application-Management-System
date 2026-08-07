@@ -1,0 +1,24 @@
+const COMPANY_STATUSES = Object.freeze({
+  DRAFT: "DRAFT",
+
+  PENDING_VERIFICATION:
+    "PENDING_VERIFICATION",
+
+  VERIFIED: "VERIFIED",
+
+  REJECTED: "REJECTED",
+
+  RESUBMITTED: "RESUBMITTED"
+});
+
+const COMPANY_STATUS_VALUES =
+  Object.freeze(
+    Object.values(
+      COMPANY_STATUSES
+    )
+  );
+
+export {
+  COMPANY_STATUSES,
+  COMPANY_STATUS_VALUES
+};

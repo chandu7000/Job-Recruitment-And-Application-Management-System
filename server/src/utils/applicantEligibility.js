@@ -1,0 +1,2 @@
+import AppError from "./AppError.js";
+export const assertApplicantEligibility=({user,profile})=>{if(!user||user.status!=="ACTIVE")throw new AppError("An active account is required to apply.",403,"APPLICANT_ACCOUNT_NOT_ACTIVE"); if(!profile)throw new AppError("Complete your job seeker profile before applying.",422,"APPLICANT_PROFILE_REQUIRED"); if(!profile.firstName||!profile.lastName||!profile.resumeUrl)throw new AppError("First name, last name, and an uploaded resume are required before applying.",422,"APPLICANT_PROFILE_INCOMPLETE");};

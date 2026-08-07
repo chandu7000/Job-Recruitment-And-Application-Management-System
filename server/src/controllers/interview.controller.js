@@ -1,0 +1,13 @@
+import { sendSuccess } from "../utils/apiResponse.js"; import * as service from "../services/interview.service.js";
+export const schedule=async(req,res)=>sendSuccess(res,201,"Interview scheduled successfully.",{interview:await service.scheduleInterview({recruiterId:req.user.id,applicationId:req.params.applicationId,body:req.body,req})});
+export const recruiterList=async(req,res)=>{const r=await service.listRecruiterInterviews({recruiterId:req.user.id,query:req.query});return sendSuccess(res,200,"Interviews retrieved successfully.",{interviews:r.items},r.meta)};
+export const candidateList=async(req,res)=>{const r=await service.listCandidateInterviews({candidateId:req.user.id,query:req.query});return sendSuccess(res,200,"Interviews retrieved successfully.",{interviews:r.items},r.meta)};
+export const recruiterDetail=async(req,res)=>sendSuccess(res,200,"Interview retrieved successfully.",{interview:await service.recruiterDetails({recruiterId:req.user.id,interviewId:req.params.interviewId})});
+export const candidateDetail=async(req,res)=>sendSuccess(res,200,"Interview retrieved successfully.",{interview:await service.candidateDetails({candidateId:req.user.id,interviewId:req.params.interviewId})});
+export const reschedule=async(req,res)=>sendSuccess(res,200,"Interview rescheduled successfully.",{interview:await service.rescheduleInterview({recruiterId:req.user.id,interviewId:req.params.interviewId,body:req.body,req})});
+export const cancel=async(req,res)=>sendSuccess(res,200,"Interview cancelled successfully.",{interview:await service.cancelInterview({recruiterId:req.user.id,interviewId:req.params.interviewId,reason:req.body.reason,req})});
+export const confirm=async(req,res)=>sendSuccess(res,200,"Interview attendance confirmed.",{interview:await service.confirmInterview({candidateId:req.user.id,interviewId:req.params.interviewId,req})});
+export const decline=async(req,res)=>sendSuccess(res,200,"Interview attendance declined.",{interview:await service.declineInterview({candidateId:req.user.id,interviewId:req.params.interviewId,reason:req.body.reason,req})});
+export const complete=async(req,res)=>sendSuccess(res,200,"Interview completed successfully.",{interview:await service.completeInterview({recruiterId:req.user.id,interviewId:req.params.interviewId,req})});
+export const feedback=async(req,res)=>sendSuccess(res,200,"Interview feedback saved successfully.",{interview:await service.saveFeedback({recruiterId:req.user.id,interviewId:req.params.interviewId,body:req.body,req})});
+export const history=async(req,res)=>sendSuccess(res,200,"Interview history retrieved successfully.",{history:await service.interviewHistory({userId:req.user.id,role:req.user.role,interviewId:req.params.interviewId})});

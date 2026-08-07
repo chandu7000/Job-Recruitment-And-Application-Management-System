@@ -1,0 +1,6 @@
+import { sendSuccess } from "../utils/apiResponse.js"; import { listApplicants,getApplicantDetails,updateRecruiterNotes,changeApplicationStatus,applicationHistory } from "../services/recruiterApplication.service.js";
+export const applicants=async(req,res)=>{const r=await listApplicants({recruiterId:req.user.id,query:req.query});return sendSuccess(res,200,"Applicants retrieved successfully.",{applications:r.items},r.meta);};
+export const applicantDetails=async(req,res)=>sendSuccess(res,200,"Applicant retrieved successfully.",{application:await getApplicantDetails({recruiterId:req.user.id,applicationId:req.params.applicationId})});
+export const saveNotes=async(req,res)=>sendSuccess(res,200,"Recruiter notes updated successfully.",{application:await updateRecruiterNotes({recruiterId:req.user.id,applicationId:req.params.applicationId,notes:req.body.notes})});
+export const updateStatus=async(req,res)=>sendSuccess(res,200,"Application status updated successfully.",{application:await changeApplicationStatus({recruiterId:req.user.id,applicationId:req.params.applicationId,status:req.body.status,reason:req.body.reason})});
+export const getHistory=async(req,res)=>sendSuccess(res,200,"Application status history retrieved successfully.",{history:await applicationHistory({recruiterId:req.user.id,applicationId:req.params.applicationId})});

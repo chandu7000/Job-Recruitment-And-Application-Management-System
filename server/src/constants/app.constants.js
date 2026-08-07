@@ -1,0 +1,112 @@
+export const USER_ROLES = Object.freeze({
+  ADMIN: "ADMIN",
+  RECRUITER: "RECRUITER",
+  JOB_SEEKER: "JOB_SEEKER"
+});
+
+export const ACCOUNT_STATUS = Object.freeze({
+  PENDING_VERIFICATION:
+    "PENDING_VERIFICATION",
+  ACTIVE: "ACTIVE",
+  DISABLED: "DISABLED",
+  SUSPENDED: "SUSPENDED"
+});
+
+/*
+ * Backward-compatible export.
+ *
+ * Existing files may currently import JOB_STATUS from
+ * app.constants.js. The canonical job lifecycle constants now live
+ * in job.constants.js, but this alias prevents existing imports from
+ * breaking while Phase 6 is implemented.
+ */
+export {
+  JOB_STATUSES as JOB_STATUS
+} from "./job.constants.js";
+
+export const APPLICATION_STATUS =
+  Object.freeze({
+    APPLIED: "APPLIED",
+    UNDER_REVIEW: "UNDER_REVIEW",
+    SHORTLISTED: "SHORTLISTED",
+    INTERVIEW_SCHEDULED:
+      "INTERVIEW_SCHEDULED",
+    INTERVIEW_COMPLETED:
+      "INTERVIEW_COMPLETED",
+    OFFERED: "OFFERED",
+    HIRED: "HIRED",
+    REJECTED: "REJECTED",
+    WITHDRAWN: "WITHDRAWN"
+  });
+
+export const EMPLOYMENT_TYPES =
+  Object.freeze({
+    FULL_TIME: "FULL_TIME",
+    PART_TIME: "PART_TIME",
+    INTERNSHIP: "INTERNSHIP",
+    CONTRACT: "CONTRACT",
+    FREELANCE: "FREELANCE"
+  });
+
+export const EXPERIENCE_LEVELS =
+  Object.freeze({
+    FRESHER: "FRESHER",
+    JUNIOR: "JUNIOR",
+    MID: "MID",
+    SENIOR: "SENIOR",
+    LEAD: "LEAD"
+  });
+
+export const TOKEN_TYPES = Object.freeze({
+  ACCESS: "ACCESS",
+  REFRESH: "REFRESH",
+  PASSWORD_RESET: "PASSWORD_RESET",
+  EMAIL_VERIFICATION:
+    "EMAIL_VERIFICATION"
+});
+
+export const SESSION_REVOCATION_REASONS =
+  Object.freeze({
+    LOGOUT: "LOGOUT",
+    LOGOUT_ALL: "LOGOUT_ALL",
+    PASSWORD_CHANGED: "PASSWORD_CHANGED",
+    PASSWORD_RESET: "PASSWORD_RESET",
+    TOKEN_REUSE: "TOKEN_REUSE",
+    ACCOUNT_DISABLED: "ACCOUNT_DISABLED",
+    ACCOUNT_SUSPENDED:
+      "ACCOUNT_SUSPENDED",
+    ADMIN_REVOKED: "ADMIN_REVOKED"
+  });
+
+export const AUTH_EVENTS = Object.freeze({
+  USER_REGISTERED: "USER_REGISTERED",
+  EMAIL_VERIFICATION_SENT:
+    "EMAIL_VERIFICATION_SENT",
+  EMAIL_VERIFIED: "EMAIL_VERIFIED",
+  LOGIN_SUCCESS: "LOGIN_SUCCESS",
+  LOGIN_FAILED: "LOGIN_FAILED",
+  ACCOUNT_LOCKED: "ACCOUNT_LOCKED",
+  ACCESS_TOKEN_REFRESHED:
+    "ACCESS_TOKEN_REFRESHED",
+  REFRESH_TOKEN_ROTATED:
+    "REFRESH_TOKEN_ROTATED",
+  REFRESH_TOKEN_REUSE_DETECTED:
+    "REFRESH_TOKEN_REUSE_DETECTED",
+  LOGOUT: "LOGOUT",
+  LOGOUT_ALL: "LOGOUT_ALL",
+  SESSION_REVOKED: "SESSION_REVOKED",
+  PASSWORD_RESET_REQUESTED:
+    "PASSWORD_RESET_REQUESTED",
+  PASSWORD_RESET_COMPLETED:
+    "PASSWORD_RESET_COMPLETED",
+  PASSWORD_CHANGED: "PASSWORD_CHANGED"
+});
+
+export const COOKIE_NAMES = Object.freeze({
+  REFRESH_TOKEN: "refreshToken"
+});
+
+export const JWT_PURPOSES = Object.freeze({
+  ACCESS_TOKEN: "ACCESS_TOKEN",
+  REFRESH_TOKEN: "REFRESH_TOKEN"
+});

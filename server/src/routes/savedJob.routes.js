@@ -1,0 +1,12 @@
+import { Router } from "express";
+import authenticate from "../middlewares/auth.middleware.js";
+import authorize from "../middlewares/authorize.middleware.js";
+import validateRequest from "../middlewares/validateRequest.middleware.js";
+import { USER_ROLES } from "../constants/app.constants.js";
+import { saveJob, removeSavedJob, getMySavedJobs } from "../controllers/savedJob.controller.js";
+import { savedJobIdValidator, savedJobListValidator } from "../validators/savedJob.validator.js";
+const router=Router();
+router.get("/",authenticate,authorize(USER_ROLES.JOB_SEEKER),savedJobListValidator,validateRequest,getMySavedJobs);
+router.post("/:jobId",authenticate,authorize(USER_ROLES.JOB_SEEKER),savedJobIdValidator,validateRequest,saveJob);
+router.delete("/:jobId",authenticate,authorize(USER_ROLES.JOB_SEEKER),savedJobIdValidator,validateRequest,removeSavedJob);
+export default router;

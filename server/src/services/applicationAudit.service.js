@@ -1,0 +1,2 @@
+import ApplicationAuditEvent from "../models/applicationAuditEvent.model.js";
+export const recordApplicationAudit=async({req,event,applicationId=null,savedJobId=null,metadata=null,transaction=null})=>ApplicationAuditEvent.create({actorId:req?.user?.id||null,applicationId,savedJobId,event,requestId:req?.requestId||null,ipAddress:req?.ip||null,userAgent:req?.get?.("user-agent")||null,metadata},{transaction}).catch(()=>null);
