@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+import fs from "fs";
 import env from "./env.js";
 
 const sequelize = new Sequelize(
@@ -27,6 +28,10 @@ const sequelize = new Sequelize(
       ...(env.isProduction
         ? {
           ssl: {
+            ca: fs.readFileSync(
+              "/etc/secrets/ca.pem",
+              "utf8"
+            ),
             rejectUnauthorized: true
           }
         }
