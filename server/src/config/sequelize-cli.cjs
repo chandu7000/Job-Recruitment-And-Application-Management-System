@@ -32,6 +32,16 @@ const commonConfig = {
   logging: false
 };
 
+const productionConfig = {
+  ...commonConfig,
+
+  dialectOptions: {
+    ssl: {
+      rejectUnauthorized: true
+    }
+  }
+};
+
 module.exports = {
   development: {
     ...commonConfig,
@@ -44,7 +54,7 @@ module.exports = {
   },
 
   production: {
-    ...commonConfig,
+    ...productionConfig,
     database: developmentDatabase
   }
 };

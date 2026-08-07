@@ -22,7 +22,15 @@ const sequelize = new Sequelize(
     },
 
     dialectOptions: {
-      connectTimeout: 10000
+      connectTimeout: 10000,
+
+      ...(env.isProduction
+        ? {
+          ssl: {
+            rejectUnauthorized: true
+          }
+        }
+        : {})
     },
 
     define: {
