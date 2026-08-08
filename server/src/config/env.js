@@ -47,7 +47,8 @@ const getNumberEnvironmentVariable = (
     maximum = Number.MAX_SAFE_INTEGER
   } = options;
 
-  const rawValue = process.env[variableName];
+  const rawValue =
+    process.env[variableName];
 
   if (
     (
@@ -98,7 +99,8 @@ const validateSecretStrength = (
     );
   }
 
-  const normalizedValue = value.toLowerCase();
+  const normalizedValue =
+    value.toLowerCase();
 
   if (
     UNSAFE_SECRET_VALUES.some(
@@ -170,11 +172,11 @@ const env = {
     name:
       nodeEnvironment === "test"
         ? getRequiredEnvironmentVariable(
-          "TEST_DB_NAME"
-        )
+            "TEST_DB_NAME"
+          )
         : getRequiredEnvironmentVariable(
-          "DB_NAME"
-        ),
+            "DB_NAME"
+          ),
 
     developmentName:
       getRequiredEnvironmentVariable(
@@ -203,7 +205,9 @@ const env = {
         "CLIENT_ORIGIN"
       )
         .split(",")
-        .map((origin) => origin.trim())
+        .map((origin) =>
+          origin.trim()
+        )
         .filter(Boolean)
   },
 
@@ -329,6 +333,46 @@ const env = {
           "EMAIL_VERIFICATION_RATE_LIMIT_MAX_REQUESTS",
           {
             defaultValue: 5,
+            minimum: 1
+          }
+        )
+    },
+
+    emailChangeRequest: {
+      windowMinutes:
+        getNumberEnvironmentVariable(
+          "EMAIL_CHANGE_REQUEST_RATE_LIMIT_WINDOW_MINUTES",
+          {
+            defaultValue: 60,
+            minimum: 1
+          }
+        ),
+
+      maxRequests:
+        getNumberEnvironmentVariable(
+          "EMAIL_CHANGE_REQUEST_RATE_LIMIT_MAX_REQUESTS",
+          {
+            defaultValue: 5,
+            minimum: 1
+          }
+        )
+    },
+
+    emailChangeVerification: {
+      windowMinutes:
+        getNumberEnvironmentVariable(
+          "EMAIL_CHANGE_VERIFICATION_RATE_LIMIT_WINDOW_MINUTES",
+          {
+            defaultValue: 15,
+            minimum: 1
+          }
+        ),
+
+      maxRequests:
+        getNumberEnvironmentVariable(
+          "EMAIL_CHANGE_VERIFICATION_RATE_LIMIT_MAX_REQUESTS",
+          {
+            defaultValue: 10,
             minimum: 1
           }
         )

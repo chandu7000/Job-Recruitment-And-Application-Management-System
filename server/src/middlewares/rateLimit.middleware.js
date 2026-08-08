@@ -3,17 +3,17 @@ import env from "../config/env.js";
 
 const createRateLimitHandler =
   ({ code, message }) =>
-    (req, res) =>
-      res.status(429).json({
-        success: false,
-        message,
-        code,
-        errors: [],
-        requestId:
-          req.requestId || null,
-        timestamp:
-          new Date().toISOString()
-      });
+  (req, res) =>
+    res.status(429).json({
+      success: false,
+      message,
+      code,
+      errors: [],
+      requestId:
+        req.requestId || null,
+      timestamp:
+        new Date().toISOString()
+    });
 
 const createRateLimiter = ({
   windowMinutes,
@@ -102,6 +102,28 @@ const emailVerificationRateLimiter =
       "Too many email verification requests. Please try again later."
   });
 
+const emailChangeRequestRateLimiter =
+  createRateLimiter({
+    ...env.authRateLimit.emailChangeRequest,
+
+    code:
+      "EMAIL_CHANGE_REQUEST_RATE_LIMIT_EXCEEDED",
+
+    message:
+      "Too many email change requests. Please try again later."
+  });
+
+const emailChangeVerificationRateLimiter =
+  createRateLimiter({
+    ...env.authRateLimit.emailChangeVerification,
+
+    code:
+      "EMAIL_CHANGE_VERIFICATION_RATE_LIMIT_EXCEEDED",
+
+    message:
+      "Too many email change verification attempts. Please try again later."
+  });
+
 const refreshTokenRateLimiter =
   createRateLimiter({
     ...env.authRateLimit.refreshToken,
@@ -142,6 +164,8 @@ export {
   forgotPasswordRateLimiter,
   resetPasswordRateLimiter,
   emailVerificationRateLimiter,
+  emailChangeRequestRateLimiter,
+  emailChangeVerificationRateLimiter,
   refreshTokenRateLimiter,
   reportRateLimiter,
   uploadRateLimiter

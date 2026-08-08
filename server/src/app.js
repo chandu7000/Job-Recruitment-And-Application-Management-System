@@ -45,6 +45,7 @@ import errorMiddleware from "./middlewares/error.middleware.js";
 import requestIdMiddleware from "./middlewares/requestId.middleware.js";
 import securityHeaders from "./middlewares/securityHeaders.middleware.js";
 import requestSecurityMiddleware from "./middlewares/requestSecurity.middleware.js";
+// import responseSanitizerMiddleware from "./middlewares/responseSanitizer.middleware.js";
 
 const app = express();
 
@@ -109,6 +110,7 @@ app.use(
 
 app.use(cookieParser());
 app.use(requestSecurityMiddleware);
+// app.use(responseSanitizerMiddleware);
 
 if (!env.isTest) {
   app.use(

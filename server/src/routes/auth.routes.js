@@ -1,12 +1,7 @@
 import { Router } from "express";
 
-import {
-  USER_ROLES
-} from "../constants/app.constants.js";
-
-import authenticate, {
-  authorize
-} from "../middlewares/auth.middleware.js";
+import authenticate from
+  "../middlewares/auth.middleware.js";
 
 import validateRequest from
   "../middlewares/validateRequest.middleware.js";
@@ -16,6 +11,8 @@ import {
   registerRateLimiter,
   forgotPasswordRateLimiter,
   emailVerificationRateLimiter,
+  emailChangeRequestRateLimiter,
+  emailChangeVerificationRateLimiter,
   refreshTokenRateLimiter,
   resetPasswordRateLimiter
 } from "../middlewares/rateLimit.middleware.js";
@@ -79,12 +76,10 @@ router.post(
 );
 
 /*
- * Admin-only recruiter registration
+ * Public recruiter registration
  */
 router.post(
   "/register/recruiter",
-  authenticate,
-  authorize(USER_ROLES.ADMIN),
   registerRateLimiter,
   registerValidator,
   validateRequest,
@@ -175,13 +170,11 @@ router.post(
   changePasswordController
 );
 
-/*
- * Email-change routes
- */
 router.post(
   "/request-email-change",
   originProtection,
   authenticate,
+  emailChangeRequestRateLimiter,
   requestEmailChangeValidator,
   validateRequest,
   requestEmailChangeController
@@ -189,6 +182,7 @@ router.post(
 
 router.post(
   "/verify-email-change",
+  emailChangeVerificationRateLimiter,
   verifyEmailValidator,
   validateRequest,
   verifyEmailChangeController
@@ -211,7 +205,5 @@ router.post(
   validateRequest,
   verifyEmailController
 );
-
-
 
 export default router;
