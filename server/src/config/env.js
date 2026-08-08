@@ -459,29 +459,15 @@ const env = {
       )
   },
 
-  smtp: {
-    host:
+  email: {
+    brevoApiKey:
       getRequiredEnvironmentVariable(
-        "SMTP_HOST"
+        "BREVO_API_KEY"
       ),
 
-    port:
-      getNumberEnvironmentVariable(
-        "SMTP_PORT",
-        {
-          minimum: 1,
-          maximum: 65535
-        }
-      ),
-
-    user:
+    senderEmail:
       getRequiredEnvironmentVariable(
-        "SMTP_USER"
-      ),
-
-    password:
-      getRequiredEnvironmentVariable(
-        "SMTP_PASSWORD"
+        "BREVO_SENDER_EMAIL"
       )
   }
 };

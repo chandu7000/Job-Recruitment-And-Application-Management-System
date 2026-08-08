@@ -1,19 +1,14 @@
 import { jest } from "@jest/globals";
 
 process.env.NODE_ENV = "test";
-process.env.RESEND_API_KEY = "re_test_fake_key";
+process.env.BREVO_API_KEY =
+  "test_brevo_api_key";
+process.env.BREVO_SENDER_EMAIL =
+  "careerforge.noreply@gmail.com";
 
-const send = jest.fn();
+const fetchMock = jest.fn();
 
-const Resend = jest.fn(() => ({
-  emails: {
-    send
-  }
-}));
-
-jest.unstable_mockModule("resend", () => ({
-  Resend
-}));
+global.fetch = fetchMock;
 
 const {
   sendEmail,
@@ -31,11 +26,12 @@ describe("Phase 10 email service", () => {
   test(
     "sends HTML and plain-text email",
     async () => {
-      send.mockResolvedValue({
-        data: {
-          id: "message-1"
-        },
-        error: null
+      fetchMock.mockResolvedValue({
+        ok: true,
+        status: 201,
+        json: jest.fn().mockResolvedValue({
+          messageId: "message-1"
+        })
       });
 
       await expect(
@@ -50,14 +46,43 @@ describe("Phase 10 email service", () => {
         messageId: "message-1"
       });
 
-      expect(send).toHaveBeenCalledWith(
+      expect(fetchMock)
+        .toHaveBeenCalledWith(
+          "https://api.brevo.com/v3/smtp/email",
+          expect.objectContaining({
+            method: "POST",
+            headers: expect.objectContaining({
+              "api-key":
+                "test_brevo_api_key",
+              "content-type":
+                "application/json"
+            })
+          })
+        );
+
+      const request =
+        fetchMock.mock.calls[0][1];
+
+      const body =
+        JSON.parse(request.body);
+
+      expect(body).toEqual(
         expect.objectContaining({
-          from:
-            "CareerForge <onboarding@resend.dev>",
-          to: ["user@example.com"],
+          sender: {
+            name: "CareerForge",
+            email:
+              "careerforge.noreply@gmail.com"
+          },
+          to: [
+            {
+              email:
+                "user@example.com"
+            }
+          ],
           subject: "Subject",
-          html: "<p>Hello</p>",
-          text: "Hello"
+          htmlContent:
+            "<p>Hello</p>",
+          textContent: "Hello"
         })
       );
     }
@@ -66,16 +91,16 @@ describe("Phase 10 email service", () => {
   test(
     "returns a safe failure result without throwing",
     async () => {
-      send.mockRejectedValue(
-        Object.assign(
-          new Error(
-            "Provider rejected request"
-          ),
-          {
-            code: "EAUTH"
-          }
-        )
-      );
+      fetchMock.mockResolvedValue({
+        ok: false,
+        status: 401,
+        json: jest.fn().mockResolvedValue({
+          code:
+            "unauthorized",
+          message:
+            "Invalid API key"
+        })
+      });
 
       await expect(
         sendEmail({
@@ -86,7 +111,8 @@ describe("Phase 10 email service", () => {
         })
       ).resolves.toEqual({
         success: false,
-        errorCategory: "EAUTH"
+        errorCategory:
+          "unauthorized"
       });
     }
   );
@@ -105,24 +131,27 @@ describe("Phase 10 email service", () => {
         "valid email recipient"
       );
 
-      expect(send).not.toHaveBeenCalled();
+      expect(fetchMock)
+        .not.toHaveBeenCalled();
     }
   );
 
   test(
     "renders and sends a template email",
     async () => {
-      send.mockResolvedValue({
-        data: {
-          id: "message-2"
-        },
-        error: null
+      fetchMock.mockResolvedValue({
+        ok: true,
+        status: 201,
+        json: jest.fn().mockResolvedValue({
+          messageId: "message-2"
+        })
       });
 
       const result =
         await sendTemplateEmail({
           to: "user@example.com",
-          template: "PASSWORD_RESET",
+          template:
+            "PASSWORD_RESET",
           data: {
             actionUrl:
               "https://example.com/reset"
@@ -134,12 +163,14 @@ describe("Phase 10 email service", () => {
         messageId: "message-2"
       });
 
-      expect(send).toHaveBeenCalledWith(
-        expect.objectContaining({
-          to: ["user@example.com"],
-          subject:
-            "Reset your CareerForge password"
-        })
+      const request =
+        fetchMock.mock.calls[0][1];
+
+      const body =
+        JSON.parse(request.body);
+
+      expect(body.subject).toBe(
+        "Reset your CareerForge password"
       );
     }
   );

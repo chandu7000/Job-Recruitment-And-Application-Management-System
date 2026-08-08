@@ -1,11 +1,15 @@
-import { Resend } from "resend";
-
 import { renderEmailTemplate } from "../templates/emails/index.js";
 
-const resendApiKey =
-  process.env.RESEND_API_KEY || "test_resend_api_key";
+const BREVO_API_URL =
+  "https://api.brevo.com/v3/smtp/email";
 
-const resend = new Resend(resendApiKey);
+const brevoApiKey =
+  process.env.BREVO_API_KEY ||
+  "test_brevo_api_key";
+
+const brevoSenderEmail =
+  process.env.BREVO_SENDER_EMAIL ||
+  "careerforge.noreply@gmail.com";
 
 const safeEmailError = ({
   eventType,
@@ -27,8 +31,8 @@ const safeEmailError = ({
       : null,
     resourceId: resourceId || null,
     errorCategory:
-      error?.name ||
       error?.code ||
+      error?.name ||
       "EMAIL_ERROR",
     providerMessage: String(
       error?.message ||
@@ -38,15 +42,19 @@ const safeEmailError = ({
   });
 };
 
-export const verifyEmailProvider = async () => {
-  if (!resendApiKey) {
-    throw new Error(
-      "RESEND_API_KEY is not configured."
-    );
-  }
+export const verifyEmailProvider =
+  async () => {
+    if (
+      !process.env.BREVO_API_KEY &&
+      process.env.NODE_ENV !== "test"
+    ) {
+      throw new Error(
+        "BREVO_API_KEY is not configured."
+      );
+    }
 
-  return true;
-};
+    return true;
+  };
 
 export const sendEmail = async ({
   to,
@@ -66,28 +74,56 @@ export const sendEmail = async ({
   }
 
   try {
-    const {
-      data,
-      error
-    } = await resend.emails.send({
-      from:
-        "CareerForge <onboarding@resend.dev>",
-      to: [to],
-      subject,
-      html,
-      text
-    });
+    const response = await fetch(
+      BREVO_API_URL,
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type":
+            "application/json",
+          "api-key": brevoApiKey
+        },
+        body: JSON.stringify({
+          sender: {
+            name: "CareerForge",
+            email: brevoSenderEmail
+          },
+          to: [
+            {
+              email: to
+            }
+          ],
+          subject,
+          htmlContent: html,
+          textContent: text
+        })
+      }
+    );
 
-    if (error) {
-      throw new Error(
-        error.message ||
-        "Resend email delivery failed."
+    const responseBody =
+      await response.json().catch(
+        () => ({})
       );
+
+    if (!response.ok) {
+      const error = new Error(
+        responseBody?.message ||
+        `Brevo email delivery failed with status ${response.status}.`
+      );
+
+      error.code =
+        responseBody?.code ||
+        `BREVO_${response.status}`;
+
+      throw error;
     }
 
     return {
       success: true,
-      messageId: data?.id || null
+      messageId:
+        responseBody?.messageId ||
+        null
     };
   } catch (error) {
     safeEmailError({
@@ -107,23 +143,24 @@ export const sendEmail = async ({
   }
 };
 
-export const sendTemplateEmail = async ({
-  to,
-  template,
-  data = {},
-  eventType = template,
-  resourceId = null
-}) => {
-  const rendered =
-    renderEmailTemplate(
-      template,
-      data
-    );
-
-  return sendEmail({
+export const sendTemplateEmail =
+  async ({
     to,
-    ...rendered,
-    eventType,
-    resourceId
-  });
-};
+    template,
+    data = {},
+    eventType = template,
+    resourceId = null
+  }) => {
+    const rendered =
+      renderEmailTemplate(
+        template,
+        data
+      );
+
+    return sendEmail({
+      to,
+      ...rendered,
+      eventType,
+      resourceId
+    });
+  };
