@@ -45,7 +45,6 @@ import errorMiddleware from "./middlewares/error.middleware.js";
 import requestIdMiddleware from "./middlewares/requestId.middleware.js";
 import securityHeaders from "./middlewares/securityHeaders.middleware.js";
 import requestSecurityMiddleware from "./middlewares/requestSecurity.middleware.js";
-// import responseSanitizerMiddleware from "./middlewares/responseSanitizer.middleware.js";
 
 const app = express();
 
@@ -110,7 +109,6 @@ app.use(
 
 app.use(cookieParser());
 app.use(requestSecurityMiddleware);
-// app.use(responseSanitizerMiddleware);
 
 if (!env.isTest) {
   app.use(
@@ -168,8 +166,7 @@ app.use("/api/job-seeker/projects", jobSeekerProjectRoutes);
 app.use("/api/job-seeker/certifications", jobSeekerCertificationRoutes);
 app.use("/api/job-seeker/social-links", jobSeekerSocialLinkRoutes);
 app.use("/api/job-seeker/job-preferences", jobSeekerJobPreferenceRoutes);
-app.use("/api/job-seeker/uploads", jobSeekerUploadRoutes
-);
+app.use("/api/job-seeker/uploads", jobSeekerUploadRoutes);
 
 app.use("/api/recruiter", recruiterProfileRoutes);
 app.use("/api/recruiter/applications", recruiterApplicationRoutes);
