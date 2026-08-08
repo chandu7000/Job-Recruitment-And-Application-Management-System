@@ -84,10 +84,8 @@ jobs:
       CLOUDINARY_RESUME_FOLDER: careerforge/ci/resumes
       CLOUDINARY_COMPANY_LOGO_FOLDER: careerforge/ci/company-logos
 
-      SMTP_HOST: localhost
-      SMTP_PORT: 1025
-      SMTP_USER: ci-test-user
-      SMTP_PASSWORD: ci-test-password
+      BREVO_API_KEY: ci-test-brevo-api-key
+      BREVO_SENDER_EMAIL: ci-test@careerforge.com
 
     steps:
       - name: Checkout repository
