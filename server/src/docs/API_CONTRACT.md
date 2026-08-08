@@ -1,20 +1,28 @@
 # CareerForge Frozen Backend API Contract
 
-**Freeze point:** Phase 14 Stage 1.
+**Freeze point:** Phase 14 Stage 5 — Final Handover.
 
-Phases 1-13 form the locked business/API baseline. Stage 1 does not change routes, controllers, services, models, migrations, statuses or ownership rules. The contract is frozen for frontend integration unless a later deployment blocker requires an explicitly reviewed correction.
+Phases 1–13 form the locked business/API baseline.
 
-## Contract sources
+Phase 14 production deployment, CI/CD and production smoke verification have been completed.
+
+The CareerForge backend API contract is now frozen for frontend integration.
+
+Do not change routes, controllers, services, models, migrations, statuses, ownership rules, request schemas or response behavior unless a future change is explicitly required, reviewed, tested and documented.
+
+## Contract Sources
 
 - Endpoint list: `ENDPOINT_INVENTORY.md`
 - API behavior/security summary: `API.md`
+- Frontend integration contract: `FRONTEND_API_HANDOFF.md`
 - Models: `MODEL_INVENTORY.md`
 - Tests: `TESTING.md` and `PHASE-13-TEST-REPORT.md`
 - Route definitions: `src/routes/**`
 - Validators/constants: `src/validators/**` and `src/constants/**`
 
-## Shared protocol
+## Base URLs
 
-Local base URL: `http://localhost:5000`. API paths are under `/api`. Access tokens are supplied as Bearer tokens. Refresh authentication uses the HTTP-only `refreshToken` cookie scoped to `/api/auth`; production cookie behavior is secure and cross-site compatible (`SameSite=None`) as implemented in cookie configuration.
+Local backend:
 
-The production base URL is intentionally pending Stage 4 deployment.
+```text
+http://localhost:5000

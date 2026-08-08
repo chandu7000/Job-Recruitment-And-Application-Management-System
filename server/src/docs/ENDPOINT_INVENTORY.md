@@ -1,6 +1,8 @@
-# CareerForge Final Endpoint Inventory
+# CareerForge Backend Endpoint Inventory
 
-Stage 1 Phase 14 snapshot. The mounted route files are the source of truth. No application route was changed while producing this inventory.
+This document contains the frozen CareerForge backend endpoint inventory.
+
+The mounted route files are the source of truth for the API contract.
 
 Total mounted endpoints: **138**.
 

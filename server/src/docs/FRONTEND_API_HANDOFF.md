@@ -1,22 +1,58 @@
 # CareerForge Frontend API Handoff
 
-Status: **Stage 1 structure prepared; production URL and production smoke-test evidence remain pending Stages 4-5.**
+## Overview
+
+This document is the frontend integration reference for the frozen CareerForge backend API.
+
+The backend implementation, automated testing, production deployment and production verification are complete.
+
+Frontend development should integrate with the existing backend contract without unnecessarily changing established backend routes, request formats, response formats, authorization rules or business workflows.
+
+---
 
 ## Base URLs
-- Local: `http://localhost:5000`
-- Production: `PENDING_STAGE_4_DEPLOYMENT`
+
+### Local Development
+
+`http://localhost:5000`
+
+### Production
+
+`https://job-recruitment-and-application.onrender.com`
+
+All application API routes are mounted under:
+
+`/api`
+
+---
 
 ## Authentication
-Use the existing registration/login/verification endpoints in the frozen endpoint inventory. Send access tokens as `Authorization: Bearer <token>`. The refresh token is maintained as an HTTP-only cookie and must not be read by frontend JavaScript. Credentialed cross-origin requests must use the backend-approved origin and include credentials where the refresh cookie is required.
 
-## Roles
-Exactly: `JOB_SEEKER`, `RECRUITER`, `ADMIN`. No public ADMIN registration exists.
+CareerForge authentication uses:
 
-## Frozen references
-- Complete endpoints: `ENDPOINT_INVENTORY.md`
-- API/security behavior: `API.md`
-- Models: `MODEL_INVENTORY.md`
-- Frozen contract statement: `API_CONTRACT.md`
+- JWT access tokens
+- HTTP-only refresh-token cookies
+- Refresh-token rotation
+- Email verification
+- Session management
+- Role-based authorization
+- Server-side ownership validation
 
-## Final Stage 5 sections to certify
-Request schemas, response schemas, status/error codes, pagination/filter/sort rules, status enums and transition rules, upload rules, production CORS/cookie requirements, production URL, and safe example users will be finalized from the locked implementation and production smoke tests.
+Protected requests must send the access token using:
+
+`Authorization: Bearer <accessToken>`
+
+The refresh token is maintained by the backend using an HTTP-only cookie named:
+
+`refreshToken`
+
+Frontend JavaScript must not attempt to read the refresh-token cookie.
+
+Requests requiring the refresh cookie must include credentials.
+
+Fetch example:
+
+```js
+fetch(url, {
+  credentials: "include"
+});

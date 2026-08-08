@@ -1,6 +1,8 @@
-# CareerForge Final Model Inventory
+# CareerForge Backend Model Inventory
 
-Stage 1 Phase 14 snapshot of Sequelize models. Model definitions and migrations remain unchanged.
+This document contains the frozen Sequelize model inventory for the CareerForge backend.
+
+Model definitions and database migrations are the source of truth for the persisted data structure.
 
 Total model files: **24**.
 

@@ -14,7 +14,7 @@ Automated suites create their own predictable records with unique emails/slugs a
 - `TEST_DB_NAME` must differ from `DB_NAME`.
 - Test cleanup targets only records created by the suite, normally through controlled prefixes or captured IDs.
 - Do not truncate arbitrary development/production tables.
-- Do not call real SMTP or Cloudinary providers during automated tests.
+- Do not call real Brevo or Cloudinary providers during automated tests.
 
 ## Production rule
 

@@ -137,7 +137,7 @@ The test environment uses `TEST_DB_NAME` and must never equal `DB_NAME`. Schema 
 
 ## Fixture/helper review
 
-The integration suites contain workflow-specific fixture and cleanup logic. Phase 13 reviewed centralization opportunities. A broad mechanical refactor was intentionally avoided because many suites encode different ownership graphs, deletion order, mock boundaries and negative-state setup. Keeping those local preserves readability and the verified 1284-test baseline. New shared helpers should be introduced only when multiple suites can consume the same behavior without hiding business intent.
+The integration suites contain workflow-specific fixture and cleanup logic. A broad mechanical centralization of these fixtures is intentionally avoided because many suites encode different ownership graphs, deletion order, mock boundaries and negative-state setup. Keeping those fixtures local preserves readability and the verified 1284-test baseline. New shared helpers should be introduced only when multiple suites can consume the same behavior without hiding business intent.
 
 ## Coverage expectations
 
