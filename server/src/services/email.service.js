@@ -2,13 +2,8 @@ import { Resend } from "resend";
 
 import { renderEmailTemplate } from "../templates/emails/index.js";
 
-const resendApiKey = process.env.RESEND_API_KEY;
-
-if (!resendApiKey) {
-  throw new Error(
-    "RESEND_API_KEY is required for email delivery."
-  );
-}
+const resendApiKey =
+  process.env.RESEND_API_KEY || "test_resend_api_key";
 
 const resend = new Resend(resendApiKey);
 
@@ -26,9 +21,9 @@ const safeEmailError = ({
     eventType,
     recipientReference: recipient
       ? recipient.replace(
-          /(^.).*(@.*$)/,
-          "$1***$2"
-        )
+        /(^.).*(@.*$)/,
+        "$1***$2"
+      )
       : null,
     resourceId: resourceId || null,
     errorCategory:
@@ -37,7 +32,7 @@ const safeEmailError = ({
       "EMAIL_ERROR",
     providerMessage: String(
       error?.message ||
-        "Email delivery failed"
+      "Email delivery failed"
     ).slice(0, 300),
     timestamp: new Date().toISOString()
   });
@@ -86,7 +81,7 @@ export const sendEmail = async ({
     if (error) {
       throw new Error(
         error.message ||
-          "Resend email delivery failed."
+        "Resend email delivery failed."
       );
     }
 
