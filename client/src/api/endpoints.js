@@ -42,4 +42,14 @@ export const API_ENDPOINTS = Object.freeze({
     PROFILE_IMAGE: '/job-seeker/uploads/profile-image',
     RESUME: '/job-seeker/uploads/resume',
   }),
+  RECRUITER: Object.freeze({
+    DASHBOARD: '/dashboard/recruiter',
+    PROFILE: '/recruiter/profile',
+    COMPANIES: '/companies',
+    MY_COMPANIES: '/companies/me',
+    COMPANY_LOGO: '/companies/me/logo',
+    SUBMIT_COMPANY_VERIFICATION: '/companies/me/submit-verification',
+    RESUBMIT_COMPANY_VERIFICATION: '/companies/me/resubmit-verification',
+    COMPANY_VERIFICATION_HISTORY: '/companies/me/verification-history',
+  }),
 })

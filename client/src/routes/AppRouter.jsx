@@ -33,6 +33,12 @@ const ProfileEditPage = lazy(() => import('../features/jobSeeker/pages/ProfileEd
 const ResourceManagementPage = lazy(() => import('../features/jobSeeker/pages/ResourceManagementPage'))
 const JobPreferencesPage = lazy(() => import('../features/jobSeeker/pages/JobPreferencesPage'))
 const DocumentsPage = lazy(() => import('../features/jobSeeker/pages/DocumentsPage'))
+const RecruiterDashboardPage = lazy(() => import('../features/recruiter/pages/RecruiterDashboardPage'))
+const RecruiterProfilePage = lazy(() => import('../features/recruiter/pages/RecruiterProfilePage'))
+const RecruiterProfileEditPage = lazy(() => import('../features/recruiter/pages/RecruiterProfileEditPage'))
+const CompanyCreatePage = lazy(() => import('../features/recruiter/pages/CompanyCreatePage'))
+const CompanyPage = lazy(() => import('../features/recruiter/pages/CompanyPage'))
+const CompanyEditPage = lazy(() => import('../features/recruiter/pages/CompanyEditPage'))
 
 function AppRouter() {
   return (
@@ -81,7 +87,12 @@ function AppRouter() {
             </Route>
             <Route element={<RoleRoute allowedRoles={['RECRUITER']} />}>
               <Route path="recruiter" element={<RecruiterLayout />}>
-                <Route path="dashboard" element={<DashboardPlaceholderPage title="Recruiter dashboard" />} />
+                <Route path="dashboard" element={<RecruiterDashboardPage />} />
+                <Route path="profile" element={<RecruiterProfilePage />} />
+                <Route path="profile/edit" element={<RecruiterProfileEditPage />} />
+                <Route path="company" element={<CompanyPage />} />
+                <Route path="company/new" element={<CompanyCreatePage />} />
+                <Route path="company/edit" element={<CompanyEditPage />} />
                 <Route path="settings" element={<SecuritySettingsPage />} />
               </Route>
             </Route>
