@@ -67,6 +67,19 @@ const createCompanyService = async ({
   country,
   postalCode
 }) => {
+  const existingCompany =
+    await findCompanyByOwnerId(
+      ownerId
+    );
+
+  if (existingCompany) {
+    throw new AppError(
+      "A recruiter can manage only one company.",
+      409,
+      "RECRUITER_COMPANY_ALREADY_EXISTS"
+    );
+  }
+
   const slug =
     generateCompanySlug(
       companyName
@@ -404,12 +417,34 @@ const updateMyCompanyService = async ({
     );
   }
 
+  if (
+    [
+      COMPANY_STATUSES.PENDING_VERIFICATION,
+      COMPANY_STATUSES.RESUBMITTED
+    ].includes(company.status)
+  ) {
+    throw new AppError(
+      "Company details cannot be edited while verification is in progress.",
+      409,
+      "COMPANY_EDIT_RESTRICTED"
+    );
+  }
+
   const allowedFields = [
+    "companyName",
+    "companyEmail",
+    "companyPhone",
     "description",
     "website",
     "industry",
     "location",
-    "companySize"
+    "companySize",
+    "foundedYear",
+    "address",
+    "city",
+    "state",
+    "country",
+    "postalCode"
   ];
 
   const sanitizedUpdateData =
@@ -557,6 +592,51 @@ const submitMyCompanyForVerification =
     });
   };
 
+const resubmitMyCompanyForVerification =
+  async ({ ownerId }) => {
+    const company =
+      await findCompanyByOwnerId(
+        ownerId
+      );
+
+    if (!company) {
+      throw new AppError(
+        "Company not found.",
+        404,
+        "COMPANY_NOT_FOUND"
+      );
+    }
+
+    validateCompanyVerificationDetails(
+      company
+    );
+
+    if (
+      company.status !==
+      COMPANY_STATUSES.REJECTED
+    ) {
+      throw new AppError(
+        "Only a rejected company can be resubmitted.",
+        409,
+        "COMPANY_NOT_REJECTED"
+      );
+    }
+
+    await changeCompanyStatus({
+      companyId: company.id,
+      nextStatus:
+        COMPANY_STATUSES.RESUBMITTED,
+      performedBy: ownerId
+    });
+
+    return changeCompanyStatus({
+      companyId: company.id,
+      nextStatus:
+        COMPANY_STATUSES.PENDING_VERIFICATION,
+      performedBy: ownerId
+    });
+  };
+
 export {
   createCompanyService,
   getMyCompaniesService,
@@ -567,6 +647,7 @@ export {
   changeCompanyStatus,
   submitCompanyForVerification,
   submitMyCompanyForVerification,
+  resubmitMyCompanyForVerification,
   verifyCompany,
   rejectCompanyVerification,
   markCompanyAsResubmitted,

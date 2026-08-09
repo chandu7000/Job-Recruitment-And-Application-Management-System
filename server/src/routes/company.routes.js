@@ -31,6 +31,8 @@ import {
   getCompany,
   updateMyCompany,
   submitMyCompanyVerification,
+  resubmitMyCompanyVerification,
+  getMyCompanyVerificationHistory,
   updateCompany,
   deleteCompany
 } from "../controllers/company.controller.js";
@@ -89,6 +91,17 @@ router.post(
   submitMyCompanyVerification
 );
 
+router.post(
+  "/me/resubmit-verification",
+  originProtection,
+  resubmitMyCompanyVerification
+);
+
+router.get(
+  "/me/verification-history",
+  getMyCompanyVerificationHistory
+);
+
 router.get(
   "/:companyId",
   getCompany
@@ -97,6 +110,8 @@ router.get(
 router.put(
   "/:companyId",
   originProtection,
+  updateCompanyValidator,
+  validateRequest,
   updateCompany
 );
 

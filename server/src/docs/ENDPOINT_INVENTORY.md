@@ -53,6 +53,8 @@ Total mounted endpoints: **138**.
 | `DELETE` | `/api/companies/me/logo` | `src/routes/company.routes.js` |
 | `POST` | `/api/companies/me/logo` | `src/routes/company.routes.js` |
 | `POST` | `/api/companies/me/submit-verification` | `src/routes/company.routes.js` |
+| `POST` | `/api/companies/me/resubmit-verification` | `src/routes/company.routes.js` |
+| `GET` | `/api/companies/me/verification-history` | `src/routes/company.routes.js` |
 | `GET` | `/api/dashboard/job-seeker` | `src/routes/dashboard.routes.js` |
 | `GET` | `/api/dashboard/recruiter` | `src/routes/dashboard.routes.js` |
 | `GET` | `/api/health/` | `src/routes/health.routes.js` |

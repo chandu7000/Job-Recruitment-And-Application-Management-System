@@ -3,6 +3,24 @@ import {
 } from "express-validator";
 
 const updateCompanyValidator = [
+  body("companyName")
+    .optional()
+    .trim()
+    .isLength({ min: 2, max: 200 })
+    .withMessage("Company name must be between 2 and 200 characters."),
+
+  body("companyEmail")
+    .optional({ nullable: true })
+    .trim()
+    .isEmail()
+    .withMessage("Company email must be valid.")
+    .isLength({ max: 255 }),
+
+  body("companyPhone")
+    .optional({ nullable: true })
+    .trim()
+    .isLength({ min: 7, max: 30 }),
+
   body("description")
     .optional()
     .trim()
@@ -68,13 +86,53 @@ const updateCompanyValidator = [
       "Company size must be between 1 and 50 characters."
     ),
 
+  body("foundedYear")
+    .optional({ nullable: true })
+    .isInt({
+      min: 1000,
+      max: new Date().getUTCFullYear()
+    })
+    .withMessage(
+      "Founded year must be valid and cannot be in the future."
+    )
+    .toInt(),
+
+  ...[
+    "address",
+    "city",
+    "state",
+    "country",
+    "postalCode"
+  ].map((field) =>
+    body(field)
+      .optional({ nullable: true })
+      .trim()
+      .isLength({
+        max:
+          field === "address"
+            ? 500
+            : field === "postalCode"
+              ? 20
+              : 100
+      })
+  ),
+
   body().custom((value) => {
     const allowedFields = [
+      "companyName",
+      "companyEmail",
+      "companyPhone",
       "description",
       "website",
       "industry",
       "location",
-      "companySize"
+      "companySize",
+      "foundedYear",
+      "address",
+      "city",
+      "state",
+      "country",
+      "postalCode"
     ];
 
     const receivedFields =

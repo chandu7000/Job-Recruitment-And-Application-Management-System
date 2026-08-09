@@ -5,8 +5,13 @@ import {
   updateCompanyService,
   updateMyCompanyService,
   deleteCompanyService,
-  submitMyCompanyForVerification
+  submitMyCompanyForVerification,
+  resubmitMyCompanyForVerification
 } from "../services/company.service.js";
+
+import {
+  getCompanyVerificationHistory
+} from "../services/companyVerificationHistory.service.js";
 
 import {
   sendSuccess
@@ -187,12 +192,73 @@ const submitMyCompanyVerification =
     }
   };
 
+const resubmitMyCompanyVerification = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const company =
+      await resubmitMyCompanyForVerification({
+        ownerId: req.user.id
+      });
+
+    return sendSuccess(
+      res,
+      200,
+      "Company resubmitted for verification successfully.",
+      company
+    );
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getMyCompanyVerificationHistory = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const companies =
+      await getMyCompaniesService(
+        req.user.id
+      );
+    const company = companies[0];
+
+    if (!company) {
+      return sendSuccess(
+        res,
+        200,
+        "Company verification history fetched successfully.",
+        []
+      );
+    }
+
+    const history =
+      await getCompanyVerificationHistory({
+        companyId: company.id
+      });
+
+    return sendSuccess(
+      res,
+      200,
+      "Company verification history fetched successfully.",
+      history
+    );
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export {
   createCompany,
   getMyCompanies,
   getCompany,
   updateMyCompany,
   submitMyCompanyVerification,
+  resubmitMyCompanyVerification,
+  getMyCompanyVerificationHistory,
   updateCompanyController as updateCompany,
   deleteCompanyController as deleteCompany
 };
