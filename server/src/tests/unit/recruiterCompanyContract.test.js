@@ -24,7 +24,7 @@ const dashboard = fs.readFileSync(
   "utf8"
 );
 
-describe("Phase 6 recruiter-company contract", () => {
+describe("Recruiter company contract", () => {
   test("exposes recruiter resubmission and verification history", () => {
     expect(routes).toContain(
       '"/me/resubmit-verification"'

@@ -384,11 +384,10 @@ describe(
         const updatedCompany = {
           ...company,
 
-          description:
-            "Updated company",
+          description: "Updated company",
+          companySize: "201-500",
+          companyName: "Updated company name"
 
-          companySize:
-            "201-500"
         };
 
         findCompanyByOwnerIdMock
@@ -413,7 +412,7 @@ describe(
                 "201-500",
 
               companyName:
-                "Unsupported change",
+                "Updated company name",
 
               status:
                 "VERIFIED"
@@ -429,7 +428,10 @@ describe(
               "Updated company",
 
             companySize:
-              "201-500"
+              "201-500",
+
+            companyName:
+              "Updated company name"
           }
         );
 
@@ -452,11 +454,11 @@ describe(
             ownerId,
 
             updateData: {
-              companyName:
-                "Unsupported",
-
               status:
-                "VERIFIED"
+                "VERIFIED",
+
+              ownerId:
+                "protected-owner-change"
             }
           })
         ).rejects.toEqual(
