@@ -140,6 +140,8 @@ export const getRecruiterDashboard = async (
       }),
     profile: {
       exists: Boolean(profile),
+      firstName: profile?.firstName ?? null,
+      lastName: profile?.lastName ?? null,
       completionPercentage:
         profileFields.length
           ? Math.round(
@@ -184,6 +186,10 @@ export const getJobSeekerSummary = async (
           isRead: false
         }
       }),
+    profile: {
+      firstName: profile?.firstName ?? null,
+      lastName: profile?.lastName ?? null
+    },
     profileCompletionPercentage:
       profile?.profileCompletionPercentage || 0,
     resumeAvailable: Boolean(profile?.resumeUrl)
