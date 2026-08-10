@@ -37,6 +37,8 @@ const DocumentsPage = lazy(() => import('../features/jobSeeker/pages/DocumentsPa
 const SavedJobsPage = lazy(() => import('../features/applications/pages/SavedJobsPage'))
 const ApplyPage = lazy(() => import('../features/applications/pages/ApplyPage'))
 const ApplicationSuccessPage = lazy(() => import('../features/applications/pages/ApplicationSuccessPage'))
+const MyApplicationsPage = lazy(() => import('../features/applications/pages/MyApplicationsPage'))
+const ApplicationDetailsPage = lazy(() => import('../features/applications/pages/ApplicationDetailsPage'))
 const RecruiterDashboardPage = lazy(() => import('../features/recruiter/pages/RecruiterDashboardPage'))
 const RecruiterProfilePage = lazy(() => import('../features/recruiter/pages/RecruiterProfilePage'))
 const RecruiterProfileEditPage = lazy(() => import('../features/recruiter/pages/RecruiterProfileEditPage'))
@@ -83,6 +85,8 @@ function AppRouter() {
                 <Route path="dashboard" element={<JobSeekerDashboardPage />} />
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="saved-jobs" element={<SavedJobsPage />} />
+                <Route path="applications" element={<MyApplicationsPage />} />
+                <Route path="applications/:applicationId" element={<ApplicationDetailsPage />} />
                 <Route path="apply/:jobId" element={<ApplyPage />} />
                 <Route path="application-success/:applicationId" element={<ApplicationSuccessPage />} />
                 <Route path="profile/edit" element={<ProfileEditPage />} />

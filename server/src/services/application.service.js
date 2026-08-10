@@ -68,7 +68,7 @@ const snapshots = (
 
   companySnapshot: {
     id: job.company.id,
-    name: job.company.name,
+    name: job.company.companyName,
     slug: job.company.slug,
     logoUrl: job.company.logoUrl
   },

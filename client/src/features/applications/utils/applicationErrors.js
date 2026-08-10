@@ -5,6 +5,8 @@ export const APPLICATION_ERROR_GUIDANCE = Object.freeze({
   APPLICATION_ALREADY_EXISTS: 'You have already applied to this job.',
   PUBLIC_JOB_NOT_FOUND: 'This job is no longer available for applications.',
   JOB_NOT_FOUND: 'This job could not be found.',
+  APPLICATION_NOT_FOUND: 'This application could not be found.',
+  INVALID_APPLICATION_STATUS_TRANSITION: 'This application can no longer be withdrawn from its current status.',
 })
 
 export function getApplicationErrorGuidance(error) {
