@@ -51,6 +51,12 @@ export const API_ENDPOINTS = Object.freeze({
     JOB_PREFERENCES: '/job-seeker/job-preferences',
     PROFILE_IMAGE: '/job-seeker/uploads/profile-image',
     RESUME: '/job-seeker/uploads/resume',
+    SAVED_JOBS: '/job-seeker/saved-jobs',
+    SAVED_JOB: (jobId) =>
+      `/job-seeker/saved-jobs/${encodeURIComponent(jobId)}`,
+    APPLICATIONS: '/job-seeker/applications',
+    APPLY_TO_JOB: (jobId) =>
+      `/job-seeker/applications/jobs/${encodeURIComponent(jobId)}`,
   }),
 
   RECRUITER: Object.freeze({

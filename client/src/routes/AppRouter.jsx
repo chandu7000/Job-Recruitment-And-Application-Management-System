@@ -22,6 +22,7 @@ import AccountStatusGuard from './guards/AccountStatusGuard'
 import GuestOnlyRoute from './guards/GuestOnlyRoute'
 import ProtectedRoute from './guards/ProtectedRoute'
 import RoleRoute from './guards/RoleRoute'
+import { SavedJobsProvider } from '../features/applications/context/SavedJobsContext'
 
 const HomePage = lazy(() => import('../pages/HomePage'))
 const JobsPage = lazy(() => import('../features/publicJobs/pages/JobsPage'))
@@ -33,6 +34,9 @@ const ProfileEditPage = lazy(() => import('../features/jobSeeker/pages/ProfileEd
 const ResourceManagementPage = lazy(() => import('../features/jobSeeker/pages/ResourceManagementPage'))
 const JobPreferencesPage = lazy(() => import('../features/jobSeeker/pages/JobPreferencesPage'))
 const DocumentsPage = lazy(() => import('../features/jobSeeker/pages/DocumentsPage'))
+const SavedJobsPage = lazy(() => import('../features/applications/pages/SavedJobsPage'))
+const ApplyPage = lazy(() => import('../features/applications/pages/ApplyPage'))
+const ApplicationSuccessPage = lazy(() => import('../features/applications/pages/ApplicationSuccessPage'))
 const RecruiterDashboardPage = lazy(() => import('../features/recruiter/pages/RecruiterDashboardPage'))
 const RecruiterProfilePage = lazy(() => import('../features/recruiter/pages/RecruiterProfilePage'))
 const RecruiterProfileEditPage = lazy(() => import('../features/recruiter/pages/RecruiterProfileEditPage'))
@@ -48,6 +52,7 @@ function AppRouter() {
   return (
     <BrowserRouter>
       <Suspense fallback={<PageLoader label="Loading page" />}>
+        <SavedJobsProvider>
         <Routes>
         <Route element={<PublicLayout />}>
           <Route index element={<HomePage />} />
@@ -77,6 +82,9 @@ function AppRouter() {
               <Route path="job-seeker" element={<JobSeekerLayout />}>
                 <Route path="dashboard" element={<JobSeekerDashboardPage />} />
                 <Route path="profile" element={<ProfilePage />} />
+                <Route path="saved-jobs" element={<SavedJobsPage />} />
+                <Route path="apply/:jobId" element={<ApplyPage />} />
+                <Route path="application-success/:applicationId" element={<ApplicationSuccessPage />} />
                 <Route path="profile/edit" element={<ProfileEditPage />} />
                 <Route path="education" element={<ResourceManagementPage resource="education" />} />
                 <Route path="experience" element={<ResourceManagementPage resource="experience" />} />
@@ -115,6 +123,7 @@ function AppRouter() {
 
         <Route element={<PublicLayout />}><Route path="*" element={<NotFoundPage />} /></Route>
         </Routes>
+        </SavedJobsProvider>
       </Suspense>
     </BrowserRouter>
   )

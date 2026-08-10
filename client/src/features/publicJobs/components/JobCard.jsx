@@ -4,6 +4,7 @@ import CompanyLogo from './CompanyLogo'
 import JobMetadata from './JobMetadata'
 import SkillsList from './SkillsList'
 import { formatJobDeadline, formatPublishedDate } from '../utils/jobFormatters'
+import SaveJobButton from '../../applications/components/SaveJobButton'
 
 function JobCard({ job }) {
   return (
@@ -27,7 +28,7 @@ function JobCard({ job }) {
 
       <div className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-4 text-xs text-slate-500">
         <span className="flex items-center gap-1.5"><CalendarDays aria-hidden="true" className="size-4" />{formatJobDeadline(job.applicationDeadline)}</span>
-        <span>{formatPublishedDate(job.publishedAt)}</span>
+        <div className="flex items-center gap-3"><span>{formatPublishedDate(job.publishedAt)}</span><SaveJobButton jobId={job.id} compact /></div>
       </div>
     </article>
   )
