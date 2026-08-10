@@ -12,8 +12,7 @@ const createUploadMiddleware = ({
     limits: {
       fileSize: maximumFileSize,
       files: 1,
-      fields: 0,
-      parts: 1
+      fields: 0
     },
 
     fileFilter(req, file, callback) {
