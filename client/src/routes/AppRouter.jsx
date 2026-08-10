@@ -39,6 +39,10 @@ const RecruiterProfileEditPage = lazy(() => import('../features/recruiter/pages/
 const CompanyCreatePage = lazy(() => import('../features/recruiter/pages/CompanyCreatePage'))
 const CompanyPage = lazy(() => import('../features/recruiter/pages/CompanyPage'))
 const CompanyEditPage = lazy(() => import('../features/recruiter/pages/CompanyEditPage'))
+const RecruiterJobsPage = lazy(() => import('../features/recruiterJobs/pages/RecruiterJobsPage'))
+const RecruiterJobCreatePage = lazy(() => import('../features/recruiterJobs/pages/JobCreatePage'))
+const RecruiterJobDetailsPage = lazy(() => import('../features/recruiterJobs/pages/JobDetailsPage'))
+const RecruiterJobEditPage = lazy(() => import('../features/recruiterJobs/pages/JobEditPage'))
 
 function AppRouter() {
   return (
@@ -93,6 +97,10 @@ function AppRouter() {
                 <Route path="company" element={<CompanyPage />} />
                 <Route path="company/new" element={<CompanyCreatePage />} />
                 <Route path="company/edit" element={<CompanyEditPage />} />
+                <Route path="jobs" element={<RecruiterJobsPage />} />
+                <Route path="jobs/create" element={<RecruiterJobCreatePage />} />
+                <Route path="jobs/:jobId" element={<RecruiterJobDetailsPage />} />
+                <Route path="jobs/:jobId/edit" element={<RecruiterJobEditPage />} />
                 <Route path="settings" element={<SecuritySettingsPage />} />
               </Route>
             </Route>

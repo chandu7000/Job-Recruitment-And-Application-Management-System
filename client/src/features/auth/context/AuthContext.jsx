@@ -20,14 +20,19 @@ function stateFromUser(user) {
     user,
     role: user?.role ?? null,
     status: user?.status ?? null,
-    permissions: Array.isArray(user?.permissions) ? user.permissions : [],
+    permissions: Array.isArray(user?.permissions)
+      ? user.permissions
+      : [],
     isAuthenticated: Boolean(user),
   }
 }
 
 export function AuthProvider({ children }) {
-  const [authState, setAuthState] = useState(emptyAuthenticationState)
-  const [isInitializing, setIsInitializing] = useState(true)
+  const [authState, setAuthState] =
+    useState(emptyAuthenticationState)
+
+  const [isInitializing, setIsInitializing] =
+    useState(true)
 
   const clearAuthentication = useCallback(() => {
     clearAccessToken()
@@ -35,8 +40,13 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    setAuthenticationFailureHandler(clearAuthentication)
-    return () => setAuthenticationFailureHandler(null)
+    setAuthenticationFailureHandler(
+      clearAuthentication,
+    )
+
+    return () => {
+      setAuthenticationFailureHandler(null)
+    }
   }, [clearAuthentication])
 
   useEffect(() => {
@@ -44,17 +54,27 @@ export function AuthProvider({ children }) {
 
     async function restoreSession() {
       try {
-        const refreshResult = await authApi.refresh()
-        setAccessToken(refreshResult.accessToken)
-        const user = await authApi.getCurrentUser()
+        const refreshResult =
+          await authApi.refresh()
+
+        setAccessToken(
+          refreshResult.accessToken,
+        )
+
+        const user =
+          await authApi.getCurrentUser()
 
         if (isMounted) {
-          setAuthState(stateFromUser(user))
+          setAuthState(
+            stateFromUser(user),
+          )
         }
       } catch {
         if (isMounted) {
           clearAccessToken()
-          setAuthState(emptyAuthenticationState)
+          setAuthState(
+            emptyAuthenticationState,
+          )
         }
       } finally {
         if (isMounted) {
@@ -70,25 +90,40 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
-  const login = useCallback(async (credentials) => {
-    const result = await authApi.login(credentials)
-    setAccessToken(result.accessToken)
-    setAuthState(stateFromUser(result.user))
-    return result.user
-  }, [])
+  const login = useCallback(
+    async (credentials) => {
+      const result =
+        await authApi.login(credentials)
 
-  const logout = useCallback(async () => {
-    try {
-      await authApi.logout()
-    } finally {
+      setAccessToken(result.accessToken)
+
+      setAuthState(
+        stateFromUser(result.user),
+      )
+
+      return result.user
+    },
+    [],
+  )
+
+  const logout = useCallback(
+    async () => {
+      try {
+        await authApi.logout()
+      } finally {
+        clearAuthentication()
+      }
+    },
+    [clearAuthentication],
+  )
+
+  const logoutAll = useCallback(
+    async () => {
+      await authApi.logoutAll()
       clearAuthentication()
-    }
-  }, [clearAuthentication])
-
-  const logoutAll = useCallback(async () => {
-    await authApi.logoutAll()
-    clearAuthentication()
-  }, [clearAuthentication])
+    },
+    [clearAuthentication],
+  )
 
   const forceLogout = useCallback(() => {
     clearAuthentication()
@@ -103,8 +138,19 @@ export function AuthProvider({ children }) {
       logoutAll,
       forceLogout,
     }),
-    [authState, forceLogout, isInitializing, login, logout, logoutAll],
+    [
+      authState,
+      forceLogout,
+      isInitializing,
+      login,
+      logout,
+      logoutAll,
+    ],
   )
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  )
 }

@@ -134,7 +134,7 @@ export const getRecruiterDashboard = async (
     unreadNotificationCount:
       await Notification.count({
         where: {
-          userId,
+          recipientId: userId,
           isRead: false
         }
       }),
@@ -167,7 +167,7 @@ export const getJobSeekerSummary = async (
       })
     },
     savedJobCount: await SavedJob.count({
-      where: { userId }
+      where: { candidateId: userId }
     }),
     interviews: {
       total: await Interview.count({
@@ -179,7 +179,10 @@ export const getJobSeekerSummary = async (
     },
     unreadNotificationCount:
       await Notification.count({
-        where: { userId, isRead: false }
+        where: {
+          recipientId: userId,
+          isRead: false
+        }
       }),
     profileCompletionPercentage:
       profile?.profileCompletionPercentage || 0,

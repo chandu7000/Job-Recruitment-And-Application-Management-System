@@ -26,7 +26,7 @@ const findCompanyVerificationHistory =
 
       order: [
         [
-          "createdAt",
+          "created_at",
           "DESC"
         ]
       ],
@@ -47,7 +47,7 @@ const findLatestCompanyVerificationHistory =
 
       order: [
         [
-          "createdAt",
+          "created_at",
           "DESC"
         ]
       ],

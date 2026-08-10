@@ -48,7 +48,7 @@ const findOwnerCompanies = async (
 
     order: [
       [
-        "createdAt",
+        "created_at",
         "DESC"
       ]
     ],
@@ -129,7 +129,7 @@ const findCompanyByOwnerId = async (
     lock,
     order: [
       [
-        "createdAt",
+        "created_at",
         "DESC"
       ]
     ]
@@ -245,7 +245,7 @@ const findCompaniesByStatus = async (
 
     order: [
       [
-        "createdAt",
+        "created_at",
         "ASC"
       ]
     ],

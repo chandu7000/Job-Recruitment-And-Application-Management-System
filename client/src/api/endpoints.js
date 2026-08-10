@@ -1,5 +1,6 @@
 export const API_ENDPOINTS = Object.freeze({
   HEALTH: '/health',
+
   AUTH: Object.freeze({
     REGISTER_JOB_SEEKER: '/auth/register/job-seeker',
     REGISTER_RECRUITER: '/auth/register/recruiter',
@@ -17,16 +18,25 @@ export const API_ENDPOINTS = Object.freeze({
     RESEND_VERIFICATION: '/auth/resend-verification',
     VERIFY_EMAIL: '/auth/verify-email',
   }),
+
   PUBLIC: Object.freeze({
     JOBS: '/public/jobs',
-    JOB_BY_ID: (jobId) => `/public/jobs/${encodeURIComponent(jobId)}`,
-    JOB_BY_SLUG: (slug) => `/public/jobs/slug/${encodeURIComponent(slug)}`,
-    SIMILAR_JOBS: (jobId) => `/public/jobs/${encodeURIComponent(jobId)}/similar`,
-    COMPANY_BY_ID: (companyId) => `/public/companies/${encodeURIComponent(companyId)}`,
-    COMPANY_BY_SLUG: (slug) => `/public/companies/slug/${encodeURIComponent(slug)}`,
-    COMPANY_JOBS_BY_ID: (companyId) => `/public/companies/${encodeURIComponent(companyId)}/jobs`,
-    COMPANY_JOBS_BY_SLUG: (slug) => `/public/companies/slug/${encodeURIComponent(slug)}/jobs`,
+    JOB_BY_ID: (jobId) =>
+      `/public/jobs/${encodeURIComponent(jobId)}`,
+    JOB_BY_SLUG: (slug) =>
+      `/public/jobs/slug/${encodeURIComponent(slug)}`,
+    SIMILAR_JOBS: (jobId) =>
+      `/public/jobs/${encodeURIComponent(jobId)}/similar`,
+    COMPANY_BY_ID: (companyId) =>
+      `/public/companies/${encodeURIComponent(companyId)}`,
+    COMPANY_BY_SLUG: (slug) =>
+      `/public/companies/slug/${encodeURIComponent(slug)}`,
+    COMPANY_JOBS_BY_ID: (companyId) =>
+      `/public/companies/${encodeURIComponent(companyId)}/jobs`,
+    COMPANY_JOBS_BY_SLUG: (slug) =>
+      `/public/companies/slug/${encodeURIComponent(slug)}/jobs`,
   }),
+
   JOB_SEEKER: Object.freeze({
     DASHBOARD: '/dashboard/job-seeker',
     PROFILE: '/job-seeker/profile',
@@ -42,14 +52,35 @@ export const API_ENDPOINTS = Object.freeze({
     PROFILE_IMAGE: '/job-seeker/uploads/profile-image',
     RESUME: '/job-seeker/uploads/resume',
   }),
+
   RECRUITER: Object.freeze({
     DASHBOARD: '/dashboard/recruiter',
     PROFILE: '/recruiter/profile',
+
     COMPANIES: '/companies',
     MY_COMPANIES: '/companies/me',
     COMPANY_LOGO: '/companies/me/logo',
-    SUBMIT_COMPANY_VERIFICATION: '/companies/me/submit-verification',
-    RESUBMIT_COMPANY_VERIFICATION: '/companies/me/resubmit-verification',
-    COMPANY_VERIFICATION_HISTORY: '/companies/me/verification-history',
+
+    SUBMIT_COMPANY_VERIFICATION:
+      '/companies/me/submit-verification',
+
+    RESUBMIT_COMPANY_VERIFICATION:
+      '/companies/me/resubmit-verification',
+
+    COMPANY_VERIFICATION_HISTORY:
+      '/companies/me/verification-history',
+
+    JOBS: '/jobs',
+
+    MY_JOBS: '/jobs/me',
+
+    JOB_BY_ID: (jobId) =>
+      `/jobs/${encodeURIComponent(jobId)}`,
+
+    PUBLISH_JOB: (jobId) =>
+      `/jobs/${encodeURIComponent(jobId)}/publish`,
+
+    CLOSE_JOB: (jobId) =>
+      `/jobs/${encodeURIComponent(jobId)}/close`,
   }),
 })
