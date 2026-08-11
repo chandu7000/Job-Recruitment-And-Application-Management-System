@@ -49,6 +49,8 @@ const RecruiterJobsPage = lazy(() => import('../features/recruiterJobs/pages/Rec
 const RecruiterJobCreatePage = lazy(() => import('../features/recruiterJobs/pages/JobCreatePage'))
 const RecruiterJobDetailsPage = lazy(() => import('../features/recruiterJobs/pages/JobDetailsPage'))
 const RecruiterJobEditPage = lazy(() => import('../features/recruiterJobs/pages/JobEditPage'))
+const RecruiterApplicantsPage = lazy(() => import('../features/applications/pages/RecruiterApplicantsPage'))
+const RecruiterApplicationDetailsPage = lazy(() => import('../features/applications/pages/RecruiterApplicationDetailsPage'))
 
 function AppRouter() {
   return (
@@ -113,6 +115,8 @@ function AppRouter() {
                 <Route path="jobs/create" element={<RecruiterJobCreatePage />} />
                 <Route path="jobs/:jobId" element={<RecruiterJobDetailsPage />} />
                 <Route path="jobs/:jobId/edit" element={<RecruiterJobEditPage />} />
+                <Route path="jobs/:jobId/applicants" element={<RecruiterApplicantsPage />} />
+                <Route path="applications/:applicationId" element={<RecruiterApplicationDetailsPage />} />
                 <Route path="settings" element={<SecuritySettingsPage />} />
               </Route>
             </Route>

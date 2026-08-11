@@ -1,23 +1,12 @@
-import {
-  getRecruiterCandidateProfile
-} from "../services/recruiterCandidate.service.js";
+import { getRecruiterCandidateProfile } from "../services/recruiterCandidate.service.js";
+import { sendSuccess } from "../utils/apiResponse.js";
 
-import {
-  sendSuccess
-} from "../utils/apiResponse.js";
-
-const getCandidateProfile = async (
-  req,
-  res,
-  next
-) => {
-
+const getCandidateProfile = async (req, res, next) => {
   try {
-
-    const candidate =
-      await getRecruiterCandidateProfile(
-        req.params.profileId
-      );
+    const candidate = await getRecruiterCandidateProfile({
+      recruiterId: req.user.id,
+      profileId: req.params.profileId
+    });
 
     return sendSuccess(
       res,
@@ -25,12 +14,9 @@ const getCandidateProfile = async (
       "Candidate profile fetched successfully",
       candidate
     );
-  } catch(error){
+  } catch (error) {
     next(error);
   }
 };
 
-
-export {
-  getCandidateProfile
-};
+export { getCandidateProfile };

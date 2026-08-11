@@ -67,6 +67,10 @@ const whereFrom = (filters) => {
     where.companyId = filters.companyId;
   }
 
+  if (filters.jobId) {
+    where.jobId = filters.jobId;
+  }
+
   if (
     filters.from ||
     filters.to

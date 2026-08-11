@@ -532,3 +532,49 @@ describe(
         );
     }
 );
+describe("Phase 10 recruiter job applicant filtering", () => {
+    beforeEach(cleanup);
+    afterEach(cleanup);
+
+    test("filters applicants to one recruiter-owned job", async () => {
+        const recruiterEmail = createEmail("p10-filter-owner");
+        const candidateOneEmail = createEmail("p10-filter-candidate-one");
+        const candidateTwoEmail = createEmail("p10-filter-candidate-two");
+
+        const recruiter = await createUser({ email: recruiterEmail, role: "RECRUITER" });
+        const candidateOne = await createUser({ email: candidateOneEmail, role: "JOB_SEEKER" });
+        const candidateTwo = await createUser({ email: candidateTwoEmail, role: "JOB_SEEKER" });
+        const company = await createCompany(recruiter.id);
+        const firstJob = await createJob({ recruiterId: recruiter.id, companyId: company.id });
+        const secondJob = await createJob({ recruiterId: recruiter.id, companyId: company.id });
+        const firstApplication = await createApplication({ candidateId: candidateOne.id, job: firstJob, company });
+        await createApplication({ candidateId: candidateTwo.id, job: secondJob, company });
+        const token = await login(recruiterEmail);
+
+        const response = await request(app)
+            .get(`/api/recruiter/applications?jobId=${firstJob.id}`)
+            .set("Authorization", `Bearer ${token}`)
+            .expect(200);
+
+        expect(response.body.data.applications).toHaveLength(1);
+        expect(response.body.data.applications[0].id).toBe(firstApplication.id);
+        expect(response.body.data.applications[0].jobId).toBe(firstJob.id);
+    });
+
+    test("rejects job filtering for a job owned by another recruiter", async () => {
+        const ownerEmail = createEmail("p10-job-owner");
+        const otherEmail = createEmail("p10-job-other");
+        const owner = await createUser({ email: ownerEmail, role: "RECRUITER" });
+        await createUser({ email: otherEmail, role: "RECRUITER" });
+        const company = await createCompany(owner.id);
+        const job = await createJob({ recruiterId: owner.id, companyId: company.id });
+        const otherToken = await login(otherEmail);
+
+        const response = await request(app)
+            .get(`/api/recruiter/applications?jobId=${job.id}`)
+            .set("Authorization", `Bearer ${otherToken}`)
+            .expect(403);
+
+        expect(response.body.error.code).toBe("JOB_OWNERSHIP_REQUIRED");
+    });
+});

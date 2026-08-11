@@ -1,506 +1,128 @@
-import {
-  jest
-} from "@jest/globals";
+import { jest } from "@jest/globals";
 
-const findByPkMock =
-  jest.fn();
+const findByPkMock = jest.fn();
+const findOneProfileMock = jest.fn();
+const findOwnedApplicationMock = jest.fn();
 
-const JobSeekerSkillModel = {
-  modelName:
-    "JobSeekerSkill"
+const associatedModels = {
+  skill: { modelName: "JobSeekerSkill" },
+  education: { modelName: "JobSeekerEducation" },
+  experience: { modelName: "JobSeekerExperience" },
+  project: { modelName: "JobSeekerProject" },
+  certification: { modelName: "JobSeekerCertification" },
+  socialLink: { modelName: "JobSeekerSocialLink" },
+  preference: { modelName: "JobSeekerJobPreference" }
 };
 
-const JobSeekerEducationModel = {
-  modelName:
-    "JobSeekerEducation"
-};
-
-const JobSeekerExperienceModel = {
-  modelName:
-    "JobSeekerExperience"
-};
-
-const JobSeekerProjectModel = {
-  modelName:
-    "JobSeekerProject"
-};
-
-const JobSeekerCertificationModel = {
-  modelName:
-    "JobSeekerCertification"
-};
-
-const JobSeekerSocialLinkModel = {
-  modelName:
-    "JobSeekerSocialLink"
-};
-
-const JobSeekerJobPreferenceModel = {
-  modelName:
-    "JobSeekerJobPreference"
-};
-
-jest.unstable_mockModule(
-  "../../models/jobSeekerProfile.model.js",
-  () => ({
-    default: {
-      findByPk:
-        findByPkMock
-    }
-  })
-);
-
-jest.unstable_mockModule(
-  "../../models/jobSeekerSkill.model.js",
-  () => ({
-    default:
-      JobSeekerSkillModel
-  })
-);
-
-jest.unstable_mockModule(
-  "../../models/jobSeekerEducation.model.js",
-  () => ({
-    default:
-      JobSeekerEducationModel
-  })
-);
-
-jest.unstable_mockModule(
-  "../../models/jobSeekerExperience.model.js",
-  () => ({
-    default:
-      JobSeekerExperienceModel
-  })
-);
-
-jest.unstable_mockModule(
-  "../../models/jobSeekerProject.model.js",
-  () => ({
-    default:
-      JobSeekerProjectModel
-  })
-);
-
-jest.unstable_mockModule(
-  "../../models/jobSeekerCertification.model.js",
-  () => ({
-    default:
-      JobSeekerCertificationModel
-  })
-);
-
-jest.unstable_mockModule(
-  "../../models/jobSeekerSocialLink.model.js",
-  () => ({
-    default:
-      JobSeekerSocialLinkModel
-  })
-);
-
-jest.unstable_mockModule(
-  "../../models/jobSeekerJobPreference.model.js",
-  () => ({
-    default:
-      JobSeekerJobPreferenceModel
-  })
-);
+jest.unstable_mockModule("../../models/application.model.js", () => ({
+  default: { findOne: findOwnedApplicationMock }
+}));
+jest.unstable_mockModule("../../models/job.model.js", () => ({
+  default: { modelName: "Job" }
+}));
+jest.unstable_mockModule("../../models/jobSeekerProfile.model.js", () => ({
+  default: { findByPk: findByPkMock, findOne: findOneProfileMock }
+}));
+jest.unstable_mockModule("../../models/jobSeekerSkill.model.js", () => ({ default: associatedModels.skill }));
+jest.unstable_mockModule("../../models/jobSeekerEducation.model.js", () => ({ default: associatedModels.education }));
+jest.unstable_mockModule("../../models/jobSeekerExperience.model.js", () => ({ default: associatedModels.experience }));
+jest.unstable_mockModule("../../models/jobSeekerProject.model.js", () => ({ default: associatedModels.project }));
+jest.unstable_mockModule("../../models/jobSeekerCertification.model.js", () => ({ default: associatedModels.certification }));
+jest.unstable_mockModule("../../models/jobSeekerSocialLink.model.js", () => ({ default: associatedModels.socialLink }));
+jest.unstable_mockModule("../../models/jobSeekerJobPreference.model.js", () => ({ default: associatedModels.preference }));
 
 const {
-  getRecruiterCandidateProfile
-} = await import(
-  "../../services/recruiterCandidate.service.js"
-);
+  getRecruiterCandidateProfile,
+  getRecruiterCandidateProfileByUserId
+} = await import("../../services/recruiterCandidate.service.js");
 
-describe(
-  "Recruiter candidate service",
-  () => {
-    const profileId =
-      "11111111-1111-1111-1111-111111111111";
+const profile = {
+  id: "11111111-1111-4111-8111-111111111111",
+  userId: "22222222-2222-4222-8222-222222222222",
+  firstName: "Chandra",
+  lastName: "Sekhar",
+  location: "Vijayawada",
+  headline: "Java Backend Developer",
+  biography: "Backend developer profile",
+  profileImageUrl: "https://example.com/profile.jpg",
+  resumeUrl: "https://example.com/resume.pdf",
+  resumeOriginalName: "resume.pdf",
+  phoneNumber: "9876543210",
+  addressLine1: "Private address",
+  skills: [{ id: 1, skillName: "Java" }],
+  educations: [],
+  experiences: [],
+  projects: [],
+  certifications: [],
+  socialLinks: [],
+  jobPreference: null
+};
 
-    beforeEach(() => {
-      jest.clearAllMocks();
+describe("Recruiter candidate service", () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  test("returns recruiter-visible candidate data when an owned application exists", async () => {
+    findByPkMock.mockResolvedValue(profile);
+    findOwnedApplicationMock.mockResolvedValue({ id: "application-1" });
+
+    const result = await getRecruiterCandidateProfile({
+      recruiterId: "recruiter-1",
+      profileId: profile.id
     });
 
-    test(
-      "fetches a candidate with all recruiter-visible associations",
-      async () => {
-        const profile = {
-          id:
-            profileId,
-
-          firstName:
-            "Chandra",
-
-          lastName:
-            "Sekhar",
-
-          location:
-            "Vijayawada",
-
-          headline:
-            "Java Backend Developer",
-
-          biography:
-            "Backend developer profile",
-
-          profileImageUrl:
-            "https://example.com/profile.jpg",
-
-          resumeUrl:
-            "https://example.com/resume.pdf",
-
-          resumeOriginalName:
-            "resume.pdf",
-
-          skills: [
-            {
-              id:
-                1,
-
-              skillName:
-                "Java"
-            }
-          ],
-
-          educations: [
-            {
-              id:
-                2,
-
-              institutionName:
-                "JNTUK"
-            }
-          ],
-
-          experiences: [
-            {
-              id:
-                3,
-
-              companyName:
-                "Example Company"
-            }
-          ],
-
-          projects: [
-            {
-              id:
-                4,
-
-              projectName:
-                "CareerForge"
-            }
-          ],
-
-          certifications: [
-            {
-              id:
-                5,
-
-              certificationName:
-                "Java Certification"
-            }
-          ],
-
-          socialLinks: [
-            {
-              id:
-                6,
-
-              platform:
-                "LINKEDIN"
-            }
-          ],
-
-          jobPreference: {
-            id:
-              7,
-
-            salaryCurrency:
-              "INR"
-          }
-        };
-
-        findByPkMock
-          .mockResolvedValue(
-            profile
-          );
-
-        const result =
-          await getRecruiterCandidateProfile(
-            profileId
-          );
-
-        expect(
-          findByPkMock
-        ).toHaveBeenCalledWith(
-          profileId,
-          {
-            include: [
-              {
-                model:
-                  JobSeekerSkillModel,
-
-                as:
-                  "skills"
-              },
-              {
-                model:
-                  JobSeekerEducationModel,
-
-                as:
-                  "educations"
-              },
-              {
-                model:
-                  JobSeekerExperienceModel,
-
-                as:
-                  "experiences"
-              },
-              {
-                model:
-                  JobSeekerProjectModel,
-
-                as:
-                  "projects"
-              },
-              {
-                model:
-                  JobSeekerCertificationModel,
-
-                as:
-                  "certifications"
-              },
-              {
-                model:
-                  JobSeekerSocialLinkModel,
-
-                as:
-                  "socialLinks"
-              },
-              {
-                model:
-                  JobSeekerJobPreferenceModel,
-
-                as:
-                  "jobPreference"
-              }
-            ]
-          }
-        );
-
-        expect(result).toEqual({
-          id:
-            profile.id,
-
-          firstName:
-            profile.firstName,
-
-          lastName:
-            profile.lastName,
-
-          location:
-            profile.location,
-
-          headline:
-            profile.headline,
-
-          biography:
-            profile.biography,
-
-          profileImageUrl:
-            profile.profileImageUrl,
-
-          resumeUrl:
-            profile.resumeUrl,
-
-          resumeOriginalName:
-            profile.resumeOriginalName,
-
-          skills:
-            profile.skills,
-
-          educations:
-            profile.educations,
-
-          experiences:
-            profile.experiences,
-
-          projects:
-            profile.projects,
-
-          certifications:
-            profile.certifications,
-
-          socialLinks:
-            profile.socialLinks,
-
-          jobPreference:
-            profile.jobPreference
-        });
-      }
+    expect(result.firstName).toBe("Chandra");
+    expect(result.skills).toEqual(profile.skills);
+    expect(result).not.toHaveProperty("phoneNumber");
+    expect(result).not.toHaveProperty("addressLine1");
+    expect(findOwnedApplicationMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { candidateId: profile.userId }
+      })
     );
+  });
 
-    test(
-      "returns empty arrays and null defaults when associations are undefined",
-      async () => {
-        findByPkMock
-          .mockResolvedValue({
-            id:
-              profileId,
+  test("blocks a recruiter without an application to the recruiter's jobs", async () => {
+    findByPkMock.mockResolvedValue(profile);
+    findOwnedApplicationMock.mockResolvedValue(null);
 
-            firstName:
-              "Chandra",
+    await expect(getRecruiterCandidateProfile({
+      recruiterId: "recruiter-2",
+      profileId: profile.id
+    })).rejects.toEqual(expect.objectContaining({
+      statusCode: 403,
+      code: "CANDIDATE_ACCESS_REQUIRED"
+    }));
+  });
 
-            lastName:
-              "Sekhar"
-          });
+  test("throws when candidate profile does not exist", async () => {
+    findByPkMock.mockResolvedValue(null);
 
-        const result =
-          await getRecruiterCandidateProfile(
-            profileId
-          );
+    await expect(getRecruiterCandidateProfile({
+      recruiterId: "recruiter-1",
+      profileId: profile.id
+    })).rejects.toEqual(expect.objectContaining({
+      statusCode: 404,
+      code: "CANDIDATE_NOT_FOUND"
+    }));
+  });
 
-        expect(result.skills).toEqual([]);
-        expect(result.educations).toEqual([]);
-        expect(result.experiences).toEqual([]);
-        expect(result.projects).toEqual([]);
-        expect(result.certifications).toEqual([]);
-        expect(result.socialLinks).toEqual([]);
-        expect(result.jobPreference).toBeNull();
-      }
+  test("loads a candidate by user id for an already ownership-checked application", async () => {
+    findOneProfileMock.mockResolvedValue(profile);
+
+    const result = await getRecruiterCandidateProfileByUserId(profile.userId);
+
+    expect(result).toEqual(expect.objectContaining({
+      id: profile.id,
+      firstName: profile.firstName,
+      resumeUrl: profile.resumeUrl
+    }));
+    expect(findOneProfileMock).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { userId: profile.userId } })
     );
+  });
 
-    test(
-      "preserves empty association values",
-      async () => {
-        findByPkMock
-          .mockResolvedValue({
-            id:
-              profileId,
-
-            skills: [],
-            educations: [],
-            experiences: [],
-            projects: [],
-            certifications: [],
-            socialLinks: [],
-            jobPreference:
-              null
-          });
-
-        const result =
-          await getRecruiterCandidateProfile(
-            profileId
-          );
-
-        expect(result).toEqual(
-          expect.objectContaining({
-            skills: [],
-            educations: [],
-            experiences: [],
-            projects: [],
-            certifications: [],
-            socialLinks: [],
-            jobPreference:
-              null
-          })
-        );
-      }
-    );
-
-    test(
-      "does not expose private candidate contact fields",
-      async () => {
-        findByPkMock
-          .mockResolvedValue({
-            id:
-              profileId,
-
-            firstName:
-              "Chandra",
-
-            lastName:
-              "Sekhar",
-
-            phoneNumber:
-              "9876543210",
-
-            addressLine1:
-              "Private address",
-
-            city:
-              "Vijayawada",
-
-            skills: []
-          });
-
-        const result =
-          await getRecruiterCandidateProfile(
-            profileId
-          );
-
-        expect(result).not.toHaveProperty(
-          "phoneNumber"
-        );
-
-        expect(result).not.toHaveProperty(
-          "addressLine1"
-        );
-
-        expect(result).not.toHaveProperty(
-          "city"
-        );
-      }
-    );
-
-    test(
-      "throws when candidate profile does not exist",
-      async () => {
-        findByPkMock
-          .mockResolvedValue(
-            null
-          );
-
-        await expect(
-          getRecruiterCandidateProfile(
-            profileId
-          )
-        ).rejects.toEqual(
-          expect.objectContaining({
-            statusCode:
-              404,
-
-            code:
-              "CANDIDATE_NOT_FOUND"
-          })
-        );
-      }
-    );
-
-    test(
-      "propagates database errors",
-      async () => {
-        const databaseError =
-          new Error(
-            "Candidate query failed"
-          );
-
-        findByPkMock
-          .mockRejectedValue(
-            databaseError
-          );
-
-        await expect(
-          getRecruiterCandidateProfile(
-            profileId
-          )
-        ).rejects.toBe(
-          databaseError
-        );
-      }
-    );
-  }
-);
+  test("returns null when an application candidate has no profile", async () => {
+    findOneProfileMock.mockResolvedValue(null);
+    await expect(getRecruiterCandidateProfileByUserId(profile.userId)).resolves.toBeNull();
+  });
+});

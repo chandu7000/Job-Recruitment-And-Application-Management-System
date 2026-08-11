@@ -93,5 +93,13 @@ export const API_ENDPOINTS = Object.freeze({
 
     CLOSE_JOB: (jobId) =>
       `/jobs/${encodeURIComponent(jobId)}/close`,
+
+    APPLICATIONS: '/recruiter/applications',
+    APPLICATION_BY_ID: (applicationId) =>
+      `/recruiter/applications/${encodeURIComponent(applicationId)}`,
+    APPLICATION_NOTES: (applicationId) =>
+      `/recruiter/applications/${encodeURIComponent(applicationId)}/notes`,
+    APPLICATION_STATUS: (applicationId) =>
+      `/recruiter/applications/${encodeURIComponent(applicationId)}/status`,
   }),
 })

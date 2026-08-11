@@ -23,6 +23,10 @@ import {
     emitApplicationNotification
 } from "./applicationNotification.service.js";
 
+import {
+    getRecruiterCandidateProfileByUserId
+} from "./recruiterCandidate.service.js";
+
 const getOwnedJobIds = async (
     recruiterId
 ) => {
@@ -82,6 +86,17 @@ export const listApplicants = async ({
     const jobIds =
         await getOwnedJobIds(recruiterId);
 
+    if (
+        query.jobId &&
+        !jobIds.includes(query.jobId)
+    ) {
+        throw new AppError(
+            "You do not own this job.",
+            403,
+            "JOB_OWNERSHIP_REQUIRED"
+        );
+    }
+
     const pagination =
         getPagination(query);
 
@@ -90,8 +105,8 @@ export const listApplicants = async ({
             .listRecruiterApplications(
                 jobIds,
                 {
-                    ...pagination,
                     ...query,
+                    ...pagination,
                     order:
                         (
                             query.order ||
@@ -126,9 +141,15 @@ export const getApplicantDetails = async ({
                 application.id
             );
 
+    const candidateProfile =
+        await getRecruiterCandidateProfileByUserId(
+            application.candidateId
+        );
+
     return {
         ...application.toJSON(),
-        statusHistory
+        statusHistory,
+        candidateProfile
     };
 };
 
@@ -228,7 +249,7 @@ export const changeApplicationStatus = async ({
                     application.id,
 
                 status
-            }).catch(() => {});
+            }).catch(() => { });
 
             return application;
         }

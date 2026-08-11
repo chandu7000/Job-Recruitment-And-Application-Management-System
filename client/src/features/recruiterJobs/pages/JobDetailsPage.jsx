@@ -73,6 +73,15 @@ function JobDetailsPage() {
         actions={<JobStatusBadge status={job.status} />}
       />
 
+      <div className="flex flex-wrap gap-3">
+        <Link
+          to={`/recruiter/jobs/${job.id}/applicants`}
+          className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
+        >
+          View applicants ({Number(job.applicationCount ?? 0)})
+        </Link>
+      </div>
+
       <JobLifecycleActions
         job={job}
         onChanged={resource.reload}
