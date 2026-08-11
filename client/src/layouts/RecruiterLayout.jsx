@@ -5,6 +5,7 @@ const navigationItems = [
   { label: 'Profile', to: '/recruiter/profile' },
   { label: 'Company', to: '/recruiter/company' },
   { label: 'Jobs', to: '/recruiter/jobs' },
+  { label: 'Interviews', to: '/recruiter/interviews' },
   { label: 'Settings', to: '/recruiter/settings' },
 ]
 

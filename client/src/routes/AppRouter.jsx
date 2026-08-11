@@ -51,6 +51,12 @@ const RecruiterJobDetailsPage = lazy(() => import('../features/recruiterJobs/pag
 const RecruiterJobEditPage = lazy(() => import('../features/recruiterJobs/pages/JobEditPage'))
 const RecruiterApplicantsPage = lazy(() => import('../features/applications/pages/RecruiterApplicantsPage'))
 const RecruiterApplicationDetailsPage = lazy(() => import('../features/applications/pages/RecruiterApplicationDetailsPage'))
+const RecruiterInterviewsPage = lazy(() => import('../features/interviews/pages/RecruiterInterviewsPage'))
+const RecruiterInterviewDetailsPage = lazy(() => import('../features/interviews/pages/RecruiterInterviewDetailsPage'))
+const ScheduleInterviewPage = lazy(() => import('../features/interviews/pages/ScheduleInterviewPage'))
+const RescheduleInterviewPage = lazy(() => import('../features/interviews/pages/RescheduleInterviewPage'))
+const MyInterviewsPage = lazy(() => import('../features/interviews/pages/MyInterviewsPage'))
+const InterviewDetailsPage = lazy(() => import('../features/interviews/pages/InterviewDetailsPage'))
 
 function AppRouter() {
   return (
@@ -89,6 +95,8 @@ function AppRouter() {
                 <Route path="saved-jobs" element={<SavedJobsPage />} />
                 <Route path="applications" element={<MyApplicationsPage />} />
                 <Route path="applications/:applicationId" element={<ApplicationDetailsPage />} />
+                <Route path="interviews" element={<MyInterviewsPage />} />
+                <Route path="interviews/:interviewId" element={<InterviewDetailsPage />} />
                 <Route path="apply/:jobId" element={<ApplyPage />} />
                 <Route path="application-success/:applicationId" element={<ApplicationSuccessPage />} />
                 <Route path="profile/edit" element={<ProfileEditPage />} />
@@ -117,6 +125,10 @@ function AppRouter() {
                 <Route path="jobs/:jobId/edit" element={<RecruiterJobEditPage />} />
                 <Route path="jobs/:jobId/applicants" element={<RecruiterApplicantsPage />} />
                 <Route path="applications/:applicationId" element={<RecruiterApplicationDetailsPage />} />
+                <Route path="applications/:applicationId/schedule-interview" element={<ScheduleInterviewPage />} />
+                <Route path="interviews" element={<RecruiterInterviewsPage />} />
+                <Route path="interviews/:interviewId" element={<RecruiterInterviewDetailsPage />} />
+                <Route path="interviews/:interviewId/reschedule" element={<RescheduleInterviewPage />} />
                 <Route path="settings" element={<SecuritySettingsPage />} />
               </Route>
             </Route>

@@ -60,6 +60,10 @@ export const API_ENDPOINTS = Object.freeze({
     WITHDRAW_APPLICATION: (applicationId) =>
       `/job-seeker/applications/${encodeURIComponent(applicationId)}/withdraw`,
     INTERVIEWS: '/job-seeker/interviews',
+    INTERVIEW_BY_ID: (interviewId) => `/job-seeker/interviews/${encodeURIComponent(interviewId)}`,
+    INTERVIEW_HISTORY: (interviewId) => `/job-seeker/interviews/${encodeURIComponent(interviewId)}/history`,
+    CONFIRM_INTERVIEW: (interviewId) => `/job-seeker/interviews/${encodeURIComponent(interviewId)}/confirm`,
+    DECLINE_INTERVIEW: (interviewId) => `/job-seeker/interviews/${encodeURIComponent(interviewId)}/decline`,
     APPLY_TO_JOB: (jobId) =>
       `/job-seeker/applications/jobs/${encodeURIComponent(jobId)}`,
   }),
@@ -101,5 +105,13 @@ export const API_ENDPOINTS = Object.freeze({
       `/recruiter/applications/${encodeURIComponent(applicationId)}/notes`,
     APPLICATION_STATUS: (applicationId) =>
       `/recruiter/applications/${encodeURIComponent(applicationId)}/status`,
+    INTERVIEWS: '/recruiter/interviews',
+    SCHEDULE_INTERVIEW: (applicationId) => `/recruiter/interviews/applications/${encodeURIComponent(applicationId)}`,
+    INTERVIEW_BY_ID: (interviewId) => `/recruiter/interviews/${encodeURIComponent(interviewId)}`,
+    INTERVIEW_HISTORY: (interviewId) => `/recruiter/interviews/${encodeURIComponent(interviewId)}/history`,
+    RESCHEDULE_INTERVIEW: (interviewId) => `/recruiter/interviews/${encodeURIComponent(interviewId)}/reschedule`,
+    CANCEL_INTERVIEW: (interviewId) => `/recruiter/interviews/${encodeURIComponent(interviewId)}/cancel`,
+    COMPLETE_INTERVIEW: (interviewId) => `/recruiter/interviews/${encodeURIComponent(interviewId)}/complete`,
+    INTERVIEW_FEEDBACK: (interviewId) => `/recruiter/interviews/${encodeURIComponent(interviewId)}/feedback`,
   }),
 })

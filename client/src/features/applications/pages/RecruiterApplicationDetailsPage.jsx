@@ -126,6 +126,22 @@ const transitionSectionRef = useRef(null)
           <p className="mt-2 text-sm text-slate-600">Applied {formatDateTime(application.createdAt)}</p>
         </div>
         <div className="flex flex-wrap gap-2">
+          {application.status === 'SHORTLISTED' && (
+            <Link
+              to={`/recruiter/applications/${application.id}/schedule-interview`}
+              className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
+            >
+              Schedule interview
+            </Link>
+          )}
+          {application.status === 'INTERVIEW_SCHEDULED' && (
+            <Link
+              to="/recruiter/interviews"
+              className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+            >
+              View interviews
+            </Link>
+          )}
           {actions.map((action) => (
             <AppButton
               key={action.value}
