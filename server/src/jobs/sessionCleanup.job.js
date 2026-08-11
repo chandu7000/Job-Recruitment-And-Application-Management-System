@@ -9,7 +9,7 @@ let cleanupRunning = false;
 const runSessionCleanup = async () => {
   if (cleanupRunning) {
     console.warn(
-      "⚠️ Session cleanup skipped because a previous cleanup is still running."
+      "Session cleanup skipped because a previous cleanup is still running."
     );
 
     return {
@@ -39,7 +39,7 @@ const runSessionCleanup = async () => {
       });
 
     console.log(
-      `🧹 Session cleanup completed. Deleted ${deletedCount} stale sessions.`
+      `Session cleanup completed. Deleted ${deletedCount} stale sessions.`
     );
 
     return {
@@ -48,7 +48,7 @@ const runSessionCleanup = async () => {
     };
   } catch (error) {
     console.error(
-      "❌ Session cleanup failed:",
+      "Session cleanup failed:",
       error.message
     );
 

@@ -23,6 +23,15 @@ export const API_ENDPOINTS = Object.freeze({
     SUBMIT: '/reports',
   }),
 
+  ADMIN: Object.freeze({
+    DASHBOARD: '/admin/dashboard',
+    USERS: '/admin/users',
+    USER_BY_ID: (userId) => `/admin/users/${encodeURIComponent(userId)}`,
+    ACTIVATE_USER: (userId) => `/admin/users/${encodeURIComponent(userId)}/activate`,
+    DISABLE_USER: (userId) => `/admin/users/${encodeURIComponent(userId)}/disable`,
+    SUSPEND_USER: (userId) => `/admin/users/${encodeURIComponent(userId)}/suspend`,
+  }),
+
   NOTIFICATIONS: Object.freeze({
     LIST: '/notifications',
     UNREAD_COUNT: '/notifications/unread-count',

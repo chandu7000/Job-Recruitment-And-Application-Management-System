@@ -148,8 +148,8 @@ app.use("/api", globalRateLimiter);
 app.use("/api/health", healthRoutes);
 app.use("/api/auth", authRoutes);
 
-app.use("/api/admin", adminRoutes);
 app.use("/api/admin", adminManagementRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/admin/candidates", adminCandidateRoutes);
 
 app.use("/api/companies", companyRoutes);

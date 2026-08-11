@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AccountRestrictedPage from '../pages/AccountRestrictedPage'
-import DashboardPlaceholderPage from '../pages/DashboardPlaceholderPage'
 import NotFoundPage from '../pages/NotFoundPage'
 import UnauthorizedPage from '../pages/UnauthorizedPage'
 import AdminLayout from '../layouts/AdminLayout'
@@ -58,6 +57,9 @@ const RescheduleInterviewPage = lazy(() => import('../features/interviews/pages/
 const MyInterviewsPage = lazy(() => import('../features/interviews/pages/MyInterviewsPage'))
 const InterviewDetailsPage = lazy(() => import('../features/interviews/pages/InterviewDetailsPage'))
 const NotificationsPage = lazy(() => import('../features/notifications/pages/NotificationsPage'))
+const AdminDashboardPage = lazy(() => import('../features/admin/pages/AdminDashboardPage'))
+const AdminUsersPage = lazy(() => import('../features/admin/pages/AdminUsersPage'))
+const AdminUserDetailsPage = lazy(() => import('../features/admin/pages/AdminUserDetailsPage'))
 
 function AppRouter() {
   return (
@@ -137,7 +139,9 @@ function AppRouter() {
             </Route>
             <Route element={<RoleRoute allowedRoles={['ADMIN']} />}>
               <Route path="admin" element={<AdminLayout />}>
-                <Route path="dashboard" element={<DashboardPlaceholderPage title="Admin dashboard" />} />
+                <Route path="dashboard" element={<AdminDashboardPage />} />
+                <Route path="users" element={<AdminUsersPage />} />
+                <Route path="users/:userId" element={<AdminUserDetailsPage />} />
                 <Route path="notifications" element={<NotificationsPage />} />
                 <Route path="settings" element={<SecuritySettingsPage />} />
               </Route>
