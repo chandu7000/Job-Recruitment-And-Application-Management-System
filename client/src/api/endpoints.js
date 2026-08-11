@@ -19,6 +19,16 @@ export const API_ENDPOINTS = Object.freeze({
     VERIFY_EMAIL: '/auth/verify-email',
   }),
 
+  NOTIFICATIONS: Object.freeze({
+    LIST: '/notifications',
+    UNREAD_COUNT: '/notifications/unread-count',
+    MARK_ALL_READ: '/notifications/read-all',
+    MARK_READ: (notificationId) =>
+      `/notifications/${encodeURIComponent(notificationId)}/read`,
+    DELETE: (notificationId) =>
+      `/notifications/${encodeURIComponent(notificationId)}`,
+  }),
+
   PUBLIC: Object.freeze({
     JOBS: '/public/jobs',
     JOB_BY_ID: (jobId) =>

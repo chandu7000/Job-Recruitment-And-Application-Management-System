@@ -6,6 +6,7 @@ const navigationItems = [
   { label: 'Saved jobs', to: '/job-seeker/saved-jobs' },
   { label: 'My applications', to: '/job-seeker/applications' },
   { label: 'My interviews', to: '/job-seeker/interviews' },
+  { label: 'Notifications', to: '/job-seeker/notifications' },
   { label: 'Education', to: '/job-seeker/education' },
   { label: 'Experience', to: '/job-seeker/experience' },
   { label: 'Skills', to: '/job-seeker/skills' },

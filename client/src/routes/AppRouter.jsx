@@ -57,6 +57,7 @@ const ScheduleInterviewPage = lazy(() => import('../features/interviews/pages/Sc
 const RescheduleInterviewPage = lazy(() => import('../features/interviews/pages/RescheduleInterviewPage'))
 const MyInterviewsPage = lazy(() => import('../features/interviews/pages/MyInterviewsPage'))
 const InterviewDetailsPage = lazy(() => import('../features/interviews/pages/InterviewDetailsPage'))
+const NotificationsPage = lazy(() => import('../features/notifications/pages/NotificationsPage'))
 
 function AppRouter() {
   return (
@@ -97,6 +98,7 @@ function AppRouter() {
                 <Route path="applications/:applicationId" element={<ApplicationDetailsPage />} />
                 <Route path="interviews" element={<MyInterviewsPage />} />
                 <Route path="interviews/:interviewId" element={<InterviewDetailsPage />} />
+                <Route path="notifications" element={<NotificationsPage />} />
                 <Route path="apply/:jobId" element={<ApplyPage />} />
                 <Route path="application-success/:applicationId" element={<ApplicationSuccessPage />} />
                 <Route path="profile/edit" element={<ProfileEditPage />} />
@@ -129,12 +131,14 @@ function AppRouter() {
                 <Route path="interviews" element={<RecruiterInterviewsPage />} />
                 <Route path="interviews/:interviewId" element={<RecruiterInterviewDetailsPage />} />
                 <Route path="interviews/:interviewId/reschedule" element={<RescheduleInterviewPage />} />
+                <Route path="notifications" element={<NotificationsPage />} />
                 <Route path="settings" element={<SecuritySettingsPage />} />
               </Route>
             </Route>
             <Route element={<RoleRoute allowedRoles={['ADMIN']} />}>
               <Route path="admin" element={<AdminLayout />}>
                 <Route path="dashboard" element={<DashboardPlaceholderPage title="Admin dashboard" />} />
+                <Route path="notifications" element={<NotificationsPage />} />
                 <Route path="settings" element={<SecuritySettingsPage />} />
               </Route>
             </Route>

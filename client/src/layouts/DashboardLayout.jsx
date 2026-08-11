@@ -2,6 +2,7 @@ import { LogOut } from 'lucide-react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import AppButton from '../components/common/AppButton'
 import { useAuth } from '../features/auth/hooks/useAuth'
+import NotificationBell from '../features/notifications/components/NotificationBell'
 
 function DashboardLayout({ roleLabel, navigationItems }) {
   const { logout, user } = useAuth()
@@ -27,6 +28,7 @@ function DashboardLayout({ roleLabel, navigationItems }) {
           </Link>
 
           <div className="flex items-center gap-3">
+            <NotificationBell />
             <div className="hidden text-right sm:block">
               <p className="text-sm font-semibold text-slate-800">{user?.email}</p>
               <p className="text-xs text-slate-500">{roleLabel}</p>

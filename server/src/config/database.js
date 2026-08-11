@@ -72,10 +72,10 @@ const connectDatabase = async () => {
 const closeDatabase = async () => {
   try {
     await sequelize.close();
-    console.log("✅ Sequelize database connection closed");
+    console.log("Sequelize database connection closed");
   } catch (error) {
     console.error(
-      "❌ Failed to close Sequelize connection:",
+      "Failed to close Sequelize connection:",
       error.message
     );
 

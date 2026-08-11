@@ -1,12 +1,15 @@
 import { Toaster } from 'sonner'
 import AppRouter from './routes/AppRouter'
 import { AuthProvider } from './features/auth/context/AuthContext'
+import { NotificationsProvider } from './features/notifications/context/NotificationsContext'
 
 function App() {
   return (
     <>
       <AuthProvider>
-        <AppRouter />
+        <NotificationsProvider>
+          <AppRouter />
+        </NotificationsProvider>
       </AuthProvider>
 
       <Toaster
