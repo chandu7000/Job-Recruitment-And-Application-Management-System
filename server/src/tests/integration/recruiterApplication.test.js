@@ -575,6 +575,6 @@ describe("Phase 10 recruiter job applicant filtering", () => {
             .set("Authorization", `Bearer ${otherToken}`)
             .expect(403);
 
-        expect(response.body.error.code).toBe("JOB_OWNERSHIP_REQUIRED");
+        expect(response.body.code).toBe("JOB_OWNERSHIP_REQUIRED");
     });
 });
