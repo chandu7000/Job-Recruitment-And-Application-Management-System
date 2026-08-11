@@ -19,6 +19,10 @@ export const API_ENDPOINTS = Object.freeze({
     VERIFY_EMAIL: '/auth/verify-email',
   }),
 
+  REPORTS: Object.freeze({
+    SUBMIT: '/reports',
+  }),
+
   NOTIFICATIONS: Object.freeze({
     LIST: '/notifications',
     UNREAD_COUNT: '/notifications/unread-count',
