@@ -18,13 +18,13 @@ import {
 import {
   uploadProfileImage as uploadProfileImageController,
   uploadResume as uploadResumeController,
+  viewResume,
+  downloadResume,
   deleteProfileImage,
   deleteResume
 } from "../controllers/jobSeekerUpload.controller.js";
 
-
 const router = Router();
-
 
 router.use(
   authenticate,
@@ -33,7 +33,6 @@ router.use(
   )
 );
 
-
 router.post(
   "/profile-image",
   uploadRateLimiter,
@@ -41,12 +40,21 @@ router.post(
   uploadProfileImageController
 );
 
-
 router.post(
   "/resume",
   uploadRateLimiter,
   uploadResume,
   uploadResumeController
+);
+
+router.get(
+  "/resume/view",
+  viewResume
+);
+
+router.get(
+  "/resume/download",
+  downloadResume
 );
 
 router.delete(

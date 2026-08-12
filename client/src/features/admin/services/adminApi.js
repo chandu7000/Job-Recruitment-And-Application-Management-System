@@ -19,7 +19,20 @@ const buildParams = (query = {}, keys = [], defaultLimit = ADMIN_PAGE_LIMIT) => 
 const buildUserParams = (query = {}) => buildParams(query, ['search', 'role', 'status', 'verified', 'sort'], ADMIN_USER_PAGE_LIMIT)
 const buildJobParams = (query = {}) => buildParams(query, ['status', 'companyId', 'recruiterId', 'location', 'search', 'sort'])
 const buildReportParams = (query = {}) => buildParams(query, ['status', 'targetType', 'category', 'reporterId', 'reviewedBy', 'sort'])
-const buildAuditParams = (query = {}) => buildParams(query, ['actorId', 'actorRole', 'action', 'resourceType', 'resourceId', 'from', 'to', 'sort'])
+const buildAuditParams = (query = {}) =>
+  buildParams(
+    query,
+    [
+      'actorId',
+      'actorRole',
+      'action',
+      'resourceType',
+      'resourceId',
+      'from',
+      'to',
+      'sort',
+    ],
+  )
 
 const normalizePagination = (pagination = {}, defaultLimit = ADMIN_PAGE_LIMIT) => ({
   page: Number(pagination.page || 1),

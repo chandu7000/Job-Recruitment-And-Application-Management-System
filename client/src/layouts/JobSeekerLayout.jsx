@@ -14,7 +14,7 @@ const navigationItems = [
   { label: 'Certifications', to: '/job-seeker/certifications' },
   { label: 'Social links', to: '/job-seeker/social-links' },
   { label: 'Preferences', to: '/job-seeker/job-preferences' },
-  { label: 'Documents', to: '/job-seeker/documents' },
+  { label: 'Resume', to: '/job-seeker/documents' },
   { label: 'Settings', to: '/job-seeker/settings' },
 ]
 

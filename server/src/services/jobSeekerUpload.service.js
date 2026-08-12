@@ -44,7 +44,6 @@ const uploadJobSeekerProfileImage =
     userId,
     file
   ) => {
-
     validateProfileImage(file);
 
     const profile =
@@ -65,7 +64,6 @@ const uploadJobSeekerProfileImage =
       );
 
     try {
-
       const updatedProfile =
         await updateJobSeekerUploadsByUserId(
           userId,
@@ -82,28 +80,21 @@ const uploadJobSeekerProfileImage =
         oldPublicId &&
         oldPublicId !== uploadResult.public_id
       ) {
-
         try {
-
           await deleteCloudinaryAsset(
             oldPublicId,
             "image"
           );
-
         } catch (cleanupError) {
-
           console.error(
             "Old profile image cleanup failed:",
             cleanupError.message
           );
-
         }
       }
 
       return updatedProfile;
-
     } catch (error) {
-
       await deleteCloudinaryAsset(
         uploadResult.public_id,
         "image"
@@ -118,7 +109,6 @@ const uploadJobSeekerResume =
     userId,
     file
   ) => {
-
     const fileMetadata =
       validateResume(file);
 
@@ -140,7 +130,6 @@ const uploadJobSeekerResume =
       );
 
     try {
-
       const updatedProfile =
         await updateJobSeekerUploadsByUserId(
           userId,
@@ -160,16 +149,12 @@ const uploadJobSeekerResume =
         oldResumePublicId &&
         oldResumePublicId !== uploadResult.public_id
       ) {
-
         try {
-
           await deleteCloudinaryAsset(
             oldResumePublicId,
             "raw"
           );
-
         } catch (cleanupError) {
-
           console.error(
             "Old resume cleanup failed:",
             cleanupError.message
@@ -178,9 +163,7 @@ const uploadJobSeekerResume =
       }
 
       return updatedProfile;
-
     } catch (error) {
-
       await deleteCloudinaryAsset(
         uploadResult.public_id,
         "raw"
@@ -190,11 +173,44 @@ const uploadJobSeekerResume =
     }
   };
 
+const getJobSeekerResume =
+  async (
+    userId
+  ) => {
+    const profile =
+      await getProfileOrThrow(
+        userId
+      );
+
+    if (
+      !profile.resumeUrl ||
+      !profile.resumePublicId
+    ) {
+      const error = new Error(
+        "Resume not found"
+      );
+
+      error.statusCode = 404;
+      error.code =
+        "RESUME_NOT_FOUND";
+
+      throw error;
+    }
+
+    return {
+      resumeUrl:
+        profile.resumeUrl,
+
+      resumeOriginalName:
+        profile.resumeOriginalName ||
+        "resume.pdf"
+    };
+  };
+
 const deleteJobSeekerProfileImage =
   async (
     userId
   ) => {
-
     const profile =
       await getProfileOrThrow(
         userId
@@ -203,7 +219,6 @@ const deleteJobSeekerProfileImage =
     if (
       !profile.profileImagePublicId
     ) {
-
       const error = new Error(
         "Profile image not found"
       );
@@ -229,7 +244,6 @@ const deleteJobSeekerResume =
   async (
     userId
   ) => {
-
     const profile =
       await getProfileOrThrow(
         userId
@@ -238,7 +252,6 @@ const deleteJobSeekerResume =
     if (
       !profile.resumePublicId
     ) {
-
       const error = new Error(
         "Resume not found"
       );
@@ -260,10 +273,10 @@ const deleteJobSeekerResume =
     );
   };
 
-
 export {
   uploadJobSeekerProfileImage,
   uploadJobSeekerResume,
+  getJobSeekerResume,
   deleteJobSeekerProfileImage,
   deleteJobSeekerResume
 };

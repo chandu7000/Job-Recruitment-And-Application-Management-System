@@ -1,5 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import {
+  Link,
+  useSearchParams,
+} from 'react-router-dom'
 import PageHeader from '../../../components/common/PageHeader'
 import EmptyState from '../../../components/feedback/EmptyState'
 import ErrorState from '../../../components/feedback/ErrorState'
@@ -19,43 +27,80 @@ import {
 import { adminApi } from '../services/adminApi'
 
 function AdminAuditLogsPage() {
-  const [params, setParams] = useSearchParams()
+  const [
+    params,
+    setParams,
+  ] = useSearchParams()
 
-  const page = Number(params.get('page') || 1)
-  const actorRole = params.get('actorRole') || ''
-  const action = params.get('action') || ''
-  const resourceType = params.get('resourceType') || ''
-  const resourceId = params.get('resourceId') || ''
-  const actorId = params.get('actorId') || ''
-  const from = params.get('from') || ''
-  const to = params.get('to') || ''
+  const page =
+    Number(
+      params.get('page') ||
+      1,
+    )
 
-  const query = useMemo(
-    () => ({
-      page,
-      actorRole,
-      action,
-      resourceType,
-      resourceId,
-      actorId,
-      from,
-      to,
-    }),
-    [
-      page,
-      actorRole,
-      action,
-      resourceType,
-      resourceId,
-      actorId,
-      from,
-      to,
-    ],
-  )
+  const actorRole =
+    params.get('actorRole') ||
+    ''
 
-  const [draft, setDraft] = useState(query)
+  const action =
+    params.get('action') ||
+    ''
 
-  const [state, setState] = useState({
+  const resourceType =
+    params.get(
+      'resourceType',
+    ) || ''
+
+  const resourceId =
+    params.get(
+      'resourceId',
+    ) || ''
+
+  const actorId =
+    params.get('actorId') ||
+    ''
+
+  const from =
+    params.get('from') ||
+    ''
+
+  const to =
+    params.get('to') ||
+    ''
+
+  const query =
+    useMemo(
+      () => ({
+        page,
+        actorRole,
+        action,
+        resourceType,
+        resourceId,
+        actorId,
+        from,
+        to,
+      }),
+      [
+        page,
+        actorRole,
+        action,
+        resourceType,
+        resourceId,
+        actorId,
+        from,
+        to,
+      ],
+    )
+
+  const [
+    draft,
+    setDraft,
+  ] = useState(query)
+
+  const [
+    state,
+    setState,
+  ] = useState({
     auditLogs: [],
     pagination: null,
     loading: true,
@@ -63,13 +108,20 @@ function AdminAuditLogsPage() {
   })
 
   useEffect(() => {
-    const controller = new AbortController()
+    const controller =
+      new AbortController()
+
     let active = true
 
     adminApi
-      .listAuditLogs(query, controller.signal)
+      .listAuditLogs(
+        query,
+        controller.signal,
+      )
       .then((result) => {
-        if (!active) return
+        if (!active) {
+          return
+        }
 
         setState({
           ...result,
@@ -80,8 +132,10 @@ function AdminAuditLogsPage() {
       .catch((error) => {
         if (
           !active ||
-          error?.name === 'CanceledError' ||
-          error?.code === 'ERR_CANCELED'
+          error?.name ===
+          'CanceledError' ||
+          error?.code ===
+          'ERR_CANCELED'
         ) {
           return
         }
@@ -96,68 +150,154 @@ function AdminAuditLogsPage() {
 
     return () => {
       active = false
+
       controller.abort()
     }
   }, [query])
 
-  const reload = useCallback(async () => {
-    setState((current) => ({
-      ...current,
-      loading: true,
-      error: null,
-    }))
+  const reload =
+    useCallback(
+      async () => {
+        setState(
+          (current) => ({
+            ...current,
+            loading: true,
+            error: null,
+          }),
+        )
 
-    try {
-      const result = await adminApi.listAuditLogs(query)
+        try {
+          const result =
+            await adminApi.listAuditLogs(
+              query,
+            )
 
-      setState({
-        ...result,
-        loading: false,
-        error: null,
-      })
-    } catch (error) {
-      setState({
-        auditLogs: [],
-        pagination: null,
-        loading: false,
-        error,
-      })
+          setState({
+            ...result,
+            loading: false,
+            error: null,
+          })
+        } catch (error) {
+          setState({
+            auditLogs: [],
+            pagination: null,
+            loading: false,
+            error,
+          })
+        }
+      },
+      [query],
+    )
+
+  const applySelectFilter = (
+    field,
+    value,
+  ) => {
+    setDraft(
+      (current) => ({
+        ...current,
+        [field]: value,
+      }),
+    )
+
+    const next =
+      new URLSearchParams(
+        params,
+      )
+
+    if (value) {
+      next.set(
+        field,
+        value,
+      )
+    } else {
+      next.delete(
+        field,
+      )
     }
-  }, [query])
 
-  const apply = (event) => {
-    event.preventDefault()
+    next.set(
+      'page',
+      '1',
+    )
 
-    const next = new URLSearchParams()
-
-    for (const [key, value] of Object.entries(draft)) {
-      if (key !== 'page' && String(value || '').trim()) {
-        next.set(key, String(value).trim())
-      }
-    }
-
-    next.set('page', '1')
     setParams(next)
   }
 
-  const clearFilters = () => {
-    setDraft({
-      page: 1,
-      actorRole: '',
-      action: '',
-      resourceType: '',
-      resourceId: '',
-      actorId: '',
-      from: '',
-      to: '',
-    })
+  const apply = (
+    event,
+  ) => {
+    event.preventDefault()
 
-    setParams({ page: '1' })
+    const next =
+      new URLSearchParams()
+
+    for (
+      const [
+        key,
+        value,
+      ] of Object.entries(
+        draft,
+      )
+    ) {
+      if (
+        key !== 'page' &&
+        String(
+          value || '',
+        ).trim()
+      ) {
+        next.set(
+          key,
+          String(
+            value,
+          ).trim(),
+        )
+      }
+    }
+
+    next.set(
+      'page',
+      '1',
+    )
+
+    setParams(next)
   }
 
-  const changePage = (nextPage) => {
-    const next = new URLSearchParams(params)
-    next.set('page', String(nextPage))
+  const clearFilters =
+    () => {
+      const cleared = {
+        page: 1,
+        actorRole: '',
+        action: '',
+        resourceType: '',
+        resourceId: '',
+        actorId: '',
+        from: '',
+        to: '',
+      }
+
+      setDraft(
+        cleared,
+      )
+
+      setParams({
+        page: '1',
+      })
+    }
+
+  const changePage = (
+    nextPage,
+  ) => {
+    const next =
+      new URLSearchParams(
+        params,
+      )
+
+    next.set(
+      'page',
+      String(nextPage),
+    )
+
     setParams(next)
   }
 
@@ -182,20 +322,39 @@ function AdminAuditLogsPage() {
 
           <AppSelect
             id="audit-action"
-            value={draft.action}
-            onChange={(event) =>
-              setDraft((current) => ({
-                ...current,
-                action: event.target.value,
-              }))
+            value={
+              draft.action
+            }
+            onChange={(
+              event,
+            ) =>
+              applySelectFilter(
+                'action',
+                event.target
+                  .value,
+              )
             }
           >
-            <option value="">All actions</option>
-            {AUDIT_ACTIONS.map((value) => (
-              <option key={value} value={value}>
-                {humanize(value)}
-              </option>
-            ))}
+            <option value="">
+              All actions
+            </option>
+
+            {AUDIT_ACTIONS.map(
+              (value) => (
+                <option
+                  key={
+                    value
+                  }
+                  value={
+                    value
+                  }
+                >
+                  {humanize(
+                    value,
+                  )}
+                </option>
+              ),
+            )}
           </AppSelect>
         </div>
 
@@ -209,20 +368,39 @@ function AdminAuditLogsPage() {
 
           <AppSelect
             id="audit-role"
-            value={draft.actorRole}
-            onChange={(event) =>
-              setDraft((current) => ({
-                ...current,
-                actorRole: event.target.value,
-              }))
+            value={
+              draft.actorRole
+            }
+            onChange={(
+              event,
+            ) =>
+              applySelectFilter(
+                'actorRole',
+                event.target
+                  .value,
+              )
             }
           >
-            <option value="">All roles</option>
-            {AUDIT_ACTOR_ROLES.map((value) => (
-              <option key={value} value={value}>
-                {humanize(value)}
-              </option>
-            ))}
+            <option value="">
+              All roles
+            </option>
+
+            {AUDIT_ACTOR_ROLES.map(
+              (value) => (
+                <option
+                  key={
+                    value
+                  }
+                  value={
+                    value
+                  }
+                >
+                  {humanize(
+                    value,
+                  )}
+                </option>
+              ),
+            )}
           </AppSelect>
         </div>
 
@@ -236,20 +414,39 @@ function AdminAuditLogsPage() {
 
           <AppSelect
             id="audit-resource"
-            value={draft.resourceType}
-            onChange={(event) =>
-              setDraft((current) => ({
-                ...current,
-                resourceType: event.target.value,
-              }))
+            value={
+              draft.resourceType
+            }
+            onChange={(
+              event,
+            ) =>
+              applySelectFilter(
+                'resourceType',
+                event.target
+                  .value,
+              )
             }
           >
-            <option value="">All resources</option>
-            {AUDIT_RESOURCE_TYPES.map((value) => (
-              <option key={value} value={value}>
-                {humanize(value)}
-              </option>
-            ))}
+            <option value="">
+              All resources
+            </option>
+
+            {AUDIT_RESOURCE_TYPES.map(
+              (value) => (
+                <option
+                  key={
+                    value
+                  }
+                  value={
+                    value
+                  }
+                >
+                  {humanize(
+                    value,
+                  )}
+                </option>
+              ),
+            )}
           </AppSelect>
         </div>
 
@@ -263,12 +460,21 @@ function AdminAuditLogsPage() {
 
           <AppInput
             id="audit-resource-id"
-            value={draft.resourceId}
-            onChange={(event) =>
-              setDraft((current) => ({
-                ...current,
-                resourceId: event.target.value,
-              }))
+            value={
+              draft.resourceId
+            }
+            onChange={(
+              event,
+            ) =>
+              setDraft(
+                (current) => ({
+                  ...current,
+                  resourceId:
+                    event
+                      .target
+                      .value,
+                }),
+              )
             }
           />
         </div>
@@ -283,12 +489,21 @@ function AdminAuditLogsPage() {
 
           <AppInput
             id="audit-actor-id"
-            value={draft.actorId}
-            onChange={(event) =>
-              setDraft((current) => ({
-                ...current,
-                actorId: event.target.value,
-              }))
+            value={
+              draft.actorId
+            }
+            onChange={(
+              event,
+            ) =>
+              setDraft(
+                (current) => ({
+                  ...current,
+                  actorId:
+                    event
+                      .target
+                      .value,
+                }),
+              )
             }
           />
         </div>
@@ -304,12 +519,21 @@ function AdminAuditLogsPage() {
           <AppInput
             id="audit-from"
             type="datetime-local"
-            value={draft.from}
-            onChange={(event) =>
-              setDraft((current) => ({
-                ...current,
-                from: event.target.value,
-              }))
+            value={
+              draft.from
+            }
+            onChange={(
+              event,
+            ) =>
+              setDraft(
+                (current) => ({
+                  ...current,
+                  from:
+                    event
+                      .target
+                      .value,
+                }),
+              )
             }
           />
         </div>
@@ -325,28 +549,39 @@ function AdminAuditLogsPage() {
           <AppInput
             id="audit-to"
             type="datetime-local"
-            value={draft.to}
-            onChange={(event) =>
-              setDraft((current) => ({
-                ...current,
-                to: event.target.value,
-              }))
+            value={
+              draft.to
+            }
+            onChange={(
+              event,
+            ) =>
+              setDraft(
+                (current) => ({
+                  ...current,
+                  to:
+                    event
+                      .target
+                      .value,
+                }),
+              )
             }
           />
         </div>
 
         <div className="flex items-end gap-2">
           <button
-            className="rounded-lg bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white"
+            className="rounded-lg bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-800"
             type="submit"
           >
             Apply
           </button>
 
           <button
-            className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold"
+            className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold transition hover:bg-slate-50"
             type="button"
-            onClick={clearFilters}
+            onClick={
+              clearFilters
+            }
           >
             Clear
           </button>
@@ -357,10 +592,15 @@ function AdminAuditLogsPage() {
         <PageLoader label="Loading audit logs" />
       ) : state.error ? (
         <ErrorState
-          message={getApiErrorMessage(state.error)}
-          onRetry={reload}
+          message={getApiErrorMessage(
+            state.error,
+          )}
+          onRetry={
+            reload
+          }
         />
-      ) : state.auditLogs.length === 0 ? (
+      ) : state.auditLogs
+        .length === 0 ? (
         <EmptyState
           title="No audit logs found"
           description="No audit records match the selected backend filters."
@@ -371,61 +611,122 @@ function AdminAuditLogsPage() {
             <table className="responsive-data-table min-w-full divide-y divide-slate-200 text-sm">
               <thead className="bg-slate-50 text-left text-slate-600">
                 <tr>
-                  <th className="px-4 py-3">Timestamp</th>
-                  <th className="px-4 py-3">Action</th>
-                  <th className="px-4 py-3">Actor</th>
-                  <th className="px-4 py-3">Resource</th>
-                  <th className="px-4 py-3">Result</th>
-                  <th className="px-4 py-3">Action</th>
+                  <th className="px-4 py-3">
+                    Timestamp
+                  </th>
+
+                  <th className="px-4 py-3">
+                    Action
+                  </th>
+
+                  <th className="px-4 py-3">
+                    Actor
+                  </th>
+
+                  <th className="px-4 py-3">
+                    Resource
+                  </th>
+
+                  <th className="px-4 py-3">
+                    Result
+                  </th>
+
+                  <th className="px-4 py-3">
+                    Action
+                  </th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-slate-100">
-                {state.auditLogs.map((audit) => (
-                  <tr key={audit.id}>
-                    <td className="px-4 py-3" data-label="Timestamp">
-                      {formatDateTime(audit.createdAt)}
-                    </td>
-
-                    <td className="px-4 py-3" data-label="Action">
-                      {humanize(audit.action)}
-                    </td>
-
-                    <td className="px-4 py-3" data-label="Actor">
-                      {humanize(audit.actorRole)}
-                      <p className="text-xs text-slate-500">
-                        {audit.actorUserId || 'System'}
-                      </p>
-                    </td>
-
-                    <td className="px-4 py-3" data-label="Resource">
-                      {humanize(audit.resourceType)}
-                      <p className="text-xs text-slate-500">
-                        {audit.resourceId || '—'}
-                      </p>
-                    </td>
-
-                    <td className="px-4 py-3" data-label="Result">
-                      <AdminStatusBadge status={audit.result} />
-                    </td>
-
-                    <td className="px-4 py-3" data-label="Details">
-                      <Link
-                        className="font-semibold text-brand-700 hover:underline"
-                        to={`/admin/audit-logs/${audit.id}`}
+                {state.auditLogs.map(
+                  (audit) => (
+                    <tr
+                      key={
+                        audit.id
+                      }
+                    >
+                      <td
+                        className="px-4 py-3"
+                        data-label="Timestamp"
                       >
-                        View details
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
+                        {formatDateTime(
+                          audit.createdAt,
+                        )}
+                      </td>
+
+                      <td
+                        className="px-4 py-3"
+                        data-label="Action"
+                      >
+                        {humanize(
+                          audit.action,
+                        )}
+                      </td>
+
+                      <td
+                        className="px-4 py-3"
+                        data-label="Actor"
+                      >
+                        {humanize(
+                          audit.actorRole,
+                        )}
+
+                        <p className="text-xs text-slate-500">
+                          {audit.actorUserId ||
+                            'System'}
+                        </p>
+                      </td>
+
+                      <td
+                        className="px-4 py-3"
+                        data-label="Resource"
+                      >
+                        {humanize(
+                          audit.resourceType,
+                        )}
+
+                        <p className="text-xs text-slate-500">
+                          {audit.resourceId ||
+                            '—'}
+                        </p>
+                      </td>
+
+                      <td
+                        className="px-4 py-3"
+                        data-label="Result"
+                      >
+                        <AdminStatusBadge
+                          status={
+                            audit.result
+                          }
+                        />
+                      </td>
+
+                      <td
+                        className="px-4 py-3"
+                        data-label="Details"
+                      >
+                        <Link
+                          className="font-semibold text-brand-700 hover:underline"
+                          to={`/admin/audit-logs/${audit.id}`}
+                        >
+                          View details
+                        </Link>
+                      </td>
+                    </tr>
+                  ),
+                )}
               </tbody>
             </table>
           </div>
 
           <Pagination
-            pagination={state.pagination}
-            onPageChange={changePage}
+            pagination={
+              state.pagination
+            }
+            onPageChange={
+              changePage
+            }
           />
         </>
       )}
