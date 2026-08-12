@@ -30,6 +30,17 @@ export const API_ENDPOINTS = Object.freeze({
     ACTIVATE_USER: (userId) => `/admin/users/${encodeURIComponent(userId)}/activate`,
     DISABLE_USER: (userId) => `/admin/users/${encodeURIComponent(userId)}/disable`,
     SUSPEND_USER: (userId) => `/admin/users/${encodeURIComponent(userId)}/suspend`,
+    PENDING_COMPANIES: '/admin/companies/pending',
+    VERIFY_COMPANY: (companyId) => `/admin/companies/${encodeURIComponent(companyId)}/verify`,
+    REJECT_COMPANY: (companyId) => `/admin/companies/${encodeURIComponent(companyId)}/reject`,
+    JOBS: '/admin/jobs',
+    JOB_BY_ID: (jobId) => `/admin/jobs/${encodeURIComponent(jobId)}`,
+    MODERATE_JOB: (jobId) => `/admin/jobs/${encodeURIComponent(jobId)}/moderate`,
+    REPORTS: '/admin/reports',
+    REPORT_BY_ID: (reportId) => `/admin/reports/${encodeURIComponent(reportId)}`,
+    PROCESS_REPORT: (reportId) => `/admin/reports/${encodeURIComponent(reportId)}/process`,
+    AUDIT_LOGS: '/admin/audit-logs',
+    AUDIT_LOG_BY_ID: (auditId) => `/admin/audit-logs/${encodeURIComponent(auditId)}`,
   }),
 
   NOTIFICATIONS: Object.freeze({

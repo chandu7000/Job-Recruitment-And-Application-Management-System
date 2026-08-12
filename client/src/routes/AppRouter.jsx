@@ -60,6 +60,13 @@ const NotificationsPage = lazy(() => import('../features/notifications/pages/Not
 const AdminDashboardPage = lazy(() => import('../features/admin/pages/AdminDashboardPage'))
 const AdminUsersPage = lazy(() => import('../features/admin/pages/AdminUsersPage'))
 const AdminUserDetailsPage = lazy(() => import('../features/admin/pages/AdminUserDetailsPage'))
+const AdminCompaniesPage = lazy(() => import('../features/admin/pages/AdminCompaniesPage'))
+const AdminJobsPage = lazy(() => import('../features/admin/pages/AdminJobsPage'))
+const AdminJobDetailsPage = lazy(() => import('../features/admin/pages/AdminJobDetailsPage'))
+const AdminReportsPage = lazy(() => import('../features/admin/pages/AdminReportsPage'))
+const AdminReportDetailsPage = lazy(() => import('../features/admin/pages/AdminReportDetailsPage'))
+const AdminAuditLogsPage = lazy(() => import('../features/admin/pages/AdminAuditLogsPage'))
+const AdminAuditLogDetailsPage = lazy(() => import('../features/admin/pages/AdminAuditLogDetailsPage'))
 
 function AppRouter() {
   return (
@@ -142,6 +149,13 @@ function AppRouter() {
                 <Route path="dashboard" element={<AdminDashboardPage />} />
                 <Route path="users" element={<AdminUsersPage />} />
                 <Route path="users/:userId" element={<AdminUserDetailsPage />} />
+                <Route path="companies" element={<AdminCompaniesPage />} />
+                <Route path="jobs" element={<AdminJobsPage />} />
+                <Route path="jobs/:jobId" element={<AdminJobDetailsPage />} />
+                <Route path="reports" element={<AdminReportsPage />} />
+                <Route path="reports/:reportId" element={<AdminReportDetailsPage />} />
+                <Route path="audit-logs" element={<AdminAuditLogsPage />} />
+                <Route path="audit-logs/:auditId" element={<AdminAuditLogDetailsPage />} />
                 <Route path="notifications" element={<NotificationsPage />} />
                 <Route path="settings" element={<SecuritySettingsPage />} />
               </Route>
