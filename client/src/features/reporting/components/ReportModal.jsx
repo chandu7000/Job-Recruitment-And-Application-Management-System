@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import { toast } from 'sonner'
 import AppButton from '../../../components/common/AppButton'
@@ -6,6 +6,7 @@ import AppSelect from '../../../components/forms/AppSelect'
 import AppTextarea from '../../../components/forms/AppTextarea'
 import InlineError from '../../../components/feedback/InlineError'
 import { getApiErrorMessage } from '../../../api/errorMapper'
+import useDialogFocus from '../../../hooks/useDialogFocus'
 import {
   REPORT_CATEGORIES,
   REPORT_DESCRIPTION_LIMITS,
@@ -37,21 +38,12 @@ function ReportModal({ isOpen, targetType, targetResourceId, targetLabel, onClos
     onClose()
   }, [onClose, reset])
 
-  useEffect(() => {
-    if (!isOpen) return undefined
-
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape' && !submittingRef.current) close()
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    const focusTimer = window.setTimeout(() => categoryRef.current?.focus(), 0)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      window.clearTimeout(focusTimer)
-    }
-  }, [close, isOpen])
+  const dialogRef = useDialogFocus({
+    isOpen,
+    initialFocusRef: categoryRef,
+    onEscape: close,
+    canClose: !submitting,
+  })
 
   if (!isOpen) return null
 
@@ -107,7 +99,9 @@ function ReportModal({ isOpen, targetType, targetResourceId, targetLabel, onClos
         role="dialog"
         aria-modal="true"
         aria-labelledby="report-modal-title"
-        className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl"
+        ref={dialogRef}
+        tabIndex={-1}
+        className="max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-5 shadow-xl sm:p-6"
       >
         <div className="flex items-start justify-between gap-4">
           <div>

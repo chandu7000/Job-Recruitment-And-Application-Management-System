@@ -255,7 +255,7 @@ function AdminJobsPage() {
       ) : (
         <>
           <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-            <table className="min-w-full divide-y divide-slate-200 text-sm">
+            <table className="responsive-data-table min-w-full divide-y divide-slate-200 text-sm">
               <thead className="bg-slate-50 text-left text-slate-600">
                 <tr>
                   <th className="px-4 py-3">Job</th>
@@ -269,7 +269,7 @@ function AdminJobsPage() {
               <tbody className="divide-y divide-slate-100">
                 {state.jobs.map((job) => (
                   <tr key={job.id}>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Job">
                       <p className="font-semibold">
                         {job.title || 'Untitled job'}
                       </p>
@@ -278,19 +278,19 @@ function AdminJobsPage() {
                       </p>
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Company">
                       {job.company?.companyName || '—'}
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Status">
                       <AdminStatusBadge status={job.status} />
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Created">
                       {formatDate(job.createdAt)}
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Action">
                       <Link
                         className="font-semibold text-brand-700 hover:underline"
                         to={`/admin/jobs/${job.id}`}

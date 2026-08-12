@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import AppButton from '../../../components/common/AppButton'
 import PageHeader from '../../../components/common/PageHeader'
@@ -10,6 +10,7 @@ import ConfirmationModal from '../../../components/modals/ConfirmationModal'
 import Pagination from '../../publicJobs/components/Pagination'
 import { getApiErrorMessage } from '../../../api/errorMapper'
 import { formatDateTime } from '../../../utils/date'
+import useDialogFocus from '../../../hooks/useDialogFocus'
 import AdminStatusBadge from '../components/AdminStatusBadge'
 import { validateCompanyRejectionReason } from '../utils/adminModerationUtils'
 import { adminApi } from '../services/adminApi'
@@ -28,6 +29,7 @@ function AdminCompaniesPage() {
   const [reason, setReason] = useState('')
   const [reasonError, setReasonError] = useState('')
   const [saving, setSaving] = useState(false)
+  const rejectionReasonRef = useRef(null)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -100,6 +102,13 @@ function AdminCompaniesPage() {
     setReasonError('')
   }
 
+  const rejectionDialogRef = useDialogFocus({
+    isOpen: action?.type === 'reject',
+    initialFocusRef: rejectionReasonRef,
+    onEscape: closeAction,
+    canClose: !saving,
+  })
+
   const confirm = async () => {
     if (!action) return
 
@@ -161,7 +170,7 @@ function AdminCompaniesPage() {
       ) : (
         <>
           <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-            <table className="min-w-full divide-y divide-slate-200 text-sm">
+            <table className="responsive-data-table min-w-full divide-y divide-slate-200 text-sm">
               <thead className="bg-slate-50 text-left text-slate-600">
                 <tr>
                   <th className="px-4 py-3">Company</th>
@@ -175,7 +184,7 @@ function AdminCompaniesPage() {
               <tbody className="divide-y divide-slate-100">
                 {state.companies.map((company) => (
                   <tr key={company.id}>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Company">
                       <p className="font-semibold text-slate-950">
                         {company.companyName}
                       </p>
@@ -187,7 +196,7 @@ function AdminCompaniesPage() {
                       </p>
                     </td>
 
-                    <td className="px-4 py-3 text-slate-700">
+                    <td className="px-4 py-3 text-slate-700" data-label="Location">
                       {company.location ||
                         [company.city, company.state, company.country]
                           .filter(Boolean)
@@ -195,17 +204,17 @@ function AdminCompaniesPage() {
                         '—'}
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Status">
                       <AdminStatusBadge status={company.status} />
                     </td>
 
-                    <td className="px-4 py-3 text-slate-700">
+                    <td className="px-4 py-3 text-slate-700" data-label="Submitted">
                       {formatDateTime(
                         company.updatedAt || company.createdAt,
                       )}
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Actions">
                       <div className="flex flex-wrap gap-2">
                         <AppButton
                           onClick={() =>
@@ -249,11 +258,15 @@ function AdminCompaniesPage() {
           <section
             role="dialog"
             aria-modal="true"
-            className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl"
+            aria-labelledby="company-rejection-title"
+            aria-describedby="company-rejection-description"
+            ref={rejectionDialogRef}
+            tabIndex={-1}
+            className="max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-5 shadow-xl sm:p-6"
           >
-            <h2 className="text-xl font-bold">Reject company?</h2>
+            <h2 id="company-rejection-title" className="text-xl font-bold">Reject company?</h2>
 
-            <p className="mt-2 text-slate-600">
+            <p id="company-rejection-description" className="mt-2 text-slate-600">
               Provide the required rejection reason for{' '}
               {action.company.companyName}.
             </p>
@@ -267,7 +280,10 @@ function AdminCompaniesPage() {
               </label>
 
               <AppTextarea
+                ref={rejectionReasonRef}
                 id="company-rejection-reason"
+                error={Boolean(reasonError)}
+                aria-describedby={reasonError ? 'company-rejection-error' : undefined}
                 value={reason}
                 onChange={(event) => {
                   setReason(event.target.value)
@@ -278,13 +294,13 @@ function AdminCompaniesPage() {
               />
 
               {reasonError && (
-                <p className="mt-2 text-sm text-rose-600">
+                <p id="company-rejection-error" className="mt-2 text-sm text-rose-600">
                   {reasonError}
                 </p>
               )}
             </div>
 
-            <div className="mt-6 flex justify-end gap-3">
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <AppButton
                 variant="secondary"
                 disabled={saving}

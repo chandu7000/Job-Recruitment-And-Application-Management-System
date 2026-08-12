@@ -91,3 +91,62 @@ svg {
   outline: 3px solid var(--color-brand-300);
   outline-offset: 2px;
 }
+
+@media (max-width: 767px) {
+  .responsive-data-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .responsive-data-table,
+  .responsive-data-table tbody,
+  .responsive-data-table tr,
+  .responsive-data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .responsive-data-table tbody {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8fafc;
+  }
+
+  .responsive-data-table tr {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: 0.875rem;
+    background: var(--color-surface);
+  }
+
+  .responsive-data-table td {
+    display: grid;
+    grid-template-columns: minmax(6.5rem, 0.4fr) minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+    padding: 0.75rem 1rem;
+    overflow-wrap: anywhere;
+  }
+
+  .responsive-data-table td + td {
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .responsive-data-table td::before {
+    content: attr(data-label);
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+}

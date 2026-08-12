@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import AppButton from '../../../components/common/AppButton'
@@ -9,6 +9,7 @@ import AppTextarea from '../../../components/forms/AppTextarea'
 import ConfirmationModal from '../../../components/modals/ConfirmationModal'
 import { getApiErrorMessage } from '../../../api/errorMapper'
 import { formatDateTime } from '../../../utils/date'
+import useDialogFocus from '../../../hooks/useDialogFocus'
 import AdminStatusBadge from '../components/AdminStatusBadge'
 import { humanize } from '../constants/adminModerationConstants'
 import { validateJobRemovalReason } from '../utils/adminModerationUtils'
@@ -27,6 +28,19 @@ function AdminJobDetailsPage() {
   const [reason, setReason] = useState('')
   const [validation, setValidation] = useState('')
   const [saving, setSaving] = useState(false)
+  const removalReasonRef = useRef(null)
+
+  const closeRemoveDialog = useCallback(() => {
+    if (saving) return
+    setAction('')
+  }, [saving])
+
+  const removalDialogRef = useDialogFocus({
+    isOpen: action === 'remove',
+    initialFocusRef: removalReasonRef,
+    onEscape: closeRemoveDialog,
+    canClose: !saving,
+  })
 
   useEffect(() => {
     const controller = new AbortController()
@@ -228,11 +242,15 @@ function AdminJobDetailsPage() {
           <section
             role="dialog"
             aria-modal="true"
-            className="w-full max-w-lg rounded-2xl bg-white p-6"
+            aria-labelledby="job-removal-title"
+            aria-describedby="job-removal-description"
+            ref={removalDialogRef}
+            tabIndex={-1}
+            className="max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-5 shadow-xl sm:p-6"
           >
-            <h2 className="text-xl font-bold">Remove job?</h2>
+            <h2 id="job-removal-title" className="text-xl font-bold">Remove job?</h2>
 
-            <p className="mt-2 text-slate-600">
+            <p id="job-removal-description" className="mt-2 text-slate-600">
               Provide a moderation reason. This is not recruiter deletion.
             </p>
 
@@ -244,7 +262,10 @@ function AdminJobDetailsPage() {
             </label>
 
             <AppTextarea
+              ref={removalReasonRef}
               id="job-removal-reason"
+              error={Boolean(validation)}
+              aria-describedby={validation ? 'job-removal-error' : undefined}
               rows={5}
               maxLength={2000}
               value={reason}
@@ -255,16 +276,16 @@ function AdminJobDetailsPage() {
             />
 
             {validation && (
-              <p className="mt-2 text-sm text-rose-600">
+              <p id="job-removal-error" className="mt-2 text-sm text-rose-600">
                 {validation}
               </p>
             )}
 
-            <div className="mt-6 flex justify-end gap-3">
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <AppButton
                 variant="secondary"
                 disabled={saving}
-                onClick={() => setAction('')}
+                onClick={closeRemoveDialog}
               >
                 Cancel
               </AppButton>

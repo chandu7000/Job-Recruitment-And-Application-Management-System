@@ -223,7 +223,7 @@ function AdminReportsPage() {
       ) : (
         <>
           <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-            <table className="min-w-full divide-y divide-slate-200 text-sm">
+            <table className="responsive-data-table min-w-full divide-y divide-slate-200 text-sm">
               <thead className="bg-slate-50 text-left text-slate-600">
                 <tr>
                   <th className="px-4 py-3">Report</th>
@@ -238,7 +238,7 @@ function AdminReportsPage() {
               <tbody className="divide-y divide-slate-100">
                 {state.reports.map((report) => (
                   <tr key={report.id}>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Report">
                       <p className="font-semibold">{report.id}</p>
                       <p className="text-slate-500">
                         {report.reporter?.email ||
@@ -246,26 +246,26 @@ function AdminReportsPage() {
                       </p>
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Target">
                       {humanize(report.targetType)}
                       <p className="text-xs text-slate-500">
                         {report.targetResourceId}
                       </p>
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Category">
                       {humanize(report.category)}
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Status">
                       <AdminStatusBadge status={report.status} />
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Created">
                       {formatDateTime(report.createdAt)}
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Action">
                       <Link
                         className="font-semibold text-brand-700 hover:underline"
                         to={`/admin/reports/${report.id}`}

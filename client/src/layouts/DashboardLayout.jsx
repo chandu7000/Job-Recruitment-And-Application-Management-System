@@ -1,4 +1,5 @@
-import { LogOut } from 'lucide-react'
+import { LogOut, Menu, X } from 'lucide-react'
+import { useState } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import AppButton from '../components/common/AppButton'
 import { useAuth } from '../features/auth/hooks/useAuth'
@@ -7,6 +8,7 @@ import NotificationBell from '../features/notifications/components/NotificationB
 function DashboardLayout({ roleLabel, navigationItems }) {
   const { logout, user } = useAuth()
   const navigate = useNavigate()
+  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false)
 
   const handleLogout = async () => {
     try {
@@ -27,7 +29,21 @@ function DashboardLayout({ roleLabel, navigationItems }) {
             CareerForge
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              className="rounded-lg p-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-950 md:hidden"
+              aria-label={mobileNavigationOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-controls="dashboard-navigation"
+              aria-expanded={mobileNavigationOpen}
+              onClick={() => setMobileNavigationOpen((open) => !open)}
+            >
+              {mobileNavigationOpen ? (
+                <X className="size-5" aria-hidden="true" />
+              ) : (
+                <Menu className="size-5" aria-hidden="true" />
+              )}
+            </button>
             <NotificationBell />
             <div className="hidden text-right sm:block">
               <p className="text-sm font-semibold text-slate-800">{user?.email}</p>
@@ -42,10 +58,16 @@ function DashboardLayout({ roleLabel, navigationItems }) {
       </header>
 
       <div className="mx-auto flex max-w-screen-2xl flex-col md:flex-row">
-        <aside className="border-b border-slate-200 bg-white p-4 md:min-h-[calc(100vh-4rem)] md:w-64 md:border-r md:border-b-0">
+        <aside
+          className={[
+            'border-b border-slate-200 bg-white p-4 md:block md:min-h-[calc(100vh-4rem)] md:w-64 md:border-r md:border-b-0',
+            mobileNavigationOpen ? 'block' : 'hidden',
+          ].join(' ')}
+        >
           <nav
+            id="dashboard-navigation"
             aria-label={`${roleLabel} navigation`}
-            className="flex gap-2 overflow-x-auto md:flex-col"
+            className="flex flex-col gap-2"
           >
             {navigationItems.map((item) => (
               <NavLink
@@ -59,6 +81,7 @@ function DashboardLayout({ roleLabel, navigationItems }) {
                       : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950',
                   ].join(' ')
                 }
+                onClick={() => setMobileNavigationOpen(false)}
               >
                 {item.label}
               </NavLink>

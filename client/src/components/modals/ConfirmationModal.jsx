@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { X } from 'lucide-react'
+import useDialogFocus from '../../hooks/useDialogFocus'
 import AppButton from '../common/AppButton'
 
 function ConfirmationModal({
@@ -15,24 +16,12 @@ function ConfirmationModal({
 }) {
   const cancelButtonRef = useRef(null)
 
-  useEffect(() => {
-    if (!isOpen) {
-      return undefined
-    }
-
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape' && !loading) {
-        onCancel()
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    cancelButtonRef.current?.focus()
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isOpen, loading, onCancel])
+  const dialogRef = useDialogFocus({
+    isOpen,
+    initialFocusRef: cancelButtonRef,
+    onEscape: onCancel,
+    canClose: !loading,
+  })
 
   if (!isOpen) {
     return null
@@ -52,7 +41,9 @@ function ConfirmationModal({
         aria-modal="true"
         aria-labelledby="confirmation-modal-title"
         aria-describedby="confirmation-modal-message"
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        ref={dialogRef}
+        tabIndex={-1}
+        className="max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-5 shadow-xl sm:p-6"
       >
         <div className="flex items-start justify-between gap-4">
           <h2
@@ -80,7 +71,7 @@ function ConfirmationModal({
           {message}
         </p>
 
-        <div className="mt-6 flex justify-end gap-3">
+        <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <AppButton
             ref={cancelButtonRef}
             variant="secondary"

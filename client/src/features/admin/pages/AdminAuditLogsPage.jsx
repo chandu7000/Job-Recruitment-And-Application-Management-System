@@ -368,7 +368,7 @@ function AdminAuditLogsPage() {
       ) : (
         <>
           <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-            <table className="min-w-full divide-y divide-slate-200 text-sm">
+            <table className="responsive-data-table min-w-full divide-y divide-slate-200 text-sm">
               <thead className="bg-slate-50 text-left text-slate-600">
                 <tr>
                   <th className="px-4 py-3">Timestamp</th>
@@ -383,33 +383,33 @@ function AdminAuditLogsPage() {
               <tbody className="divide-y divide-slate-100">
                 {state.auditLogs.map((audit) => (
                   <tr key={audit.id}>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Timestamp">
                       {formatDateTime(audit.createdAt)}
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Action">
                       {humanize(audit.action)}
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Actor">
                       {humanize(audit.actorRole)}
                       <p className="text-xs text-slate-500">
                         {audit.actorUserId || 'System'}
                       </p>
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Resource">
                       {humanize(audit.resourceType)}
                       <p className="text-xs text-slate-500">
                         {audit.resourceId || '—'}
                       </p>
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Result">
                       <AdminStatusBadge status={audit.result} />
                     </td>
 
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" data-label="Details">
                       <Link
                         className="font-semibold text-brand-700 hover:underline"
                         to={`/admin/audit-logs/${audit.id}`}

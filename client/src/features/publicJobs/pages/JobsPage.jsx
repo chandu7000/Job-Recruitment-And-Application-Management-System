@@ -1,5 +1,5 @@
 import { SlidersHorizontal, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import EmptyState from '../../../components/feedback/EmptyState'
 import ErrorState from '../../../components/feedback/ErrorState'
@@ -12,10 +12,12 @@ import ResultsCount from '../components/ResultsCount'
 import { PUBLIC_JOB_SORTS } from '../constants/publicJobConstants'
 import { usePublicJobs } from '../hooks/usePublicJobs'
 import { EMPTY_FILTERS, filtersFromSearchParams, filtersToSearchParams } from '../utils/urlFilters'
+import useDialogFocus from '../../../hooks/useDialogFocus'
 
 function JobsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const closeFiltersRef = useRef(null)
   const filters = useMemo(() => filtersFromSearchParams(searchParams), [searchParams])
   const query = useMemo(() => ({ ...filters, limit: 10 }), [filters])
   const { jobs, pagination, loading, error, retry } = usePublicJobs(query)
@@ -25,6 +27,11 @@ function JobsPage() {
   const clearAll = () => commit(EMPTY_FILTERS)
   const removeFilter = (key) => commit({ ...filters, [key]: '', page: '1' })
   const submitSearch = (event) => { event.preventDefault(); commit({ ...filters, page: '1' }) }
+  const mobileFiltersDialogRef = useDialogFocus({
+    isOpen: mobileFiltersOpen,
+    initialFocusRef: closeFiltersRef,
+    onEscape: () => setMobileFiltersOpen(false),
+  })
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -47,7 +54,7 @@ function JobsPage() {
         </section>
       </div>
 
-      {mobileFiltersOpen && <div className="fixed inset-0 z-50 bg-slate-950/40 lg:hidden" role="dialog" aria-modal="true" aria-label="Job filters"><div className="ml-auto h-full w-full max-w-sm overflow-y-auto bg-white p-5"><div className="mb-5 flex items-center justify-between"><h2 className="text-xl font-bold">Filters</h2><button type="button" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)}><X /></button></div><JobFilters key={searchParams.toString()} filters={filters} onApply={applyFilters} onClear={clearAll} /></div></div>}
+      {mobileFiltersOpen && <div className="fixed inset-0 z-50 bg-slate-950/40 lg:hidden"><section ref={mobileFiltersDialogRef} tabIndex={-1} className="ml-auto h-full w-full max-w-sm overflow-y-auto bg-white p-5 shadow-xl" role="dialog" aria-modal="true" aria-labelledby="mobile-job-filters-title"><div className="mb-5 flex items-center justify-between"><h2 id="mobile-job-filters-title" className="text-xl font-bold">Filters</h2><button ref={closeFiltersRef} type="button" className="rounded-lg p-2 text-slate-600 hover:bg-slate-100" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)}><X aria-hidden="true" className="size-5" /></button></div><JobFilters key={searchParams.toString()} filters={filters} onApply={applyFilters} onClear={clearAll} /></section></div>}
     </div>
   )
 }
