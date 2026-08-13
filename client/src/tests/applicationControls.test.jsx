@@ -86,6 +86,44 @@ describe('Phase 8 job actions', () => {
     expect(remove).toHaveBeenCalledWith('job-1')
   })
 
+  it('saves an unsaved job and disables the control while a mutation is pending', async () => {
+    const save = vi.fn()
+    const { rerender } = render(
+      <AuthContext.Provider value={{ isAuthenticated: true, role: 'JOB_SEEKER' }}>
+        <SavedJobsContext.Provider
+          value={{
+            isSaved: () => false,
+            isPending: () => false,
+            save,
+            remove: vi.fn(),
+          }}
+        >
+          <SaveJobButton jobId={job.id} />
+        </SavedJobsContext.Provider>
+      </AuthContext.Provider>,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /save job/i }))
+    expect(save).toHaveBeenCalledWith('job-1')
+
+    rerender(
+      <AuthContext.Provider value={{ isAuthenticated: true, role: 'JOB_SEEKER' }}>
+        <SavedJobsContext.Provider
+          value={{
+            isSaved: () => false,
+            isPending: () => true,
+            save,
+            remove: vi.fn(),
+          }}
+        >
+          <SaveJobButton jobId={job.id} />
+        </SavedJobsContext.Provider>
+      </AuthContext.Provider>,
+    )
+
+    expect(screen.getByRole('button', { name: /save job/i })).toBeDisabled()
+  })
+
   it('hides save action for recruiter role', () => {
     render(
       <AuthContext.Provider

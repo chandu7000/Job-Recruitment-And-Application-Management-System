@@ -82,6 +82,42 @@ describe('Axios client foundation', () => {
         expect(getAccessToken()).toBe('fresh-token')
     })
 
+
+    it('refreshes once and retries the original protected request only once', async () => {
+        setAccessToken('expired-token')
+        const refresh = vi.spyOn(axios, 'post').mockResolvedValue({ data: { data: { accessToken: 'fresh-token' } } })
+        let protectedAttempts = 0
+
+        axiosClient.defaults.adapter = async (config) => {
+            protectedAttempts += 1
+            if (protectedAttempts === 1) {
+                return Promise.reject({ config, response: { status: 401, data: { code: 'ACCESS_TOKEN_EXPIRED' } } })
+            }
+            return { data: { ok: true }, status: 200, statusText: 'OK', headers: {}, config }
+        }
+
+        const response = await axiosClient.get('/protected/retry-once')
+
+        expect(response.status).toBe(200)
+        expect(refresh).toHaveBeenCalledTimes(1)
+        expect(protectedAttempts).toBe(2)
+    })
+
+    it('does not enter an infinite refresh loop when the retried request is still unauthorized', async () => {
+        setAccessToken('expired-token')
+        const refresh = vi.spyOn(axios, 'post').mockResolvedValue({ data: { data: { accessToken: 'fresh-token' } } })
+        let protectedAttempts = 0
+
+        axiosClient.defaults.adapter = (config) => {
+            protectedAttempts += 1
+            return Promise.reject({ config, response: { status: 401, data: { code: 'ACCESS_TOKEN_EXPIRED' } } })
+        }
+
+        await expect(axiosClient.get('/protected/still-unauthorized')).rejects.toBeDefined()
+        expect(refresh).toHaveBeenCalledTimes(1)
+        expect(protectedAttempts).toBe(2)
+    })
+
     it('clears authentication when refresh fails', async () => {
         setAccessToken('expired-token')
         const onFailure = vi.fn()

@@ -27,6 +27,8 @@ function renderGuard({ value, initialPath = '/protected', guard }) {
           <Route path="unauthorized" element={<h1>Unauthorized page</h1>} />
           <Route path="account-restricted" element={<h1>Restricted page</h1>} />
           <Route path="job-seeker/dashboard" element={<h1>Job seeker home</h1>} />
+          <Route path="recruiter/dashboard" element={<h1>Recruiter home</h1>} />
+          <Route path="admin/dashboard" element={<h1>Admin home</h1>} />
         </Routes>
       </MemoryRouter>
     </AuthContext.Provider>,
@@ -44,22 +46,51 @@ describe('authentication route guards', () => {
     expect(screen.getByRole('heading', { name: 'Protected content' })).toBeInTheDocument()
   })
 
+  it('shows session restoration loading before deciding protected access', () => {
+    renderGuard({ value: { isInitializing: true }, guard: <ProtectedRoute /> })
+    expect(screen.getByRole('status')).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Login page' })).not.toBeInTheDocument()
+  })
+
   it('redirects authenticated users away from guest routes', () => {
     renderGuard({
       value: { isAuthenticated: true, role: 'JOB_SEEKER' },
-      initialPath: '/protected',
       guard: <GuestOnlyRoute />,
     })
     expect(screen.getByRole('heading', { name: 'Job seeker home' })).toBeInTheDocument()
   })
 
-  it('blocks cross-role access', () => {
-    renderGuard({ value: { role: 'JOB_SEEKER' }, guard: <RoleRoute allowedRoles={['ADMIN']} /> })
+  it.each([
+    ['JOB_SEEKER', ['JOB_SEEKER']],
+    ['RECRUITER', ['RECRUITER']],
+    ['ADMIN', ['ADMIN']],
+  ])('allows %s through its own role guard', (role, allowedRoles) => {
+    renderGuard({ value: { role }, guard: <RoleRoute allowedRoles={allowedRoles} /> })
+    expect(screen.getByRole('heading', { name: 'Protected content' })).toBeInTheDocument()
+  })
+
+  it.each([
+    ['JOB_SEEKER', ['RECRUITER']],
+    ['JOB_SEEKER', ['ADMIN']],
+    ['RECRUITER', ['JOB_SEEKER']],
+    ['RECRUITER', ['ADMIN']],
+    ['ADMIN', ['JOB_SEEKER']],
+    ['ADMIN', ['RECRUITER']],
+  ])('blocks %s from a different role area', (role, allowedRoles) => {
+    renderGuard({ value: { role }, guard: <RoleRoute allowedRoles={allowedRoles} /> })
     expect(screen.getByRole('heading', { name: 'Unauthorized page' })).toBeInTheDocument()
   })
 
-  it('redirects a restricted account', () => {
-    renderGuard({ value: { status: 'SUSPENDED' }, guard: <AccountStatusGuard /> })
-    expect(screen.getByRole('heading', { name: 'Restricted page' })).toBeInTheDocument()
+  it('allows ACTIVE accounts through the account-status guard', () => {
+    renderGuard({ value: { status: 'ACTIVE' }, guard: <AccountStatusGuard /> })
+    expect(screen.getByRole('heading', { name: 'Protected content' })).toBeInTheDocument()
   })
+
+  it.each(['PENDING_VERIFICATION', 'DISABLED', 'SUSPENDED'])(
+    'redirects %s accounts to restricted handling',
+    (status) => {
+      renderGuard({ value: { status }, guard: <AccountStatusGuard /> })
+      expect(screen.getByRole('heading', { name: 'Restricted page' })).toBeInTheDocument()
+    },
+  )
 })

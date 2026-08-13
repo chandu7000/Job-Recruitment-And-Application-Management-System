@@ -1,7 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import {
+  Link,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
 import AppButton from '../../../components/common/AppButton'
 import AppInput from '../../../components/forms/AppInput'
 import { authApi } from '../services/authApi'
@@ -13,8 +18,10 @@ import AuthFormHeader from '../components/AuthFormHeader'
 
 function VerifyEmailPage() {
   const [searchParams] = useSearchParams()
+  const { token: routeToken } = useParams()
   const location = useLocation()
-  const token = searchParams.get('token') ?? ''
+
+  const token = routeToken ?? searchParams.get('token') ?? ''
   const tokenValidation = verificationTokenSchema.safeParse({ token })
   const [status, setStatus] = useState(token ? (tokenValidation.success ? 'verifying' : 'failed') : 'awaiting')
   const [apiError, setApiError] = useState(token && !tokenValidation.success ? { message: tokenValidation.error.issues[0].message } : null)

@@ -86,6 +86,7 @@ function AppRouter() {
 
             <Route element={<AuthLayout />}>
               <Route path="verify-email" element={<VerifyEmailPage />} />
+              <Route path="verify-email/:token" element={<VerifyEmailPage />} />
               <Route path="verify-email-change" element={<VerifyEmailChangePage />} />
               <Route path="reset-password" element={<ResetPasswordPage />} />
               <Route element={<GuestOnlyRoute />}>

@@ -8,9 +8,19 @@ import InterviewSummary from '../features/applications/components/InterviewSumma
 function renderWithRouter(ui) { return render(<MemoryRouter>{ui}</MemoryRouter>) }
 
 describe('application tracking presentation', () => {
-  it('renders readable application status', () => {
-    renderWithRouter(<ApplicationStatusBadge status="UNDER_REVIEW" />)
-    expect(screen.getByText('Under Review')).toBeInTheDocument()
+  it.each([
+    ['APPLIED', 'Applied'],
+    ['UNDER_REVIEW', 'Under Review'],
+    ['SHORTLISTED', 'Shortlisted'],
+    ['INTERVIEW_SCHEDULED', 'Interview Scheduled'],
+    ['INTERVIEW_COMPLETED', 'Interview Completed'],
+    ['OFFERED', 'Offered'],
+    ['HIRED', 'Hired'],
+    ['REJECTED', 'Rejected'],
+    ['WITHDRAWN', 'Withdrawn'],
+  ])('renders readable application status %s', (status, label) => {
+    renderWithRouter(<ApplicationStatusBadge status={status} />)
+    expect(screen.getByText(label)).toBeInTheDocument()
   })
 
   it('renders status history without recruiter-private information', () => {
