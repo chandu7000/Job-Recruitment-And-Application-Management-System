@@ -29,12 +29,17 @@ import {
   saveEmailChangeRequest,
   findUserByEmailChangeToken,
   completeEmailChange,
-  clearEmailChangeRequest
+  clearEmailChangeRequest,
+  deletePendingUserById
 } from "../repositories/auth.repository.js";
 
 import {
   createJobSeekerProfile
 } from "../repositories/jobSeekerProfile.repository.js";
+
+import {
+  createRecruiterProfile
+} from "../repositories/recruiterProfile.repository.js";
 
 import {
   createUserSession,
@@ -72,7 +77,110 @@ const REFRESH_TOKEN_EXPIRY_MS =
 const MAX_FAILED_LOGIN_ATTEMPTS = 5;
 const ACCOUNT_LOCK_DURATION_MINUTES = 15;
 
+
+const sendRegistrationVerification = async ({
+  user,
+  verificationToken,
+  event = "EMAIL_VERIFICATION_SENT"
+}) => {
+  let verificationEmailSent =
+    process.env.NODE_ENV === "test";
+
+  if (process.env.NODE_ENV !== "test") {
+    try {
+      const delivery =
+        await sendVerificationEmail(
+          user.email,
+          verificationToken
+        );
+
+      verificationEmailSent =
+        delivery?.success === true;
+
+      await logAuthEvent({
+        userId: user.id,
+        email: user.email,
+        event,
+        status: verificationEmailSent
+          ? "SUCCESS"
+          : "FAILED",
+        metadata: verificationEmailSent
+          ? undefined
+          : {
+              reason:
+                delivery?.errorCategory ||
+                "EMAIL_DELIVERY_FAILED"
+            }
+      });
+    } catch (error) {
+      verificationEmailSent = false;
+
+      await logAuthEvent({
+        userId: user.id,
+        email: user.email,
+        event,
+        status: "FAILED",
+        metadata: {
+          reason:
+            error?.message ||
+            "EMAIL_DELIVERY_FAILED"
+        }
+      });
+    }
+  }
+
+  return verificationEmailSent;
+};
+
+const refreshPendingRegistration = async ({
+  user,
+  role
+}) => {
+  if (
+    user.role !== role ||
+    user.status !==
+      ACCOUNT_STATUS.PENDING_VERIFICATION ||
+    user.emailVerifiedAt
+  ) {
+    throw new AppError(
+      "Email already registered.",
+      409,
+      "EMAIL_ALREADY_EXISTS"
+    );
+  }
+
+  const verificationToken =
+    generateSecureToken();
+
+  await saveEmailVerificationToken({
+    userId: user.id,
+    token: hashToken(verificationToken),
+    expiresAt: new Date(
+      Date.now() +
+      24 * 60 * 60 * 1000
+    )
+  });
+
+  const verificationEmailSent =
+    await sendRegistrationVerification({
+      user,
+      verificationToken,
+      event: "EMAIL_VERIFICATION_RESENT"
+    });
+
+  return {
+    user,
+    accessToken: null,
+    refreshToken: null,
+    verificationEmailSent,
+    existingPendingRegistration: true
+  };
+};
+
 const registerUser = async ({
+  firstName,
+  lastName,
+  phoneNumber,
   email,
   password,
   role = USER_ROLES.JOB_SEEKER,
@@ -82,11 +190,10 @@ const registerUser = async ({
     await findUserByEmail(email);
 
   if (existingUser) {
-    throw new AppError(
-      "Email already registered.",
-      409,
-      "EMAIL_ALREADY_EXISTS"
-    );
+    return refreshPendingRegistration({
+      user: existingUser,
+      role
+    });
   }
 
   const passwordHash =
@@ -99,60 +206,120 @@ const registerUser = async ({
   let accessToken;
   let refreshToken;
 
-  await sequelize.transaction(
-    async (transaction) => {
-      user = await createUser(
-        {
-          email,
-          passwordHash,
-          role,
-          status:
-            ACCOUNT_STATUS.PENDING_VERIFICATION
-        },
-        {
-          transaction
-        }
-      );
+  const verificationToken =
+    generateSecureToken();
+  const hashedVerificationToken =
+    hashToken(verificationToken);
 
-      if (role === USER_ROLES.JOB_SEEKER) {
-        await createJobSeekerProfile(
+  try {
+    await sequelize.transaction(
+      async (transaction) => {
+        user = await createUser(
           {
-            userId: user.id
+            email,
+            passwordHash,
+            role,
+            status:
+              ACCOUNT_STATUS.PENDING_VERIFICATION
+          },
+          {
+            transaction
+          }
+        );
+
+        if (
+          role === USER_ROLES.JOB_SEEKER
+        ) {
+          await createJobSeekerProfile(
+            {
+              userId: user.id,
+              firstName,
+              lastName,
+              phoneNumber
+            },
+            {
+              transaction
+            }
+          );
+        } else if (role === USER_ROLES.RECRUITER) {
+          await createRecruiterProfile(
+            {
+              userId: user.id,
+              firstName,
+              lastName,
+              phoneNumber
+            },
+            { transaction }
+          );
+        }
+
+        await saveEmailVerificationToken(
+          {
+            userId: user.id,
+            token:
+              hashedVerificationToken,
+            expiresAt: new Date(
+              Date.now() +
+              24 * 60 * 60 * 1000
+            )
+          },
+          {
+            transaction
+          }
+        );
+
+        const payload = {
+          id: user.id,
+          email: user.email,
+          role: user.role
+        };
+
+        accessToken =
+          generateAccessToken(payload);
+
+        refreshToken =
+          generateRefreshToken(payload);
+
+        await createUserSession(
+          {
+            userId: user.id,
+            refreshToken,
+            ...deviceInfo,
+            expiresAt: new Date(
+              Date.now() +
+              REFRESH_TOKEN_EXPIRY_MS
+            )
           },
           {
             transaction
           }
         );
       }
+    );
+  } catch (error) {
+    if (
+      error?.name ===
+      "SequelizeUniqueConstraintError"
+    ) {
+      const concurrentUser =
+        await findUserByEmail(email);
 
-      const payload = {
-        id: user.id,
-        email: user.email,
-        role: user.role
-      };
-
-      accessToken =
-        generateAccessToken(payload);
-
-      refreshToken =
-        generateRefreshToken(payload);
-
-      await createUserSession(
-        {
-          userId: user.id,
-          refreshToken,
-          ...deviceInfo,
-          expiresAt: new Date(
-            Date.now() +
-            REFRESH_TOKEN_EXPIRY_MS
-          )
-        },
-        {
-          transaction
-        }
-      );
+      if (concurrentUser) {
+        return refreshPendingRegistration({
+          user: concurrentUser,
+          role
+        });
+      }
     }
-  );
+
+    throw error;
+  }
+
+  const verificationEmailSent =
+    await sendRegistrationVerification({
+      user,
+      verificationToken
+    });
 
   await logAuthEvent({
     userId: user.id,
@@ -166,10 +333,11 @@ const registerUser = async ({
   return {
     user,
     accessToken,
-    refreshToken
+    refreshToken,
+    verificationEmailSent,
+    existingPendingRegistration: false
   };
 };
-
 const loginUser = async ({
   email,
   password,
@@ -1172,6 +1340,66 @@ const verifyEmail = async ({
   };
 };
 
+const declineEmailVerification = async ({
+  token
+}) => {
+  const hashedToken =
+    hashToken(token);
+
+  const user =
+    await findUserByEmailVerificationToken(
+      hashedToken
+    );
+
+  if (!user) {
+    throw new AppError(
+      "This registration link is invalid, expired, or has already been used.",
+      400,
+      "INVALID_VERIFICATION_TOKEN"
+    );
+  }
+
+  if (
+    !user.emailVerificationExpiresAt ||
+    user.emailVerificationExpiresAt <
+    new Date()
+  ) {
+    throw new AppError(
+      "Verification token expired.",
+      400,
+      "VERIFICATION_TOKEN_EXPIRED"
+    );
+  }
+
+  const email = user.email;
+  const userId = user.id;
+
+  const deletedCount =
+    await deletePendingUserById(userId);
+
+  if (!deletedCount) {
+    throw new AppError(
+      "This registration can no longer be cancelled.",
+      409,
+      "REGISTRATION_NOT_PENDING"
+    );
+  }
+
+  await logAuthEvent({
+    email,
+    event: "EMAIL_VERIFICATION_DECLINED",
+    status: "SUCCESS",
+    metadata: {
+      cancelledUserId: userId
+    }
+  });
+
+  return {
+    message:
+      "Pending registration cancelled successfully."
+  };
+};
+
 const verifyEmailChange = async ({
   token
 }) => {
@@ -1327,6 +1555,7 @@ export {
   requestEmailChange,
   sendEmailVerification,
   verifyEmail,
+  declineEmailVerification,
   verifyEmailChange,
   getCurrentUser
 };

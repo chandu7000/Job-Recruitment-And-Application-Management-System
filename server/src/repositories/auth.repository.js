@@ -1,3 +1,5 @@
+import { Op } from "sequelize";
+
 import User from "../models/user.model.js";
 
 import {
@@ -385,6 +387,32 @@ const completeEmailChange = async (
   );
 };
 
+
+const deletePendingUserById = async (
+  userId,
+  { transaction } = {}
+) => {
+  return User.destroy({
+    where: {
+      id: userId,
+      status: "PENDING_VERIFICATION",
+      emailVerifiedAt: null
+    },
+    transaction
+  });
+};
+
+
+const deleteExpiredPendingUsers = async (createdBefore) => {
+  return User.destroy({
+    where: {
+      status: ACCOUNT_STATUS.PENDING_VERIFICATION,
+      emailVerifiedAt: null,
+      createdAt: { [Op.lt]: createdBefore }
+    }
+  });
+};
+
 const clearEmailChangeRequest = async (
   userId,
   { transaction } = {}
@@ -424,5 +452,7 @@ export {
   saveEmailChangeRequest,
   findUserByEmailChangeToken,
   completeEmailChange,
-  clearEmailChangeRequest
+  clearEmailChangeRequest,
+  deletePendingUserById,
+  deleteExpiredPendingUsers
 };

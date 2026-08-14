@@ -11,7 +11,10 @@ const sendPasswordResetEmail = async (email, resetToken) => sendTemplateEmail({
 const sendVerificationEmail = async (email, verificationToken) => sendTemplateEmail({
   to: email,
   template: "EMAIL_VERIFICATION",
-  data: { actionUrl: `${env.clientUrl}/verify-email/${verificationToken}` },
+  data: {
+    actionUrl: `${env.clientUrl}/verify-email/${verificationToken}`,
+    secondaryActionUrl: `${env.clientUrl}/decline-email-verification/${verificationToken}`
+  },
   eventType: "EMAIL_VERIFICATION"
 });
 

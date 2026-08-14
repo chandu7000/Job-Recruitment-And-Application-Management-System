@@ -10,6 +10,7 @@ import {
   requestEmailChange,
   sendEmailVerification,
   verifyEmail,
+  declineEmailVerification,
   verifyEmailChange,
   getCurrentUser
 } from "../services/auth.service.js";
@@ -42,18 +43,28 @@ const registerJobSeeker = async (
         req
       });
 
-    setRefreshTokenCookie(
-      res,
-      result.refreshToken
-    );
+    if (result.refreshToken) {
+      setRefreshTokenCookie(
+        res,
+        result.refreshToken
+      );
+    }
 
     return sendSuccess(
       res,
-      201,
-      "Job seeker registered successfully.",
+      result.existingPendingRegistration
+        ? 200
+        : 201,
+      result.existingPendingRegistration
+        ? "Registration already pending. A new verification email has been sent."
+        : "Job seeker registered successfully.",
       {
         user: result.user,
-        accessToken: result.accessToken
+        accessToken: result.accessToken,
+        verificationEmailSent:
+          result.verificationEmailSent,
+        existingPendingRegistration:
+          result.existingPendingRegistration
       }
     );
   } catch (error) {
@@ -74,18 +85,28 @@ const registerRecruiter = async (
         req
       });
 
-    setRefreshTokenCookie(
-      res,
-      result.refreshToken
-    );
+    if (result.refreshToken) {
+      setRefreshTokenCookie(
+        res,
+        result.refreshToken
+      );
+    }
 
     return sendSuccess(
       res,
-      201,
-      "Recruiter registered successfully.",
+      result.existingPendingRegistration
+        ? 200
+        : 201,
+      result.existingPendingRegistration
+        ? "Registration already pending. A new verification email has been sent."
+        : "Recruiter registered successfully.",
       {
         user: result.user,
-        accessToken: result.accessToken
+        accessToken: result.accessToken,
+        verificationEmailSent:
+          result.verificationEmailSent,
+        existingPendingRegistration:
+          result.existingPendingRegistration
       }
     );
   } catch (error) {
@@ -364,6 +385,28 @@ const verifyEmailController = async (
   }
 };
 
+const declineEmailVerificationController = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const result =
+      await declineEmailVerification(
+        req.body
+      );
+
+    return sendSuccess(
+      res,
+      200,
+      result.message,
+      {}
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
 const me = async (
   req,
   res,
@@ -442,6 +485,7 @@ export {
   requestEmailChangeController,
   sendEmailVerificationController,
   verifyEmailController,
+  declineEmailVerificationController,
   verifyEmailChangeController,
   me,
   getSessions,

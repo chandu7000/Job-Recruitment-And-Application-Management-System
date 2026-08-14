@@ -20,16 +20,24 @@ function RegistrationPage({ accountType }) {
   const isRecruiter = accountType === 'recruiter'
   const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(registrationSchema),
-    defaultValues: { email: '', password: '', confirmPassword: '' },
+    defaultValues: { firstName: '', lastName: '', phoneNumber: '', email: '', password: '', confirmPassword: '' },
   })
 
-  const submit = async ({ email, password }) => {
+  const submit = async ({ firstName, lastName, phoneNumber, email, password }) => {
     setApiError(null)
     try {
       const registerAccount = isRecruiter ? authApi.registerRecruiter : authApi.registerJobSeeker
-      await registerAccount({ email, password })
+      const result = await registerAccount({ firstName, lastName, phoneNumber, email, password })
       clearAccessToken()
-      navigate('/verify-email', { replace: true, state: { email, registrationComplete: true } })
+      navigate('/verify-email', {
+        replace: true,
+        state: {
+          email,
+          registrationComplete: true,
+          verificationEmailSent:
+            result?.verificationEmailSent !== false,
+        },
+      })
     } catch (error) {
       setApiError(error.apiError ?? { message: 'Unable to create your account.' })
       applyServerFieldErrors(error, setError)
@@ -41,6 +49,17 @@ function RegistrationPage({ accountType }) {
       <AuthFormHeader title={isRecruiter ? 'Recruiter registration' : 'Job-seeker registration'} description="Create your secure CareerForge account." />
       <form className="space-y-4" onSubmit={handleSubmit(submit)} noValidate>
         <ApiFormError error={apiError} />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <AuthField id="firstName" label="First name" error={errors.firstName}>
+            <AppInput id="firstName" autoComplete="given-name" error={Boolean(errors.firstName)} {...register('firstName')} />
+          </AuthField>
+          <AuthField id="lastName" label="Last name" error={errors.lastName}>
+            <AppInput id="lastName" autoComplete="family-name" error={Boolean(errors.lastName)} {...register('lastName')} />
+          </AuthField>
+        </div>
+        <AuthField id="phoneNumber" label="Phone number" error={errors.phoneNumber}>
+          <AppInput id="phoneNumber" type="tel" autoComplete="tel" placeholder="e.g. +91 98765 43210" error={Boolean(errors.phoneNumber)} {...register('phoneNumber')} />
+        </AuthField>
         <AuthField id="email" label="Email address" error={errors.email}>
           <AppInput id="email" type="email" autoComplete="email" error={Boolean(errors.email)} {...register('email')} />
         </AuthField>

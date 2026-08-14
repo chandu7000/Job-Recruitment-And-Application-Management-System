@@ -17,6 +17,7 @@ export const API_ENDPOINTS = Object.freeze({
     VERIFY_EMAIL_CHANGE: '/auth/verify-email-change',
     RESEND_VERIFICATION: '/auth/resend-verification',
     VERIFY_EMAIL: '/auth/verify-email',
+    DECLINE_EMAIL_VERIFICATION: '/auth/decline-verification',
   }),
 
   REPORTS: Object.freeze({

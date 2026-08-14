@@ -97,4 +97,9 @@ export const authApi = {
     axiosClient
       .post(AUTH.VERIFY_EMAIL, payload)
       .then(responseData),
+
+  declineEmailVerification: (payload) =>
+    axiosClient
+      .post(AUTH.DECLINE_EMAIL_VERIFICATION, payload)
+      .then(responseData),
 }

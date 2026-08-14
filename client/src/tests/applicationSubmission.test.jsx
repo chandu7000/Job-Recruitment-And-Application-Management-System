@@ -55,8 +55,8 @@ describe('application submission page', () => {
   })
 
   it('shows a loading state while application prerequisites are being prepared', () => {
-    publicJobApi.getById.mockReturnValue(new Promise(() => { }))
-    jobSeekerApi.profile.mockReturnValue(new Promise(() => { }))
+    publicJobApi.getById.mockReturnValue(new Promise(() => {}))
+    jobSeekerApi.profile.mockReturnValue(new Promise(() => {}))
 
     renderApplyPage()
 

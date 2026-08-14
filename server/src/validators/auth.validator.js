@@ -49,6 +49,19 @@ const passwordStrengthValidator = (
 };
 
 const registerValidator = [
+  body("firstName")
+    .optional().isString().withMessage("First name must be a valid string.")
+    .bail().trim().isLength({ min: 1, max: 100 }).withMessage("First name must contain between 1 and 100 characters."),
+
+  body("lastName")
+    .optional().isString().withMessage("Last name must be a valid string.")
+    .bail().trim().isLength({ min: 1, max: 100 }).withMessage("Last name must contain between 1 and 100 characters."),
+
+  body("phoneNumber")
+    .optional().isString().withMessage("Phone number must be a valid string.")
+    .bail().trim().isLength({ min: 7, max: 30 }).withMessage("Phone number must contain between 7 and 30 characters.")
+    .bail().matches(/^\+?[0-9\s()-]{7,30}$/).withMessage("Phone number format is invalid."),
+
   body("email")
     .exists({
       checkFalsy: true

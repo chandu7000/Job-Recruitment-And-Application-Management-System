@@ -104,6 +104,15 @@ const resendVerification = (email) =>
             email
         });
 
+const declineVerification = (token) =>
+    request(app)
+        .post(
+            "/api/auth/decline-verification"
+        )
+        .send({
+            token
+        });
+
 describe("Email Verification API", () => {
     beforeEach(cleanup);
     afterEach(cleanup);
@@ -707,6 +716,235 @@ describe("Email Verification API", () => {
                     );
                 },
                 15000
+            );
+        }
+    );
+
+    describe(
+        "POST /api/auth/decline-verification",
+        () => {
+            it(
+                "should remove a pending unverified registration with a valid token",
+                async () => {
+                    const email =
+                        createEmail(
+                            "decline"
+                        );
+
+                    const rawToken =
+                        createVerificationToken();
+
+                    const user =
+                        await registerUser(
+                            email
+                        );
+
+                    await assignVerificationToken({
+                        user,
+                        rawToken
+                    });
+
+                    const response =
+                        await declineVerification(
+                            rawToken
+                        ).expect(200);
+
+                    expect(
+                        response.body.message
+                    ).toBe(
+                        "Pending registration cancelled successfully."
+                    );
+
+                    const storedUser =
+                        await User.unscoped().findOne({
+                            where: { email }
+                        });
+
+                    expect(storedUser).toBeNull();
+                }
+            );
+
+            it(
+                "should reject an invalid decline token without deleting an account",
+                async () => {
+                    const email =
+                        createEmail(
+                            "decline-invalid"
+                        );
+
+                    await registerUser(email);
+
+                    const response =
+                        await declineVerification(
+                            createVerificationToken()
+                        ).expect(400);
+
+                    expect(
+                        response.body.code
+                    ).toBe(
+                        "INVALID_VERIFICATION_TOKEN"
+                    );
+
+                    const storedUser =
+                        await User.unscoped().findOne({
+                            where: { email }
+                        });
+
+                    expect(storedUser).not.toBeNull();
+                }
+            );
+        }
+    );
+
+});
+
+describe("Registration duplicate protection", () => {
+    beforeEach(cleanup);
+    afterEach(cleanup);
+
+    it(
+        "reuses one pending account instead of creating a duplicate user row",
+        async () => {
+            const email =
+                createEmail(
+                    "duplicate-pending"
+                );
+
+            const first =
+                await request(app)
+                    .post(
+                        "/api/auth/register/job-seeker"
+                    )
+                    .send({
+                        email,
+                        password: PASSWORD
+                    })
+                    .expect(201);
+
+            const firstUserId =
+                first.body.data.user.id;
+
+            const second =
+                await request(app)
+                    .post(
+                        "/api/auth/register/job-seeker"
+                    )
+                    .send({
+                        email,
+                        password:
+                            "Different@Password123"
+                    })
+                    .expect(200);
+
+            expect(
+                second.body.data
+                    .existingPendingRegistration
+            ).toBe(true);
+
+            expect(
+                second.body.data.user.id
+            ).toBe(firstUserId);
+
+            const users =
+                await User.unscoped().findAll({
+                    where: {
+                        email
+                    }
+                });
+
+            expect(users).toHaveLength(1);
+            expect(users[0].status).toBe(
+                "PENDING_VERIFICATION"
+            );
+        }
+    );
+
+    it(
+        "does not allow a verified account email to register again",
+        async () => {
+            const email =
+                createEmail(
+                    "duplicate-verified"
+                );
+
+            const user =
+                await registerUser(email);
+
+            user.status = "ACTIVE";
+            user.emailVerifiedAt =
+                new Date();
+            user.emailVerificationToken =
+                null;
+            user.emailVerificationExpiresAt =
+                null;
+
+            await user.save();
+
+            const response =
+                await request(app)
+                    .post(
+                        "/api/auth/register/job-seeker"
+                    )
+                    .send({
+                        email,
+                        password: PASSWORD
+                    })
+                    .expect(409);
+
+            expect(
+                response.body.error.code
+            ).toBe(
+                "EMAIL_ALREADY_EXISTS"
+            );
+
+            const users =
+                await User.unscoped().findAll({
+                    where: {
+                        email
+                    }
+                });
+
+            expect(users).toHaveLength(1);
+        }
+    );
+
+    it(
+        "does not switch account role when the same pending email is submitted to another registration type",
+        async () => {
+            const email =
+                createEmail(
+                    "duplicate-role"
+                );
+
+            await registerUser(email);
+
+            const response =
+                await request(app)
+                    .post(
+                        "/api/auth/register/recruiter"
+                    )
+                    .send({
+                        email,
+                        password: PASSWORD
+                    })
+                    .expect(409);
+
+            expect(
+                response.body.error.code
+            ).toBe(
+                "EMAIL_ALREADY_EXISTS"
+            );
+
+            const users =
+                await User.unscoped().findAll({
+                    where: {
+                        email
+                    }
+                });
+
+            expect(users).toHaveLength(1);
+            expect(users[0].role).toBe(
+                "JOB_SEEKER"
             );
         }
     );

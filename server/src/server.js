@@ -8,9 +8,11 @@ import {
 } from "./config/database.js";
 
 import runSessionCleanup from "./jobs/sessionCleanup.job.js";
+import runPendingRegistrationCleanup from "./jobs/pendingRegistrationCleanup.job.js";
 
 let httpServer;
 let sessionCleanupInterval;
+let pendingRegistrationCleanupInterval;
 let isShuttingDown = false;
 
 const shutdownServer = async (
@@ -35,6 +37,12 @@ const shutdownServer = async (
       console.log(
         "Session cleanup interval stopped"
       );
+    }
+
+    if (pendingRegistrationCleanupInterval) {
+      clearInterval(pendingRegistrationCleanupInterval);
+      pendingRegistrationCleanupInterval = null;
+      console.log("Pending registration cleanup interval stopped");
     }
 
     if (httpServer) {
@@ -124,6 +132,7 @@ const startServer = async () => {
      * connection has been established.
      */
     await runSessionCleanup();
+    await runPendingRegistrationCleanup();
 
     /*
      * Run session cleanup every hour.
@@ -136,6 +145,12 @@ const startServer = async () => {
     );
 
     sessionCleanupInterval.unref();
+
+    pendingRegistrationCleanupInterval = setInterval(
+      () => { void runPendingRegistrationCleanup(); },
+      60 * 60 * 1000
+    );
+    pendingRegistrationCleanupInterval.unref();
 
     console.log(
       "CareerForge startup completed"

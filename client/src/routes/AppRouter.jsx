@@ -16,6 +16,7 @@ import ResetPasswordPage from '../features/auth/pages/ResetPasswordPage'
 import SecuritySettingsPage from '../features/auth/pages/SecuritySettingsPage'
 import VerifyEmailChangePage from '../features/auth/pages/VerifyEmailChangePage'
 import VerifyEmailPage from '../features/auth/pages/VerifyEmailPage'
+import DeclineEmailVerificationPage from '../features/auth/pages/DeclineEmailVerificationPage'
 import PageLoader from '../components/feedback/PageLoader'
 import AccountStatusGuard from './guards/AccountStatusGuard'
 import GuestOnlyRoute from './guards/GuestOnlyRoute'
@@ -87,6 +88,7 @@ function AppRouter() {
             <Route element={<AuthLayout />}>
               <Route path="verify-email" element={<VerifyEmailPage />} />
               <Route path="verify-email/:token" element={<VerifyEmailPage />} />
+              <Route path="decline-email-verification/:token" element={<DeclineEmailVerificationPage />} />
               <Route path="verify-email-change" element={<VerifyEmailChangePage />} />
               <Route path="reset-password" element={<ResetPasswordPage />} />
               <Route element={<GuestOnlyRoute />}>

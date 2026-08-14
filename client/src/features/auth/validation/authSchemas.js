@@ -36,8 +36,15 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'Password is required.'),
 })
 
+const personNameSchema = (label) => z.string().trim().min(1, `${label} is required.`).max(100, `${label} must not exceed 100 characters.`)
+
+const phoneNumberSchema = z.string().trim().min(1, 'Phone number is required.').max(30, 'Phone number must not exceed 30 characters.').regex(/^\+?[0-9\s()-]{7,30}$/, 'Enter a valid phone number.')
+
 export const registrationSchema = addPasswordConfirmation(
   z.object({
+    firstName: personNameSchema('First name'),
+    lastName: personNameSchema('Last name'),
+    phoneNumber: phoneNumberSchema,
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: z.string().min(1, 'Confirm your password.'),

@@ -2,19 +2,32 @@ const escapeHtml = (value = "") => String(value)
   .replaceAll("&", "&amp;").replaceAll("<", "&lt;")
   .replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
-const layout = ({ heading, body, actionUrl, actionLabel }) => {
+const layout = ({ heading, body, actionUrl, actionLabel, secondaryActionUrl, secondaryActionLabel }) => {
   const action = actionUrl ? `<p><a href="${escapeHtml(actionUrl)}">${escapeHtml(actionLabel || "View details")}</a></p>` : "";
-  return `<!doctype html><html><body><h1>${escapeHtml(heading)}</h1>${body}${action}<p>CareerForge</p></body></html>`;
+  const secondaryAction = secondaryActionUrl ? `<p><a href="${escapeHtml(secondaryActionUrl)}">${escapeHtml(secondaryActionLabel || "Secondary action")}</a></p>` : "";
+  return `<!doctype html><html><body><h1>${escapeHtml(heading)}</h1>${body}${action}${secondaryAction}<p>CareerForge</p></body></html>`;
 };
 
-const build = ({ subject, heading, lines = [], actionUrl, actionLabel }) => ({
+const build = ({ subject, heading, lines = [], actionUrl, actionLabel, secondaryActionUrl, secondaryActionLabel }) => ({
   subject,
-  text: [...lines, actionUrl || ""].filter(Boolean).join("\n"),
-  html: layout({ heading, body: lines.map((line) => `<p>${escapeHtml(line)}</p>`).join(""), actionUrl, actionLabel })
+  text: [...lines, actionUrl || "", secondaryActionUrl || ""].filter(Boolean).join("\n"),
+  html: layout({ heading, body: lines.map((line) => `<p>${escapeHtml(line)}</p>`).join(""), actionUrl, actionLabel, secondaryActionUrl, secondaryActionLabel })
 });
 
 export const emailTemplates = {
-  EMAIL_VERIFICATION: (d) => build({ subject: "Verify your CareerForge email", heading: "Verify your email", lines: ["Complete your email verification to activate your account."], actionUrl: d.actionUrl, actionLabel: "Verify email" }),
+  EMAIL_VERIFICATION: (d) => build({
+    subject: "Verify your CareerForge email",
+    heading: "Verify your email",
+    lines: [
+      "Complete your email verification to activate your account.",
+      "Only verify this address if you created the CareerForge account.",
+      "If you did not create this account, use the This wasn't me link below to cancel the pending registration."
+    ],
+    actionUrl: d.actionUrl,
+    actionLabel: "Verify email",
+    secondaryActionUrl: d.secondaryActionUrl,
+    secondaryActionLabel: "This wasn't me"
+  }),
   PASSWORD_RESET: (d) => build({ subject: "Reset your CareerForge password", heading: "Reset your password", lines: ["Use the secure link below to reset your password."], actionUrl: d.actionUrl, actionLabel: "Reset password" }),
   COMPANY_APPROVED: (d) => build({ subject: "Company verification approved", heading: "Company approved", lines: [`${d.companyName || "Your company"} has been approved.`], actionUrl: d.actionUrl }),
   COMPANY_REJECTED: (d) => build({ subject: "Company verification update", heading: "Company verification rejected", lines: [`${d.companyName || "Your company"} was not approved.`, d.reason || "Review the company details and try again."], actionUrl: d.actionUrl }),

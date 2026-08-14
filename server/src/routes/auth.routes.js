@@ -33,6 +33,7 @@ import {
   requestEmailChangeController,
   sendEmailVerificationController,
   verifyEmailController,
+  declineEmailVerificationController,
   verifyEmailChangeController,
   me,
   getSessions,
@@ -204,6 +205,13 @@ router.post(
   verifyEmailValidator,
   validateRequest,
   verifyEmailController
+);
+
+router.post(
+  "/decline-verification",
+  verifyEmailValidator,
+  validateRequest,
+  declineEmailVerificationController
 );
 
 export default router;

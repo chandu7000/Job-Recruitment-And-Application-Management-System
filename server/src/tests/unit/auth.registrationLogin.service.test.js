@@ -601,7 +601,10 @@ describe(
                 "access-token",
 
               refreshToken:
-                "refresh-token"
+                "refresh-token",
+
+              verificationEmailSent:
+                true
             });
           }
         );
@@ -1151,7 +1154,10 @@ describe(
                 "access-token",
 
               refreshToken:
-                "refresh-token"
+                "refresh-token",
+
+              verificationEmailSent:
+                true
             });
           }
         );
