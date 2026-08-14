@@ -48,6 +48,9 @@ const registerUser = async (email) => {
     await request(app)
         .post("/api/auth/register/job-seeker")
         .send({
+            firstName: "Test",
+            lastName: "User",
+            phoneNumber: "9876543210",
             email,
             password: PASSWORD
         })
@@ -807,7 +810,7 @@ describe("Registration duplicate protection", () => {
         async () => {
             const email =
                 createEmail(
-                    "duplicate-pending"
+                    "dup-pending"
                 );
 
             const first =
@@ -816,10 +819,21 @@ describe("Registration duplicate protection", () => {
                         "/api/auth/register/job-seeker"
                     )
                     .send({
+                        firstName: "Test",
+                        lastName: "User",
+                        phoneNumber: "9876543210",
                         email,
                         password: PASSWORD
                     })
                     .expect(201);
+
+            console.log(
+                "DUPLICATE REGISTER DEBUG:",
+                first.status,
+                JSON.stringify(first.body, null, 2)
+            );
+
+            expect(first.status).toBe(201);
 
             const firstUserId =
                 first.body.data.user.id;
@@ -830,6 +844,9 @@ describe("Registration duplicate protection", () => {
                         "/api/auth/register/job-seeker"
                     )
                     .send({
+                        firstName: "Test",
+                        lastName: "User",
+                        phoneNumber: "9876543210",
                         email,
                         password:
                             "Different@Password123"
@@ -864,7 +881,7 @@ describe("Registration duplicate protection", () => {
         async () => {
             const email =
                 createEmail(
-                    "duplicate-verified"
+                    "dup-verified"
                 );
 
             const user =
@@ -886,13 +903,16 @@ describe("Registration duplicate protection", () => {
                         "/api/auth/register/job-seeker"
                     )
                     .send({
+                        firstName: "Test",
+                        lastName: "User",
+                        phoneNumber: "9876543210",
                         email,
                         password: PASSWORD
                     })
                     .expect(409);
 
             expect(
-                response.body.error.code
+                response.body.code
             ).toBe(
                 "EMAIL_ALREADY_EXISTS"
             );
@@ -924,13 +944,16 @@ describe("Registration duplicate protection", () => {
                         "/api/auth/register/recruiter"
                     )
                     .send({
+                        firstName: "Test",
+                        lastName: "User",
+                        phoneNumber: "9876543210",
                         email,
                         password: PASSWORD
                     })
                     .expect(409);
 
             expect(
-                response.body.error.code
+                response.body.code
             ).toBe(
                 "EMAIL_ALREADY_EXISTS"
             );

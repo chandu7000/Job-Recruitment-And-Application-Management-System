@@ -68,7 +68,13 @@ const completeEmailChangeMock =
 const clearEmailChangeRequestMock =
   jest.fn();
 
+const deletePendingUserByIdMock =
+  jest.fn();
+
 const createJobSeekerProfileMock =
+  jest.fn();
+
+const createRecruiterProfileMock =
   jest.fn();
 
 const createUserSessionMock =
@@ -211,7 +217,10 @@ jest.unstable_mockModule(
       completeEmailChangeMock,
 
     clearEmailChangeRequest:
-      clearEmailChangeRequestMock
+      clearEmailChangeRequestMock,
+
+    deletePendingUserById:
+      deletePendingUserByIdMock
   })
 );
 
@@ -220,6 +229,14 @@ jest.unstable_mockModule(
   () => ({
     createJobSeekerProfile:
       createJobSeekerProfileMock
+  })
+);
+
+jest.unstable_mockModule(
+  "../../repositories/recruiterProfile.repository.js",
+  () => ({
+    createRecruiterProfile:
+      createRecruiterProfileMock
   })
 );
 
@@ -604,7 +621,10 @@ describe(
                 "refresh-token",
 
               verificationEmailSent:
-                true
+                true,
+
+              existingPendingRegistration:
+                false
             });
           }
         );
@@ -1154,10 +1174,7 @@ describe(
                 "access-token",
 
               refreshToken:
-                "refresh-token",
-
-              verificationEmailSent:
-                true
+                "refresh-token"
             });
           }
         );

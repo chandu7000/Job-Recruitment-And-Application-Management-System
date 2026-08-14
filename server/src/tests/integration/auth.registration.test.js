@@ -276,19 +276,16 @@ describe("Job Seeker Registration API", () => {
                             email,
                             password: validPassword
                         })
-                        .expect(409);
+                        .expect(200);
 
                     expect(response.body.success).toBe(
-                        false
+                        true
                     );
 
-                    expect(response.body.message).toBe(
-                        "Email already registered."
-                    );
-
-                    expect(response.body.code).toBe(
-                        "EMAIL_ALREADY_EXISTS"
-                    );
+                    expect(
+                        response.body.data
+                            .existingPendingRegistration
+                    ).toBe(true);
 
                     const userCount = await User.count({
                         where: {
@@ -705,23 +702,16 @@ describe("Recruiter Registration API", () => {
                                 password:
                                     validPassword
                             })
-                            .expect(409);
+                            .expect(200);
 
                     expect(
                         response.body.success
-                    ).toBe(false);
+                    ).toBe(true);
 
                     expect(
-                        response.body.message
-                    ).toBe(
-                        "Email already registered."
-                    );
-
-                    expect(
-                        response.body.code
-                    ).toBe(
-                        "EMAIL_ALREADY_EXISTS"
-                    );
+                        response.body.data
+                            .existingPendingRegistration
+                    ).toBe(true);
 
                     const userCount =
                         await User.count({

@@ -24,6 +24,7 @@ import {
   registerJobSeeker,
   registerRecruiter,
   login,
+  restoreSessionController,
   refreshToken,
   logout,
   logoutAll,
@@ -96,6 +97,12 @@ router.post(
   loginValidator,
   validateRequest,
   login
+);
+
+router.post(
+  "/restore-session",
+  originProtection,
+  restoreSessionController
 );
 
 router.post(

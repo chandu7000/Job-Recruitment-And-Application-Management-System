@@ -1,6 +1,7 @@
 import {
   registerUser,
   loginUser,
+  restoreSession,
   refreshAccessToken,
   logoutUser,
   logoutFromAllDevices,
@@ -133,6 +134,36 @@ const login = async (req, res, next) => {
       {
         user: result.user,
         accessToken: result.accessToken
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+const restoreSessionController = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const existingRefreshToken =
+      getRefreshTokenFromRequest(req);
+
+    const result =
+      await restoreSession({
+        refreshToken:
+          existingRefreshToken
+      });
+
+    return sendSuccess(
+      res,
+      200,
+      "Session restored successfully.",
+      {
+        user: result.user,
+        accessToken:
+          result.accessToken
       }
     );
   } catch (error) {
@@ -476,6 +507,7 @@ export {
   registerJobSeeker,
   registerRecruiter,
   login,
+  restoreSessionController,
   refreshToken,
   logout,
   logoutAll,

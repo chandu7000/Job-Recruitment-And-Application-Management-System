@@ -86,6 +86,50 @@ describe("Refresh Token API", () => {
     beforeEach(cleanup);
     afterEach(cleanup);
 
+    describe("POST /api/auth/restore-session", () => {
+        it("should restore the same session repeatedly without rotating the refresh token", async () => {
+            const email = createEmail("restore-repeat");
+
+            await registerUser(email);
+
+            const loginResponse = await loginUser(email);
+            const refreshCookie = loginResponse.headers["set-cookie"];
+
+            expect(refreshCookie).toBeDefined();
+
+            for (let attempt = 0; attempt < 5; attempt += 1) {
+                const response = await request(app)
+                    .post("/api/auth/restore-session")
+                    .set("Origin", "http://localhost:5173")
+                    .set("Sec-Fetch-Site", "same-site")
+                    .set("Cookie", refreshCookie)
+                    .expect(200);
+
+                expect(response.body.success).toBe(true);
+                expect(response.body.data.accessToken).toEqual(expect.any(String));
+                expect(response.body.data.user.email).toBe(email);
+                expect(response.headers["set-cookie"]).toBeUndefined();
+            }
+
+            const refreshResponse = await request(app)
+                .post("/api/auth/refresh-token")
+                .set("Origin", "http://localhost:5173")
+                .set("Sec-Fetch-Site", "same-site")
+                .set("Cookie", refreshCookie)
+                .expect(200);
+
+            expect(refreshResponse.headers["set-cookie"]).toBeDefined();
+        });
+
+        it("should reject session restore when the cookie is missing", async () => {
+            const response = await request(app)
+                .post("/api/auth/restore-session")
+                .expect(401);
+
+            expect(response.body.code).toBe("REFRESH_TOKEN_REQUIRED");
+        });
+    });
+
     describe("POST /api/auth/refresh-token", () => {
         it("should refresh the access token successfully", async () => {
             const email = createEmail("success");

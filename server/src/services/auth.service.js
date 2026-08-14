@@ -591,6 +591,63 @@ const loginUser = async ({
   };
 };
 
+const restoreSession = async ({
+  refreshToken
+}) => {
+  if (!refreshToken) {
+    throw new AppError(
+      "Refresh token is required.",
+      401,
+      "REFRESH_TOKEN_REQUIRED"
+    );
+  }
+
+  const payload =
+    verifyRefreshToken(refreshToken);
+
+  const session =
+    await getSessionByRefreshToken(
+      refreshToken
+    );
+
+  const user =
+    await findUserByEmail(
+      payload.email,
+      false
+    );
+
+  if (!user || user.id !== session.userId) {
+    throw new AppError(
+      "Session user is invalid.",
+      401,
+      "INVALID_SESSION"
+    );
+  }
+
+  if (
+    user.status !==
+    ACCOUNT_STATUS.ACTIVE
+  ) {
+    throw new AppError(
+      "User account is not active.",
+      403,
+      "ACCOUNT_NOT_ACTIVE"
+    );
+  }
+
+  const accessToken =
+    generateAccessToken({
+      id: user.id,
+      email: user.email,
+      role: user.role
+    });
+
+  return {
+    user,
+    accessToken
+  };
+};
+
 const refreshAccessToken = async ({
   refreshToken
 }) => {
@@ -1546,6 +1603,7 @@ const getCurrentUser = async ({
 export {
   registerUser,
   loginUser,
+  restoreSession,
   refreshAccessToken,
   logoutUser,
   logoutFromAllDevices,

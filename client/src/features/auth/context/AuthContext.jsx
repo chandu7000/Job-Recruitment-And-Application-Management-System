@@ -54,19 +54,18 @@ export function AuthProvider({ children }) {
 
     async function restoreSession() {
       try {
-        const refreshResult =
-          await authApi.refresh()
+        const restoredSession =
+          await authApi.restoreSession()
 
         setAccessToken(
-          refreshResult.accessToken,
+          restoredSession.accessToken,
         )
-
-        const user =
-          await authApi.getCurrentUser()
 
         if (isMounted) {
           setAuthState(
-            stateFromUser(user),
+            stateFromUser(
+              restoredSession.user,
+            ),
           )
         }
       } catch {

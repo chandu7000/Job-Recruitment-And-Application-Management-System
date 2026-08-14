@@ -7,7 +7,7 @@ import { clearAccessToken, getAccessToken } from '../features/auth/services/toke
 
 vi.mock('../features/auth/services/authApi', () => ({
   authApi: {
-    refresh: vi.fn(), getCurrentUser: vi.fn(), login: vi.fn(), logout: vi.fn(), logoutAll: vi.fn(),
+    refresh: vi.fn(), restoreSession: vi.fn(), getCurrentUser: vi.fn(), login: vi.fn(), logout: vi.fn(), logoutAll: vi.fn(),
   },
 }))
 
@@ -30,8 +30,7 @@ describe('AuthProvider', () => {
   })
 
   it('restores a valid cookie session and current user', async () => {
-    authApi.refresh.mockResolvedValue({ accessToken: 'restored-token' })
-    authApi.getCurrentUser.mockResolvedValue({ email: 'user@example.com', role: 'JOB_SEEKER', status: 'ACTIVE' })
+    authApi.restoreSession.mockResolvedValue({ accessToken: 'restored-token', user: { email: 'user@example.com', role: 'JOB_SEEKER', status: 'ACTIVE' } })
     render(<AuthProvider><Probe /></AuthProvider>)
     await waitFor(() => expect(screen.getByTestId('initializing')).toHaveTextContent('false'))
     expect(screen.getByTestId('authenticated')).toHaveTextContent('true')
@@ -40,7 +39,7 @@ describe('AuthProvider', () => {
   })
 
   it('finishes unauthenticated when restoration fails', async () => {
-    authApi.refresh.mockRejectedValue(new Error('No session'))
+    authApi.restoreSession.mockRejectedValue(new Error('No session'))
     render(<AuthProvider><Probe /></AuthProvider>)
     await waitFor(() => expect(screen.getByTestId('initializing')).toHaveTextContent('false'))
     expect(screen.getByTestId('authenticated')).toHaveTextContent('false')
@@ -48,7 +47,7 @@ describe('AuthProvider', () => {
   })
 
   it('stores login state and clears it on logout', async () => {
-    authApi.refresh.mockRejectedValue(new Error('No session'))
+    authApi.restoreSession.mockRejectedValue(new Error('No session'))
     authApi.login.mockResolvedValue({ accessToken: 'login-token', user: { email: 'user@example.com', role: 'JOB_SEEKER', status: 'ACTIVE' } })
     authApi.logout.mockResolvedValue({})
     render(<AuthProvider><Probe /></AuthProvider>)

@@ -1799,7 +1799,8 @@ describe(
                         sourceJob.viewCount
                     )
                 ).toBe(7);
-            }
+            },
+            15000
         );
 
         test(

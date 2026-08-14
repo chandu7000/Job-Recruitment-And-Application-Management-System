@@ -38,6 +38,11 @@ export const authApi = {
 
   refresh: refreshSession,
 
+  restoreSession: () =>
+    axiosClient
+      .post(AUTH.RESTORE_SESSION)
+      .then(responseData),
+
   logout: () =>
     axiosClient
       .post(AUTH.LOGOUT)

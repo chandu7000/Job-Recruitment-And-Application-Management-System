@@ -6,6 +6,7 @@ export const API_ENDPOINTS = Object.freeze({
     REGISTER_RECRUITER: '/auth/register/recruiter',
     LOGIN: '/auth/login',
     REFRESH: '/auth/refresh-token',
+    RESTORE_SESSION: '/auth/restore-session',
     LOGOUT: '/auth/logout',
     LOGOUT_ALL: '/auth/logout-all',
     ME: '/auth/me',
