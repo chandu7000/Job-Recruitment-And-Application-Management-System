@@ -287,7 +287,7 @@ describe("Refresh Token API", () => {
                         )
                         .set(
                             "Sec-Fetch-Site",
-                            "same-site"
+                            "cross-site"
                         )
                         .set(
                             "Cookie",

@@ -83,19 +83,6 @@ const originProtection = (
     );
   }
 
-  const fetchSite =
-    req.get("sec-fetch-site");
-
-  if (
-    fetchSite === "cross-site"
-  ) {
-    throw new AppError(
-      "Cross-site request is not allowed.",
-      403,
-      "CROSS_SITE_REQUEST_BLOCKED"
-    );
-  }
-
   return next();
 };
 
