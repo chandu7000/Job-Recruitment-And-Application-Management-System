@@ -90,7 +90,8 @@ app.use(
 
     allowedHeaders: [
       "Content-Type",
-      "Authorization"
+      "Authorization",
+      "X-Auth-Tab-Id"
     ]
   })
 );

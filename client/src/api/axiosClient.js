@@ -6,6 +6,7 @@ import {
   getAccessToken,
   setAccessToken,
 } from '../features/auth/services/tokenStore'
+import { getAuthTabId } from '../features/auth/services/authTabStore'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -42,6 +43,7 @@ export function setAuthenticationFailureHandler(handler) {
 
 axiosClient.interceptors.request.use((config) => {
   const token = getAccessToken()
+  config.headers['X-Auth-Tab-Id'] = getAuthTabId()
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -72,7 +74,13 @@ axiosClient.interceptors.response.use(
           .post(
             `${API_BASE_URL}${API_ENDPOINTS.AUTH.REFRESH}`,
             {},
-            { withCredentials: true, headers: { Accept: 'application/json' } },
+            {
+              withCredentials: true,
+              headers: {
+                Accept: 'application/json',
+                'X-Auth-Tab-Id': getAuthTabId(),
+              },
+            },
           )
           .then((response) => {
             const token = response.data?.data?.accessToken

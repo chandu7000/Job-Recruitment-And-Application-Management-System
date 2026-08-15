@@ -47,7 +47,8 @@ const registerJobSeeker = async (
     if (result.refreshToken) {
       setRefreshTokenCookie(
         res,
-        result.refreshToken
+        result.refreshToken,
+        req
       );
     }
 
@@ -89,7 +90,8 @@ const registerRecruiter = async (
     if (result.refreshToken) {
       setRefreshTokenCookie(
         res,
-        result.refreshToken
+        result.refreshToken,
+        req
       );
     }
 
@@ -124,7 +126,8 @@ const login = async (req, res, next) => {
 
     setRefreshTokenCookie(
       res,
-      result.refreshToken
+      result.refreshToken,
+      req
     );
 
     return sendSuccess(
@@ -188,7 +191,8 @@ const refreshToken = async (
 
     setRefreshTokenCookie(
       res,
-      result.refreshToken
+      result.refreshToken,
+      req
     );
 
     return sendSuccess(
@@ -201,7 +205,7 @@ const refreshToken = async (
       }
     );
   } catch (error) {
-    clearRefreshTokenCookie(res);
+    clearRefreshTokenCookie(res, req);
     next(error);
   }
 };
@@ -218,7 +222,7 @@ const logout = async (req, res, next) => {
       });
     }
 
-    clearRefreshTokenCookie(res);
+    clearRefreshTokenCookie(res, req);
 
     return sendSuccess(
       res,
@@ -227,7 +231,7 @@ const logout = async (req, res, next) => {
       {}
     );
   } catch (error) {
-    clearRefreshTokenCookie(res);
+    clearRefreshTokenCookie(res, req);
     next(error);
   }
 };
@@ -243,7 +247,7 @@ const logoutAll = async (
         userId: req.user.id
       });
 
-    clearRefreshTokenCookie(res);
+    clearRefreshTokenCookie(res, req);
 
     return sendSuccess(
       res,
@@ -361,7 +365,7 @@ const verifyEmailChangeController = async (
      * Email changes revoke every session,
      * including the current refresh-token session.
      */
-    clearRefreshTokenCookie(res);
+    clearRefreshTokenCookie(res, req);
 
     return sendSuccess(
       res,

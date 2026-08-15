@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import axiosClient, { setAuthenticationFailureHandler } from '../api/axiosClient'
 import { getApiErrorMessage, mapApiError } from '../api/errorMapper'
 import { clearAccessToken, getAccessToken, setAccessToken } from '../features/auth/services/tokenStore'
+import { AUTH_TAB_ID_STORAGE_KEY, resetAuthTabIdForTests } from '../features/auth/services/authTabStore'
 
 const originalAdapter = axiosClient.defaults.adapter
 
@@ -11,6 +12,8 @@ describe('Axios client foundation', () => {
         axiosClient.defaults.adapter = originalAdapter
         setAuthenticationFailureHandler(null)
         clearAccessToken()
+        sessionStorage.removeItem(AUTH_TAB_ID_STORAGE_KEY)
+        resetAuthTabIdForTests()
         vi.restoreAllMocks()
     })
     it('uses the approved base configuration', () => {
@@ -59,6 +62,7 @@ describe('Axios client foundation', () => {
 
         const response = await axiosClient.get('/auth/me')
         expect(response.config.headers.Authorization).toBe('Bearer memory-token')
+        expect(response.config.headers['X-Auth-Tab-Id']).toBeTruthy()
     })
 
     it('shares one refresh request across simultaneous 401 responses', async () => {
