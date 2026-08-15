@@ -1,4 +1,4 @@
-# CareerForge Backend
+﻿# CareerForge Backend
 
 Production-oriented backend API for the CareerForge Job Recruitment and Application Management System.
 
@@ -12,21 +12,21 @@ The CareerForge backend follows a layered architecture that separates routing, r
 
 ```text
 src/
-├── config/
-├── constants/
-├── controllers/
-├── docs/
-├── middleware/
-├── migrations/
-├── models/
-├── repositories/
-├── routes/
-├── seeders/
-├── services/
-├── tests/
-├── utils/
-├── validators/
-└── app.js
+â”œâ”€â”€ config/
+â”œâ”€â”€ constants/
+â”œâ”€â”€ controllers/
+â”œâ”€â”€ docs/
+â”œâ”€â”€ middleware/
+â”œâ”€â”€ migrations/
+â”œâ”€â”€ models/
+â”œâ”€â”€ repositories/
+â”œâ”€â”€ routes/
+â”œâ”€â”€ seeders/
+â”œâ”€â”€ services/
+â”œâ”€â”€ tests/
+â”œâ”€â”€ utils/
+â”œâ”€â”€ validators/
+â””â”€â”€ app.js
 ```
 
 ### `config/`
@@ -404,8 +404,8 @@ npm run lint
 The established backend quality gate is:
 
 ```text
-106/106 test suites passed
-1323/1323 tests passed
+107/107 test suites passed
+1326/1326 tests passed
 ESLint passed
 ```
 

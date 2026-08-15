@@ -1,4 +1,4 @@
-# CareerForge Frontend
+﻿# CareerForge Frontend
 
 CareerForge is a full-stack Job Recruitment and Application Management System designed to support the complete recruitment lifecycle for job seekers, recruiters, administrators, and public visitors.
 
@@ -35,15 +35,15 @@ The CareerForge frontend follows a feature-oriented structure that separates app
 
 ```text
 src/
-├── api/
-├── components/
-├── features/
-├── layouts/
-├── routes/
-├── tests/
-├── utils/
-├── App.jsx
-└── main.jsx
+â”œâ”€â”€ api/
+â”œâ”€â”€ components/
+â”œâ”€â”€ features/
+â”œâ”€â”€ layouts/
+â”œâ”€â”€ routes/
+â”œâ”€â”€ tests/
+â”œâ”€â”€ utils/
+â”œâ”€â”€ App.jsx
+â””â”€â”€ main.jsx
 ```
 
 ### `api/`
@@ -304,8 +304,8 @@ The frontend contains automated tests covering major application areas including
 The established frontend quality gate is:
 
 ```text
-58/58 test files passed
-224/224 tests passed
+59/59 test files passed
+225/225 tests passed
 ESLint passed
 Production build passed
 ```
