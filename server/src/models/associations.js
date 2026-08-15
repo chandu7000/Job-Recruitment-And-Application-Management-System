@@ -312,7 +312,7 @@ JobSeekerJobPreference.belongsTo(
     onUpdate: "CASCADE"
   }
 );
-// Phase 8 associations
+// Saved jobs and application associations
 User.hasMany(SavedJob,{foreignKey:"candidateId",as:"savedJobs",onDelete:"CASCADE"});
 SavedJob.belongsTo(User,{foreignKey:"candidateId",as:"candidate"});
 Job.hasMany(SavedJob,{foreignKey:"jobId",as:"savedByCandidates",onDelete:"CASCADE"});
@@ -342,7 +342,7 @@ Interview.hasMany(InterviewHistory,{foreignKey:"interviewId",as:"history",onDele
 User.hasMany(Notification, { foreignKey: "recipientId", as: "notifications", onDelete: "CASCADE", onUpdate: "CASCADE" });
 Notification.belongsTo(User, { foreignKey: "recipientId", as: "recipient", onDelete: "CASCADE", onUpdate: "CASCADE" });
 
-// Phase 11 reports and audit logs
+// Reports and audit log associations
 import Report from "./report.model.js";
 import AuditLog from "./auditLog.model.js";
 User.hasMany(Report,{foreignKey:"reporterId",as:"submittedReports"});

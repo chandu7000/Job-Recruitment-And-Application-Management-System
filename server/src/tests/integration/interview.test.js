@@ -16,7 +16,7 @@ import { hashPassword } from "../../utils/password.util.js";
 
 const PASSWORD = "Strong@Password123";
 const EMAIL_PREFIX = "p9interview.";
-const SLUG_PREFIX = "phase9-interview-";
+const SLUG_PREFIX = "interview-scheduling-";
 
 const uniqueValue = (label) =>
   `${label}-${Date.now()}-${Math.random()
@@ -47,7 +47,7 @@ const login = async (email) => {
     .post("/api/auth/login")
     .set(
       "User-Agent",
-      "CareerForge Phase 9 Interview Integration Test"
+      "CareerForge Interview Integration Test"
     )
     .send({
       email,
@@ -61,7 +61,7 @@ const login = async (email) => {
 const createCompany = async (recruiterId) => {
   return Company.create({
     ownerId: recruiterId,
-    companyName: "Phase 9 Interview Company",
+    companyName: "Interview Test Company",
     slug: `${SLUG_PREFIX}${uniqueValue("company")}`,
     status: "VERIFIED"
   });
@@ -74,10 +74,10 @@ const createJob = async ({
   return Job.create({
     companyId,
     createdBy: recruiterId,
-    title: "Phase 9 Backend Developer",
+    title: "Backend Developer",
     slug: `${SLUG_PREFIX}${uniqueValue("job")}`,
     description:
-      "Phase 9 interview integration test job.",
+      "Interview scheduling integration test job.",
     responsibilities:
       "Develop and maintain backend APIs.",
     requirements:
@@ -113,7 +113,7 @@ const createApplication = async ({
     companyId: company.id,
     status,
     coverLetter:
-      "Phase 9 interview integration cover letter.",
+      "Interview scheduling integration cover letter.",
     resumeSnapshot: {
       url: "https://example.com/resume.pdf",
       originalName: "resume.pdf"
@@ -176,7 +176,7 @@ const createScheduleBody = ({
 
   if (meetingType === "ONLINE") {
     body.meetingLink =
-      "https://meet.example.com/phase9-interview";
+      "https://meet.example.com/interview-session";
   }
 
   if (meetingType === "IN_PERSON") {
@@ -323,7 +323,7 @@ const cleanup = async () => {
   });
 };
 
-describe("Phase 9 Interview Scheduling API", () => {
+describe("Interview Scheduling API", () => {
   beforeEach(cleanup);
   afterEach(cleanup);
 

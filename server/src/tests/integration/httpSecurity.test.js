@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../../app.js";
 
-describe("Phase 12 HTTP security", () => {
+describe("HTTP security", () => {
   test("returns hardened HTTP headers", async () => {
     const response = await request(app).get("/api/health");
     expect(response.headers["x-frame-options"]).toBe("DENY");

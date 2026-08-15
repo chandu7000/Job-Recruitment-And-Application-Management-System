@@ -5,7 +5,7 @@ import {
 } from '../features/applications/utils/recruiterApplicationProcessing'
 
 describe('recruiter applicant processing rules', () => {
-  it('shows only Phase 10 processing actions', () => {
+  it('shows only recruiter application processing actions', () => {
     expect(getRecruiterProcessingActions('APPLIED').map((action) => action.value)).toEqual([
       'UNDER_REVIEW',
       'SHORTLISTED',
@@ -18,7 +18,7 @@ describe('recruiter applicant processing rules', () => {
     expect(getRecruiterProcessingActions('SHORTLISTED').map((action) => action.value)).toEqual(['REJECTED'])
   })
 
-  it('never exposes Phase 11 interview actions in Phase 10 controls', () => {
+  it('never exposes interview actions in recruiter application controls', () => {
     const values = getRecruiterProcessingActions('UNDER_REVIEW').map((action) => action.value)
     expect(values).not.toContain('INTERVIEW')
     expect(values).not.toContain('INTERVIEW_SCHEDULED')

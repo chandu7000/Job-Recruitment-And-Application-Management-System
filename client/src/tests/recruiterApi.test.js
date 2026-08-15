@@ -6,7 +6,7 @@ import { recruiterApi } from '../features/recruiter/services/recruiterApi'
 const originalAdapter = axiosClient.defaults.adapter
 const response = (config, data) => ({ data: { success: true, data }, status: 200, statusText: 'OK', headers: {}, config })
 
-describe('Recruiter Phase 6 API service', () => {
+describe('Recruiter API service', () => {
   afterEach(() => { axiosClient.defaults.adapter = originalAdapter })
   it('uses only verified backend endpoints without repeating the api prefix', () => {
     expect(API_ENDPOINTS.RECRUITER.DASHBOARD).toBe('/dashboard/recruiter')

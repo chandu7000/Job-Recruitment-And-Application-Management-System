@@ -16,7 +16,7 @@ vi.mock('../features/recruiter/services/recruiterApi', () => ({
 
 const renderPage = (page) => render(<MemoryRouter>{page}</MemoryRouter>)
 
-describe('Recruiter Phase 6 pages', () => {
+describe('Recruiter pages', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('renders real dashboard statistics and company status', async () => {

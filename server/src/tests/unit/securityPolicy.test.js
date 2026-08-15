@@ -3,7 +3,7 @@ import { JWT_ALGORITHM, generateAccessToken, verifyAccessToken } from "../../uti
 import { hasDangerousKey, pickAllowedFields, normalizeSortDirection, removeSensitiveFields } from "../../utils/securityPolicy.js";
 import { refreshTokenCookieOptions, clearRefreshTokenCookieOptions } from "../../config/cookie.config.js";
 
-describe("Phase 12 security utilities", () => {
+describe("Security utilities", () => {
   test("uses only HS256 for project JWT tokens", () => {
     const token = generateAccessToken({ id: "user-1", role: "JOB_SEEKER" });
     expect(JWT_ALGORITHM).toBe("HS256");

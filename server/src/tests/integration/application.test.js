@@ -15,7 +15,7 @@ import { hashPassword } from "../../utils/password.util.js";
 
 const PASSWORD = "Strong@Password123";
 const EMAIL_PREFIX = "p8app.";
-const SLUG_PREFIX = "phase8-application-";
+const SLUG_PREFIX = "candidate-application-";
 
 const uniqueValue = (label) =>
     `${label}-${Date.now()}-${Math.random()
@@ -47,7 +47,7 @@ const login = async (email) => {
             .post("/api/auth/login")
             .set(
                 "User-Agent",
-                "CareerForge Phase 8 Application Integration Test"
+                "CareerForge Application Integration Test"
             )
             .send({
                 email,
@@ -72,7 +72,7 @@ const createCandidateProfile = async (
         resumeUrl:
             "https://example.com/resume.pdf",
         resumePublicId:
-            "phase8-resume-public-id",
+            "application-resume-public-id",
         resumeOriginalName:
             "resume.pdf"
     });
@@ -84,7 +84,7 @@ const createCompany = async (
     return Company.create({
         ownerId: recruiterId,
         companyName:
-            "Phase 8 Application Company",
+            "Application Test Company",
         slug:
             `${SLUG_PREFIX}${uniqueValue(
                 "company"
@@ -101,7 +101,7 @@ const createPublishedJob = async ({
         companyId,
         createdBy: recruiterId,
         title:
-            "Phase 8 Software Engineer",
+            "Software Engineer",
         slug:
             `${SLUG_PREFIX}${uniqueValue(
                 "job"
@@ -242,7 +242,7 @@ const cleanup = async () => {
 };
 
 describe(
-    "Phase 8 Candidate Applications API",
+    "Candidate Applications API",
     () => {
         beforeEach(cleanup);
         afterEach(cleanup);

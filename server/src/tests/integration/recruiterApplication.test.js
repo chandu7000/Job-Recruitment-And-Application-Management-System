@@ -15,7 +15,7 @@ import { hashPassword } from "../../utils/password.util.js";
 const PASSWORD = "Strong@Password123";
 const EMAIL_PREFIX = "p8ra.";
 const SLUG_PREFIX =
-    "phase8-recruiter-application-";
+    "recruiter-application-";
 
 const uniqueValue = (label) =>
     `${label}-${Date.now()}-${Math.random()
@@ -266,7 +266,7 @@ const cleanup = async () => {
 };
 
 describe(
-    "Phase 8 Recruiter Applications API",
+    "Recruiter Applications API",
     () => {
         beforeEach(cleanup);
         afterEach(cleanup);
@@ -532,7 +532,7 @@ describe(
         );
     }
 );
-describe("Phase 10 recruiter job applicant filtering", () => {
+describe("Recruiter job applicant filtering", () => {
     beforeEach(cleanup);
     afterEach(cleanup);
 

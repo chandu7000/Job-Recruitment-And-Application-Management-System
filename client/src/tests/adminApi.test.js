@@ -17,7 +17,7 @@ describe('admin API service', () => {
     axiosClient.defaults.adapter = originalAdapter
   })
 
-  it('uses the verified Phase 14 admin endpoints', () => {
+  it('Recruiter pages', () => {
     expect(API_ENDPOINTS.ADMIN.DASHBOARD).toBe('/admin/dashboard')
     expect(API_ENDPOINTS.ADMIN.USERS).toBe('/admin/users')
     expect(API_ENDPOINTS.ADMIN.USER_BY_ID('user 1')).toBe('/admin/users/user%201')

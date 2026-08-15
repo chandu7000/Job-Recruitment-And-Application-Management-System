@@ -3,7 +3,7 @@ import { validateJobFilters } from '../features/publicJobs/utils/filterValidatio
 import { formatExperienceRange, formatSalaryRange } from '../features/publicJobs/utils/jobFormatters'
 import { filtersFromSearchParams, filtersToSearchParams } from '../features/publicJobs/utils/urlFilters'
 
-describe('Phase 4 job utilities', () => {
+describe('Public job utilities', () => {
   it('formats salary and experience ranges with fallbacks', () => {
     expect(formatSalaryRange({ minimumSalary: 500000, maximumSalary: 800000, salaryCurrency: 'INR' })).toContain('5,00,000')
     expect(formatSalaryRange({})).toBe('Salary not disclosed')

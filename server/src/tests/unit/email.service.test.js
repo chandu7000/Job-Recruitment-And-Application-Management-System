@@ -18,7 +18,7 @@ const {
   "../../services/email.service.js"
 );
 
-describe("Phase 10 email service", () => {
+describe("Email service", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

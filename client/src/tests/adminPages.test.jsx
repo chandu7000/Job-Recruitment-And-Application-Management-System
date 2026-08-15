@@ -32,7 +32,7 @@ const user = {
   lastLoginAt: '2026-08-10T10:00:00.000Z',
 }
 
-describe('Phase 14 admin pages', () => {
+describe('Recruiter API service', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('renders real dashboard metrics without invented values', async () => {

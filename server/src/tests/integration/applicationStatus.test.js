@@ -15,7 +15,7 @@ import { hashPassword } from "../../utils/password.util.js";
 const PASSWORD = "Strong@Password123";
 const EMAIL_PREFIX = "p8as.";
 const SLUG_PREFIX =
-    "phase8-application-status-";
+    "application-status-";
 
 const uniqueValue = (label) =>
     `${label}-${Date.now()}-${Math.random()
@@ -256,7 +256,7 @@ const cleanup = async () => {
 };
 
 describe(
-    "Phase 8 Application Status Workflow API",
+    "Application Status Workflow API",
     () => {
         beforeEach(cleanup);
         afterEach(cleanup);

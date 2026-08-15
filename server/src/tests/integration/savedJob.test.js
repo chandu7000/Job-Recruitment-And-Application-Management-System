@@ -13,7 +13,7 @@ import { hashPassword } from "../../utils/password.util.js";
 
 const PASSWORD = "Strong@Password123";
 const EMAIL_PREFIX = "p8sj.";
-const SLUG_PREFIX = "phase8-saved-job-";
+const SLUG_PREFIX = "saved-job-";
 
 const uniqueValue = (label) =>
     `${label}-${Date.now()}-${Math.random()
@@ -45,7 +45,7 @@ const login = async (email) => {
             .post("/api/auth/login")
             .set(
                 "User-Agent",
-                "CareerForge Phase 8 Saved Job Integration Test"
+                "CareerForge Saved Job Integration Test"
             )
             .send({
                 email,
@@ -62,7 +62,7 @@ const createCompany = async (
     return Company.create({
         ownerId: recruiterId,
         companyName:
-            "Phase 8 Saved Job Company",
+            "Saved Job Test Company",
         slug:
             `${SLUG_PREFIX}${uniqueValue(
                 "company"
@@ -79,7 +79,7 @@ const createPublishedJob = async ({
         companyId,
         createdBy: recruiterId,
         title:
-            "Phase 8 Backend Developer",
+            "Backend Developer",
         slug:
             `${SLUG_PREFIX}${uniqueValue(
                 "job"
@@ -180,7 +180,7 @@ const cleanup = async () => {
 };
 
 describe(
-    "Phase 8 Saved Jobs API",
+    "Saved Jobs API",
     () => {
         beforeEach(cleanup);
         afterEach(cleanup);

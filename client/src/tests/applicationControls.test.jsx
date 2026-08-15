@@ -18,7 +18,7 @@ const job = {
   title: 'Engineer',
 }
 
-describe('Phase 8 job actions', () => {
+describe('Job application actions', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 

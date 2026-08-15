@@ -8,7 +8,7 @@ const response = (config, data) => ({ data: { success: true, data }, status: 200
 
 describe('Job seeker API service', () => {
   afterEach(() => { axiosClient.defaults.adapter = originalAdapter })
-  it('uses the verified Phase 5 endpoint paths', () => {
+  it('uses the approved job seeker endpoint paths', () => {
     expect(API_ENDPOINTS.JOB_SEEKER.DASHBOARD).toBe('/dashboard/job-seeker')
     expect(API_ENDPOINTS.JOB_SEEKER.PROFILE_IMAGE).toBe('/job-seeker/uploads/profile-image')
     expect(API_ENDPOINTS.JOB_SEEKER.RESUME).toBe('/job-seeker/uploads/resume')

@@ -159,7 +159,7 @@ const transitionSectionRef = useRef(null)
 
       {actions.length === 0 && (
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-          No Phase 10 recruiter processing actions are available for this application status.
+          No recruiter actions are available for this application status.
         </div>
       )}
 

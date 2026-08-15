@@ -34,7 +34,7 @@ const validPayload = {
   resourceId: "22222222-2222-4222-8222-222222222222"
 };
 
-describe("Phase 10 notification service", () => {
+describe("Notification service", () => {
   beforeEach(() => jest.clearAllMocks());
 
   test("creates a validated notification", async () => {

@@ -18,7 +18,7 @@ export const ACCOUNT_STATUS = Object.freeze({
  * Existing files may currently import JOB_STATUS from
  * app.constants.js. The canonical job lifecycle constants now live
  * in job.constants.js, but this alias prevents existing imports from
- * breaking while Phase 6 is implemented.
+ * existing imports.
  */
 export {
   JOB_STATUSES as JOB_STATUS

@@ -24,7 +24,7 @@ function renderAt(path, route, element) {
   return render(<MemoryRouter initialEntries={[path]}><Routes><Route path={route} element={element} /></Routes></MemoryRouter>)
 }
 
-describe('Phase 4 public pages', () => {
+describe('Public pages', () => {
   afterEach(() => vi.resetAllMocks())
 
   it('loads the latest jobs on home and carries search into the jobs URL', async () => {

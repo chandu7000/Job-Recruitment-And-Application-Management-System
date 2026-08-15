@@ -1,10 +1,10 @@
 # CareerForge Frozen Backend API Contract
 
-**Freeze point:** Phase 14 Stage 5 — Final Handover.
+Status: Production API contract frozen after final backend verification.
 
-Phases 1–13 form the locked business/API baseline.
+The implemented business and API behavior forms the locked production baseline.
 
-Phase 14 production deployment, CI/CD and production smoke verification have been completed.
+Production deployment, CI/CD, and production smoke verification have been completed.
 
 The CareerForge backend API contract is now frozen for frontend integration.
 
@@ -16,7 +16,7 @@ Do not change routes, controllers, services, models, migrations, statuses, owner
 - API behavior/security summary: `API.md`
 - Frontend integration contract: `FRONTEND_API_HANDOFF.md`
 - Models: `MODEL_INVENTORY.md`
-- Tests: `TESTING.md` and `PHASE-13-TEST-REPORT.md`
+- Tests: TESTING.md, PRODUCTION_SMOKE_TEST_REPORT.md, and PRODUCTION_VERIFICATION.md
 - Route definitions: `src/routes/**`
 - Validators/constants: `src/validators/**` and `src/constants/**`
 

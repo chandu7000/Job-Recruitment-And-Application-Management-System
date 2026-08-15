@@ -21,7 +21,7 @@ const createUser = async (role = "JOB_SEEKER") => User.create({
 
 const login = async (email) => {
   const response = await request(app).post("/api/auth/login")
-    .set("User-Agent", "CareerForge Phase 10 Notification Test")
+    .set("User-Agent", "CareerForge Notification Integration Test")
     .send({ email, password: PASSWORD }).expect(200);
   return response.body.data.accessToken;
 };
@@ -35,7 +35,7 @@ const cleanup = async () => {
   await User.unscoped().destroy({ where: { id: { [Op.in]: ids } }, force: true });
 };
 
-describe("Phase 10 Notification API", () => {
+describe("Notification API", () => {
   beforeEach(cleanup);
   afterEach(cleanup);
 

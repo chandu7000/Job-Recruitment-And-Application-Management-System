@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { COMPANY_LOGO_RULES, COMPANY_STATUSES, getCompanyCapabilities } from '../features/recruiter/constants/recruiterConstants'
 import { companyCreateSchema, companyEditSchema, recruiterProfileSchema } from '../features/recruiter/validation/recruiterSchemas'
 
-describe('Recruiter Phase 6 validation and restrictions', () => {
+describe('Recruiter validation and restrictions', () => {
   it('matches the backend logo contract', () => {
     expect(COMPANY_LOGO_RULES.fieldName).toBe('companyLogo')
     expect(COMPANY_LOGO_RULES.maximumSize).toBe(5 * 1024 * 1024)

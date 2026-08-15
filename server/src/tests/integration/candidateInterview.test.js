@@ -14,7 +14,7 @@ import { hashPassword } from "../../utils/password.util.js";
 
 const PASSWORD = "Strong@Password123";
 const EMAIL_PREFIX = "p9candidate.";
-const SLUG_PREFIX = "phase9-candidate-";
+const SLUG_PREFIX = "candidate-interview-";
 
 const uniqueValue = label =>
   `${label}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
@@ -34,7 +34,7 @@ const createUser = async ({ email, role }) =>
 const login = async email => {
   const response = await request(app)
     .post("/api/auth/login")
-    .set("User-Agent", "CareerForge Phase 9 Candidate Integration Test")
+    .set("User-Agent", "CareerForge Candidate Interview Integration Test")
     .send({ email, password: PASSWORD })
     .expect(200);
 
@@ -44,7 +44,7 @@ const login = async email => {
 const createCompany = recruiterId =>
   Company.create({
     ownerId: recruiterId,
-    companyName: "Phase 9 Candidate Company",
+    companyName: "Candidate Interview Test Company",
     slug: `${SLUG_PREFIX}${uniqueValue("company")}`,
     status: "VERIFIED"
   });
@@ -53,7 +53,7 @@ const createJob = ({ recruiterId, companyId }) =>
   Job.create({
     companyId,
     createdBy: recruiterId,
-    title: "Phase 9 Candidate Backend Developer",
+    title: "Backend Developer",
     slug: `${SLUG_PREFIX}${uniqueValue("job")}`,
     description: "Candidate interview integration test job.",
     responsibilities: "Develop and maintain backend APIs.",
@@ -80,7 +80,7 @@ const createApplication = ({ candidateId, job, company }) =>
     jobId: job.id,
     companyId: company.id,
     status: "INTERVIEW_SCHEDULED",
-    coverLetter: "Phase 9 candidate integration cover letter.",
+    coverLetter: "Candidate interview integration cover letter.",
     resumeSnapshot: {
       url: "https://example.com/resume.pdf",
       originalName: "resume.pdf"
@@ -234,7 +234,7 @@ const cleanup = async () => {
   });
 };
 
-describe("Phase 9 Candidate Interview APIs", () => {
+describe("Candidate Interview APIs", () => {
   beforeEach(cleanup);
   afterEach(cleanup);
 

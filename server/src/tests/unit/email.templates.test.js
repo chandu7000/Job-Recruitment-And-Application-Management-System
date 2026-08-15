@@ -1,6 +1,6 @@
 import { emailTemplates, renderEmailTemplate } from "../../templates/emails/index.js";
 
-describe("Phase 10 email templates", () => {
+describe("Email templates", () => {
   test("all approved templates render subject, html and text", () => {
     for (const name of Object.keys(emailTemplates)) {
       const result = renderEmailTemplate(name, {

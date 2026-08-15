@@ -11,7 +11,7 @@ vi.mock('../features/jobSeeker/services/jobSeekerApi', () => ({
   },
 }))
 
-describe('Phase 5 job seeker pages', () => {
+describe('Job seeker pages', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('renders backend profile completion fields and missing sections', async () => {

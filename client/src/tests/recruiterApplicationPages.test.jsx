@@ -47,7 +47,7 @@ describe('recruiter applicant pages', () => {
     )
   })
 
-  it('renders candidate details, recruiter note and Phase 10 actions', async () => {
+  it('renders candidate details, recruiter note and recruiter actions', async () => {
     recruiterApplicationApi.details.mockResolvedValue({
       id: 'a1',
       jobId: 'job-1',
