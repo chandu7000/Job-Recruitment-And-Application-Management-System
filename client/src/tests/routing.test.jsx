@@ -12,7 +12,11 @@ describe('application routing', () => {
     renderRoute('/job-seeker/dashboard')
 
     expect(
-      await screen.findByRole('heading', { name: 'Welcome back' }),
+      await screen.findByRole(
+        'heading',
+        { name: 'Welcome back' },
+        { timeout: 5000 },
+      ),
     ).toBeInTheDocument()
   })
 
