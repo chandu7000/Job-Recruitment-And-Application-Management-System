@@ -1,145 +1,108 @@
 ﻿# CareerForge Backend
 
-Production-oriented backend API for the CareerForge Job Recruitment and Application Management System.
+CareerForge is a full-stack Job Recruitment and Application Management System built as a portfolio project to demonstrate practical full-stack development and backend engineering skills.
 
-## Stack
+This directory contains the Node.js and Express backend of CareerForge.
 
-Node.js 20+, Express 5, JavaScript ES modules, MySQL 8, Sequelize, JWT, HTTP-only cookies, bcrypt, Express Validator, Helmet, CORS, Multer, Cloudinary, Brevo Transactional Email API, Jest, Supertest and ESLint.
+The backend provides REST APIs for authentication, job management, applications, interviews, notifications, recruiter workflows, administrator functionality, file uploads, and other CareerForge features.
 
-## Backend Structure
+## Technology Stack
 
-The CareerForge backend follows a layered architecture that separates routing, request handling, business logic, validation, data access, persistence, and shared infrastructure.
+- Node.js
+- Express
+- JavaScript ES Modules
+- MySQL
+- Sequelize
+- JWT
+- HTTP-only Cookies
+- bcrypt
+- Express Validator
+- Helmet
+- CORS
+- Multer
+- Cloudinary
+- Brevo Transactional Email API
+- Jest
+- Supertest
+- ESLint
+
+## Project Structure
+
+The backend uses a layered structure to keep different responsibilities separated.
 
 ```text
-src/
-â”œâ”€â”€ config/
-â”œâ”€â”€ constants/
-â”œâ”€â”€ controllers/
-â”œâ”€â”€ docs/
-â”œâ”€â”€ middleware/
-â”œâ”€â”€ migrations/
-â”œâ”€â”€ models/
-â”œâ”€â”€ repositories/
-â”œâ”€â”€ routes/
-â”œâ”€â”€ seeders/
-â”œâ”€â”€ services/
-â”œâ”€â”€ tests/
-â”œâ”€â”€ utils/
-â”œâ”€â”€ validators/
-â””â”€â”€ app.js
+server/
+|-- migrations/
+|-- seeders/
+|-- src/
+|   |-- config/
+|   |-- constants/
+|   |-- controllers/
+|   |-- docs/
+|   |-- middleware/
+|   |-- models/
+|   |-- repositories/
+|   |-- routes/
+|   |-- services/
+|   |-- tests/
+|   |-- utils/
+|   |-- validators/
+|   `-- app.js
+|-- .env.example
+|-- package.json
+`-- README.md
 ```
 
-### `config/`
+### Folder Overview
 
-Contains backend configuration such as database connectivity and environment-dependent application configuration.
+`migrations/`  
+Contains Sequelize migrations used to create and update the database structure.
 
-### `constants/`
+`seeders/`  
+Contains controlled database seed operations.
 
-Contains shared application constants, statuses, limits, enumerations, and reusable backend values.
+`src/config/`  
+Contains database and application configuration.
 
-### `controllers/`
+`src/constants/`  
+Contains shared constants, statuses, limits, and other reusable values.
 
+`src/controllers/`  
 Contains HTTP request handlers.
 
-Controllers receive validated requests, invoke the appropriate service-layer functionality, and return API responses.
+`src/docs/`  
+Contains detailed backend documentation such as API information, architecture, testing, environment configuration, and production setup.
 
-### `docs/`
+`src/middleware/`  
+Contains Express middleware for authentication, authorization, validation, security, error handling, file processing, and other request-related behavior.
 
-Contains detailed backend technical documentation, including:
+`src/models/`  
+Contains Sequelize models and database relationships.
 
-- API documentation
-- API contracts
-- Architecture information
-- Endpoint inventories
-- Environment-variable documentation
-- Frontend API handoff information
-- Model inventories
-- Production configuration
-- Testing documentation
-- Test-data strategy
+`src/repositories/`  
+Contains database access logic.
 
-### `middleware/`
+`src/routes/`  
+Contains REST API route definitions.
 
-Contains reusable Express middleware for cross-cutting request concerns such as:
+`src/services/`  
+Contains the main business logic of the application.
 
-- Authentication
-- Authorization
-- Error handling
-- Request validation
-- Security
-- File handling
-- Request processing
+`src/tests/`  
+Contains backend unit and integration tests.
 
-### `migrations/`
+`src/utils/`  
+Contains reusable backend helper functions.
 
-Contains Sequelize database migrations used to create and evolve the CareerForge database schema.
+`src/validators/`  
+Contains request and domain validation logic.
 
-### `models/`
+`src/app.js`  
+Configures the Express application, middleware, and API routes.
 
-Contains Sequelize model definitions and associations representing CareerForge database entities.
+## Backend Architecture
 
-### `repositories/`
-
-Contains the data-access layer.
-
-Repositories isolate database queries and persistence operations from higher-level business logic.
-
-### `routes/`
-
-Contains Express route definitions that map CareerForge API endpoints to middleware, validators, and controllers.
-
-### `seeders/`
-
-Contains database seed operations used where controlled initial or test-oriented data is required.
-
-### `services/`
-
-Contains the primary business-logic layer.
-
-Services coordinate:
-
-- Application business rules
-- Authorization requirements
-- Repository operations
-- Notifications
-- Transactional email
-- File-related workflows
-- Domain-specific processing
-
-### `tests/`
-
-Contains automated backend tests, including unit and integration coverage for:
-
-- Authentication
-- Authorization
-- API behavior
-- Validation
-- Business rules
-- Security behavior
-- Job-seeker workflows
-- Recruiter workflows
-- Administrator workflows
-- Applications
-- Saved jobs
-- Interviews
-- Notifications
-- Reporting and moderation
-
-### `utils/`
-
-Contains reusable backend utility functions and domain helpers shared across application modules.
-
-### `validators/`
-
-Contains request and domain validation logic used to validate incoming data before business operations are performed.
-
-### Application Entry Point
-
-`app.js` configures the Express application, middleware, API routing, and application-level behavior.
-
-## Backend Layering
-
-The primary backend request flow follows this structure:
+A typical API request follows this flow:
 
 ```text
 HTTP Request
@@ -148,7 +111,7 @@ HTTP Request
 Routes
      |
      v
-Middleware / Validators
+Middleware / Validation
      |
      v
 Controllers
@@ -166,92 +129,15 @@ Sequelize Models
 MySQL
 ```
 
-This layered structure keeps HTTP concerns, validation, business rules, and database access separated and maintainable.
+This structure helps keep routing, validation, business logic, and database operations separated.
 
-## Local Setup
+## Main Features
 
-1. Install Node.js 20+ and MySQL 8.
-2. From `server`, run `npm install`.
-3. Copy `.env.example` to `.env` and replace local placeholders.
-4. Create the development and test databases named by `DB_NAME` and `TEST_DB_NAME`.
-5. Run `npm run db:migrate`.
-6. Run `npm run db:migrate:test`.
-7. Run `npm run lint`.
-8. Run `npm test`.
-9. Start development with `npm run dev` or production-style local execution with `npm start`.
+### Authentication and Account Management
 
-Default local base URL:
-
-```text
-http://localhost:5000
-```
-
-## Environment Configuration
-
-Use:
-
-```text
-.env.example
-```
-
-as the secret-free reference for backend environment configuration.
-
-Create a local:
-
-```text
-.env
-```
-
-for development and provide the required environment-specific values.
-
-Production credentials and secrets must be configured through the deployment platform and must never be committed to source control.
-
-Environment configuration includes areas such as:
-
-- Application environment
-- Server configuration
-- Database configuration
-- Authentication secrets
-- Cookie configuration
-- Frontend origin configuration
-- Cloudinary integration
-- Brevo transactional email configuration
-
-Detailed environment-variable documentation is maintained in:
-
-```text
-src/docs/ENVIRONMENT_VARIABLES.md
-```
-
-## Database
-
-CareerForge uses MySQL with Sequelize.
-
-Database schema changes are managed through Sequelize migrations.
-
-Development migrations:
-
-```bash
-npm run db:migrate
-```
-
-Test migrations:
-
-```bash
-npm run db:migrate:test
-```
-
-Database seed and migration commands are maintained through the backend package scripts.
-
-## Authentication
-
-CareerForge provides a complete authentication and account-security lifecycle.
-
-Authentication functionality includes:
-
-- Registration
+- User registration
 - Email verification
-- Verification resend
+- Resend email verification
 - Login
 - JWT access-token authentication
 - Refresh-token sessions
@@ -268,59 +154,36 @@ Authentication functionality includes:
 
 Refresh tokens are handled using HTTP-only cookies.
 
-Production authentication cookies use secure production configuration appropriate for the deployed frontend and backend.
-
-## Authorization
-
-Backend authorization protects role-specific and resource-specific operations.
-
-CareerForge supports:
-
-- Job seeker access
-- Recruiter access
-- Administrator access
-- Ownership validation
-- Resource-level authorization
-- Protected application operations
-- Protected interview operations
-- Protected company and job management
-- Administrative moderation permissions
-
-## Core Backend Functional Areas
-
-The backend supports the complete CareerForge recruitment lifecycle.
-
 ### Public Jobs
 
 - Public job listings
-- Search
-- Filtering
-- Sorting
+- Job search
+- Filtering and sorting
 - Pagination
 - Job details
 - Company information
 - Similar jobs
 
-### Job Seeker
+### Job Seekers
 
 - Profile management
 - Profile image management
-- Resume/document management
+- Resume and document management
 - Job preferences
 - Saved jobs
-- Applications
+- Job applications
 - Application tracking
 - Application withdrawal
 - Application history
 - Interview management
 - Notifications
 
-### Recruiter
+### Recruiters
 
-- Recruiter profile
+- Recruiter profile management
 - Company management
 - Company verification workflow
-- Job creation and management
+- Job creation and editing
 - Job publishing and closing
 - Applicant management
 - Applicant details
@@ -329,67 +192,216 @@ The backend supports the complete CareerForge recruitment lifecycle.
 - Application status management
 - Interview scheduling
 - Interview rescheduling
-- Interview management/history
+- Interview history
 
-### Administrator
+### Administrators
 
 - User management
 - User details
-- User enable/disable operations
+- Enable and disable users
+- Company verification and rejection
 - Job moderation
-- Job removal/restoration
+- Job removal and restoration
 - Report management
-- Company verification/rejection
 - Audit logs
-- Audit-log details
+- Audit log details
 - Administrative moderation
+
+## Database
+
+CareerForge uses MySQL as the relational database and Sequelize as the ORM.
+
+Database changes are managed using Sequelize migrations.
+
+Run development migrations:
+
+```bash
+npm run db:migrate
+```
+
+Run test-database migrations:
+
+```bash
+npm run db:migrate:test
+```
+
+The development and test databases should use separate database names.
 
 ## File Uploads
 
-CareerForge uses Multer for upload handling and Cloudinary for applicable persistent file and image storage.
+CareerForge uses Multer for handling uploaded files and Cloudinary for applicable persistent file and image storage.
 
-File-related functionality includes:
+Supported workflows include:
 
 - Profile images
-- Resumes/documents
+- Resumes
+- Documents
 
-Cloudinary credentials are configured through environment variables and must not be committed to source control.
+Cloudinary credentials are configured using environment variables and must not be committed to Git.
 
 ## Transactional Email
 
-CareerForge uses the Brevo Transactional Email API for applicable email workflows.
+CareerForge uses the Brevo Transactional Email API for applicable email functionality.
 
-Email-related functionality supports account and authentication workflows such as verification and password-related communication.
+Email is used for account-related workflows such as:
 
-Brevo credentials remain outside source control and are configured through environment variables.
+- Email verification
+- Password-related communication
+- Other supported authentication notifications
 
-## Security
+Brevo credentials are configured using environment variables and remain outside source control.
 
-Backend security includes:
+## Authentication and Security
+
+The backend contains security features including:
 
 - Password hashing
-- JWT access authentication
+- JWT authentication
 - HTTP-only refresh-token cookies
 - Secure production cookies
 - Role-based authorization
 - Resource ownership validation
+- Request validation
 - CORS protection
 - Trusted-origin validation
-- Request validation
 - Rate limiting
+- Session revocation
+- Helmet security headers
+- Administrative audit logging
 - Production-safe error handling
 - Environment-based secrets
-- Session revocation
-- Administrative audit logging
-- Helmet security headers
 
-Production credentials and secrets must never be committed to the repository.
+Real passwords, database credentials, JWT secrets, API keys, and other private configuration must never be committed to Git.
+
+## Environment Configuration
+
+Use:
+
+```text
+.env.example
+```
+
+as the reference for backend environment variables.
+
+Create a local:
+
+```text
+.env
+```
+
+for development and provide the required values.
+
+Environment configuration covers areas such as:
+
+- Application environment
+- Server port
+- Database connection
+- Authentication secrets
+- Cookie configuration
+- Frontend origin
+- Cloudinary
+- Brevo
+
+Detailed information is available in:
+
+```text
+src/docs/ENVIRONMENT_VARIABLES.md
+```
+
+## Local Setup
+
+### 1. Install Requirements
+
+Install:
+
+- Node.js 20+
+- MySQL 8
+
+### 2. Install Dependencies
+
+From the `server` directory:
+
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Copy the example configuration:
+
+```text
+.env.example
+```
+
+and create your local `.env`.
+
+### 4. Create Databases
+
+Create the development and test databases configured through:
+
+```text
+DB_NAME
+TEST_DB_NAME
+```
+
+### 5. Run Database Migrations
+
+Development database:
+
+```bash
+npm run db:migrate
+```
+
+Test database:
+
+```bash
+npm run db:migrate:test
+```
+
+### 6. Start the Backend
+
+Development:
+
+```bash
+npm run dev
+```
+
+Standard start:
+
+```bash
+npm start
+```
+
+The default local backend URL is:
+
+```text
+http://localhost:5000
+```
 
 ## Testing
 
-CareerForge contains backend unit and integration tests covering major application behavior.
+The backend contains unit and integration tests for important application behavior.
 
-Run the complete backend test suite:
+Testing covers areas such as:
+
+- Authentication
+- Authorization
+- Validation
+- Public jobs
+- Companies
+- Job seeker functionality
+- Recruiter functionality
+- Administrator functionality
+- Applications
+- Saved jobs
+- Interviews
+- Notifications
+- Reporting
+- Security behavior
+- API behavior
+- Business rules
+
+Run all backend tests:
 
 ```bash
 npm test
@@ -401,7 +413,7 @@ Run ESLint:
 npm run lint
 ```
 
-The established backend quality gate is:
+Current verified backend test result:
 
 ```text
 107/107 test suites passed
@@ -409,162 +421,134 @@ The established backend quality gate is:
 ESLint passed
 ```
 
-Testing covers areas including:
+## API Documentation
 
+Detailed backend documentation is available in:
+
+```text
+src/docs/
+```
+
+Important documentation includes:
+
+```text
+API.md
+API_CONTRACT.md
+ARCHITECTURE.md
+ENDPOINT_INVENTORY.md
+ENVIRONMENT_VARIABLES.md
+FRONTEND_API_HANDOFF.md
+MODEL_INVENTORY.md
+PRODUCTION_CONFIGURATION.md
+TEST-DATA-STRATEGY.md
+TESTING.md
+```
+
+These files provide additional information about API endpoints, architecture, environment configuration, testing, and frontend integration.
+
+## API Integration
+
+The backend REST API is integrated with the CareerForge React frontend.
+
+The integration includes:
+
+- API routes
+- Request and response formats
 - Authentication
 - Authorization
-- Job-seeker functionality
-- Recruiter functionality
-- Administrator functionality
-- Jobs
-- Companies
-- Applications
-- Saved jobs
-- Interviews
-- Notifications
-- Reporting
+- Pagination
 - Validation
-- Security rules
-- API behavior
-- Business logic
+- Business rules
+- Cookie-based session handling
+
+The established API contract should remain stable unless a feature requires an intentional change.
+
+## CI/CD
+
+GitHub Actions is used to automatically check the backend code.
+
+The backend CI process includes the configured automated quality checks for the project.
+
+The production backend is deployed through Render from the GitHub repository.
 
 ## Production Deployment
 
-CareerForge backend is deployed on Render.
+The CareerForge backend is deployed on Render.
 
-Production base URL:
+Production backend:
 
-```text
 https://job-recruitment-and-application.onrender.com
-```
 
 Health endpoint:
 
-```text
 https://job-recruitment-and-application.onrender.com/api/health
-```
 
 Readiness endpoint:
 
-```text
 https://job-recruitment-and-application.onrender.com/api/health/ready
-```
 
-Production configuration includes:
+The production environment uses configuration for:
 
 - HTTPS
-- Production MySQL connectivity
+- Production MySQL
 - Environment-based secrets
-- Approved frontend-origin CORS handling
+- CORS
 - Secure authentication cookies
-- Cloudinary integration
-- Brevo transactional email
+- Cloudinary
+- Brevo
 - Production logging
 - Health checks
 - Readiness checks
 
 ## Production Frontend
 
-The production frontend is deployed on Vercel.
+The CareerForge frontend is deployed on Vercel.
 
-```text
+Production application:
+
 https://job-recruitment-and-application-man.vercel.app
-```
 
-The backend accepts the approved production frontend origin according to its production CORS configuration.
+The frontend communicates with this backend using its production API configuration.
 
-## Backend Verification
+## Project Status
 
-Backend automated and production verification covers:
+The CareerForge backend is complete for the planned project scope.
 
+Completed areas include:
+
+- Backend implementation
+- Database integration
 - Authentication and authorization
-- Job-seeker functionality
+- Job seeker functionality
 - Recruiter functionality
 - Administrator functionality
-- Job and company management
+- Company and job management
 - Applications and saved jobs
 - Interview management
 - Notifications
-- Reporting and dashboards
-- Cloudinary file uploads
-- Brevo transactional email
-- Production MySQL connectivity
-- Database migrations
-- CORS protection
-- Secure authentication cookies
-- Rate limiting
-- Production-safe error handling
-- Production logging
-- Health and readiness checks
+- File uploads
+- Transactional email
+- Security implementation
+- Automated testing
+- API integration
+- CI/CD
+- Production deployment
+- Production verification
 
-## API Documentation
+## Related Documentation
 
-Detailed backend documentation is maintained under:
-
-```text
-src/docs/
-```
-
-Important documents include:
-
-- `API.md`
-- `API_CONTRACT.md`
-- `ARCHITECTURE.md`
-- `ENDPOINT_INVENTORY.md`
-- `ENVIRONMENT_VARIABLES.md`
-- `FRONTEND_API_HANDOFF.md`
-- `MODEL_INVENTORY.md`
-- `PRODUCTION_CONFIGURATION.md`
-- `TEST-DATA-STRATEGY.md`
-- `TESTING.md`
-
-## API Contract
-
-The backend API contract is established and integrated with the CareerForge frontend.
-
-Frontend integration follows the existing backend:
-
-- Routes
-- Request formats
-- Response formats
-- Authentication requirements
-- Authorization rules
-- Pagination behavior
-- Business rules
-
-Established backend contracts should not be changed unnecessarily.
-
-## Documentation
-
-Backend documentation is maintained through:
-
-```text
-README.md
-src/docs/
-```
-
-Project-wide and frontend documentation is available through:
+For complete project and frontend information, see:
 
 ```text
 ../README.md
 ../client/README.md
+src/docs/
 ```
 
-## Backend Status
+## About This Project
 
-- Backend implementation - Complete
-- Authentication and authorization - Complete
-- Database integration - Complete
-- Job-seeker functionality - Complete
-- Recruiter functionality - Complete
-- Administrator functionality - Complete
-- Applications and saved jobs - Complete
-- Interview management - Complete
-- Notifications - Complete
-- File uploads - Complete
-- Transactional email - Complete
-- Automated testing - Complete
-- ESLint verification - Complete
-- Production deployment - Complete
-- Production verification - Complete
-- API contract - Frozen
+CareerForge was built as a full-stack portfolio project to apply and demonstrate practical backend and full-stack development concepts.
+
+The backend demonstrates experience with REST API development, relational databases, authentication, authorization, layered application structure, validation, file uploads, transactional email, automated testing, security practices, CI/CD, and production deployment.
+
+The project is intended to demonstrate skills relevant to entry-level and junior full-stack and backend software development roles.

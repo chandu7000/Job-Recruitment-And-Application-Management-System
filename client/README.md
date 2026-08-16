@@ -1,24 +1,105 @@
 ﻿# CareerForge Frontend
 
-CareerForge is a full-stack Job Recruitment and Application Management System designed to support the complete recruitment lifecycle for job seekers, recruiters, administrators, and public visitors.
+CareerForge is a full-stack Job Recruitment and Application Management System built as a portfolio project to demonstrate practical full-stack development skills.
 
-This directory contains the React frontend for CareerForge.
+This directory contains the React frontend of CareerForge.
 
-## Frontend Overview
+The frontend provides separate user experiences for public visitors, job seekers, recruiters, and administrators and communicates with the CareerForge backend REST API.
 
-The CareerForge frontend provides role-based interfaces and workflows for:
+## Features
 
-- Public visitors
-- Job seekers
-- Recruiters
-- Administrators
+### Public Users
 
-The application communicates with the CareerForge REST API and provides responsive interfaces for authentication, job discovery, applications, interviews, notifications, recruiter workflows, and administrative moderation.
+- Home page
+- Browse available jobs
+- Search jobs
+- Filter and sort jobs
+- View job details
+- View company information
+- View similar jobs
+- Pagination
+
+### Authentication
+
+- User registration
+- Job seeker registration
+- Recruiter registration
+- Email verification
+- Resend email verification
+- Login
+- Logout
+- Session restoration
+- Session management
+- Logout from all sessions
+- Forgot password
+- Reset password
+- Change password
+- Email change
+- Protected routes
+- Role-based navigation
+
+### Job Seekers
+
+- Job seeker dashboard
+- Profile management
+- Profile image management
+- Education management
+- Experience management
+- Skills management
+- Projects and certifications
+- Social links
+- Job preferences
+- Resume and document management
+- Save jobs
+- Apply for jobs
+- View applications
+- Track application status
+- Withdraw eligible applications
+- View interviews
+- Confirm interview attendance
+- Decline interviews
+- View interview history
+- Manage interview rescheduling
+- Receive notifications
+
+### Recruiters
+
+- Recruiter dashboard
+- Recruiter profile management
+- Company creation and management
+- Company verification workflow
+- Create and edit jobs
+- Publish and close jobs
+- View applicants
+- View applicant details
+- View applicant resumes
+- Add recruiter notes
+- Update application status
+- Schedule interviews
+- Reschedule interviews
+- Manage interviews
+- Receive notifications
+
+### Administrators
+
+- Administrator dashboard
+- User management
+- View user details
+- Enable and disable users
+- Company verification
+- Company rejection
+- Job moderation
+- Remove and restore jobs
+- Report management
+- Audit logs
+- View audit log details
+- Administrative moderation workflows
 
 ## Technology Stack
 
 - React
 - Vite
+- JavaScript
 - React Router
 - Axios
 - Tailwind CSS
@@ -29,197 +110,105 @@ The application communicates with the CareerForge REST API and provides responsi
 - React Testing Library
 - ESLint
 
-## Frontend Structure
+## Project Structure
 
-The CareerForge frontend follows a feature-oriented structure that separates application domains while keeping shared infrastructure reusable.
+The frontend uses a feature-based folder structure.
 
 ```text
 src/
-â”œâ”€â”€ api/
-â”œâ”€â”€ components/
-â”œâ”€â”€ features/
-â”œâ”€â”€ layouts/
-â”œâ”€â”€ routes/
-â”œâ”€â”€ tests/
-â”œâ”€â”€ utils/
-â”œâ”€â”€ App.jsx
-â””â”€â”€ main.jsx
+|-- api/
+|-- components/
+|-- features/
+|-- layouts/
+|-- routes/
+|-- tests/
+|-- utils/
+|-- App.jsx
+`-- main.jsx
 ```
 
-### `api/`
+### Folder Overview
 
-Contains shared API configuration, endpoint definitions, HTTP client behavior, and API-related infrastructure used by frontend features.
+`api/`  
+Contains shared Axios configuration and API endpoint definitions.
 
-### `components/`
+`components/`  
+Contains reusable UI components used across the application.
 
-Contains reusable UI components shared across multiple areas of the application.
+`features/`  
+Contains the main application features such as authentication, jobs, applications, interviews, notifications, recruiter functionality, and administrator functionality.
 
-### `features/`
+`layouts/`  
+Contains layouts for public, authentication, job seeker, recruiter, and administrator pages.
 
-Contains feature-oriented modules for the major CareerForge domains, including:
+`routes/`  
+Contains application routing and protected route configuration.
 
-- Authentication and account management
-- Public jobs
-- Job seeker workflows
-- Recruiter workflows
-- Applications
-- Interviews
-- Notifications
-- Administrator functionality
+`tests/`  
+Contains frontend automated tests.
 
-Feature modules keep related pages, components, API logic, validation, constants, contexts, and utilities close to their respective application domain.
+`utils/`  
+Contains reusable utility functions.
 
-### `layouts/`
+`App.jsx`  
+Provides the main application setup and global providers.
 
-Contains layout components that provide consistent navigation and page structure for public, authenticated, job-seeker, recruiter, and administrator areas.
+`main.jsx`  
+Starts and renders the React application.
 
-### `routes/`
+## API Integration
 
-Contains application routing configuration, protected-route behavior, role-based route handling, and navigation structure.
+The frontend communicates with the CareerForge backend through Axios.
 
-### `tests/`
-
-Contains automated frontend tests covering pages, components, API modules, routing, authentication, validation, utilities, and role-based workflows.
-
-### `utils/`
-
-Contains reusable frontend utility functions shared across application features.
-
-### Application Entry Points
-
-`main.jsx` initializes and renders the React application.
-
-`App.jsx` provides application-level providers and renders the main router, including authentication, notifications, and global toast behavior.
-
-## Frontend Design Principles
-
-The frontend structure follows these principles:
-
-- Feature-oriented organization
-- Reusable shared components
-- Centralized API communication
-- Role-based routing and authorization
-- Separation of page, API, validation, and utility concerns
-- Shared application providers
-- Automated testing across frontend functionality
-- Environment-based backend configuration
-
-## Major Features
-
-### Public
-
-- Home page
-- Public job listings
-- Job search
-- Filtering and sorting
-- Pagination
-- Job details
-- Company information
-- Similar jobs
-
-### Authentication and Account
-
-- Registration
-- Email verification
-- Resend verification
-- Login
-- Session restoration
-- Logout
-- Logout from all sessions
-- Session management
-- Forgot password
-- Reset password
-- Change password
-- Email change
-- Protected routes
-- Role-based route access
-
-### Job Seeker
-
-- Dashboard
-- Profile management
-- Profile image management
-- Resume and document management
-- Job preferences
-- Saved jobs
-- Job applications
-- Application details and tracking
-- Application withdrawal
-- Application history
-- Interview management
-- Attendance confirmation
-- Interview decline
-- Interview rescheduling
-- Notifications
-
-### Recruiter
-
-- Dashboard
-- Recruiter profile
-- Company management
-- Company verification workflow
-- Job creation and editing
-- Job publishing and closing
-- Job management
-- Applicant management
-- Applicant details
-- Resume viewing
-- Recruiter notes
-- Application status management
-- Interview scheduling
-- Interview rescheduling
-- Interview management and history
-
-### Administrator
-
-- Dashboard
-- User management
-- User details
-- User enable/disable actions
-- Job moderation
-- Job removal and restoration
-- Report management
-- Company verification and rejection
-- Audit logs
-- Audit log details
-- Moderation workflows
-
-## Local Setup
-
-Install frontend dependencies:
-
-```bash
-npm ci
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-The frontend requires the CareerForge backend API to be available and correctly configured.
-
-## Environment Configuration
-
-Create the required local environment configuration using the provided example file as the reference:
-
-```text
-.env.example
-```
-
-The frontend API base URL is configured through:
+The backend API URL is configured using:
 
 ```text
 VITE_API_BASE_URL
 ```
 
-```markdown
-API requests that require cookie-based session handling use the shared Axios client with `withCredentials: true`, allowing the browser to send the secure HTTP-only refresh-token cookie to the backend.
+Requests that require cookie-based authentication use Axios with:
 
-Do not commit real environment files, credentials, tokens, API keys, or other secrets to source control.
+```text
+withCredentials: true
+```
 
-## Quality Commands
+This allows the browser to send the secure HTTP-only refresh-token cookie when required.
+
+## Local Setup
+
+### 1. Install Dependencies
+
+```bash
+npm ci
+```
+
+### 2. Configure Environment Variables
+
+Use `.env.example` as the reference for local configuration.
+
+Example:
+
+```text
+VITE_API_BASE_URL=http://localhost:5000/api
+```
+
+Do not commit real secrets or private environment configuration to Git.
+
+### 3. Start the Frontend
+
+```bash
+npm run dev
+```
+
+The frontend requires the CareerForge backend to be running and correctly configured.
+
+## Available Commands
+
+Start development server:
+
+```bash
+npm run dev
+```
 
 Run ESLint:
 
@@ -227,7 +216,7 @@ Run ESLint:
 npm run lint
 ```
 
-Run the automated frontend test suite:
+Run frontend tests:
 
 ```bash
 npm test
@@ -239,69 +228,44 @@ Create a production build:
 npm run build
 ```
 
-## CI/CD
+## Authentication and Security
 
-Frontend continuous integration is configured with GitHub Actions.
+The frontend works with the authentication and security features provided by the CareerForge backend.
 
-The CI workflow performs:
+Important frontend security behavior includes:
 
-1. Dependency installation
-2. ESLint validation
-3. Automated frontend tests
-4. Production build validation
+- Protected routes
+- Role-based route access
+- Session restoration
+- Secure HTTP-only refresh-token cookies
+- Authenticated API requests
+- Logout and session management
+- Account-status handling
+- Environment-based API configuration
 
-CI runs for pushes to `main` and pull requests targeting `main`.
-
-## Production Deployment
-
-The frontend is deployed using Vercel.
-
-Production frontend:
-
-```text
-https://job-recruitment-and-application-man.vercel.app
-```
-
-The Vercel Production environment tracks the `main` branch.
-
-The production frontend communicates with the deployed CareerForge backend API through environment-based configuration.
-
-SPA routing configuration is maintained through:
-
-```text
-vercel.json
-```
-
-This allows direct navigation and browser refreshes on frontend application routes.
-
-## Security Notes
-
-- Authentication is handled through the CareerForge backend.
-- Access tokens and session behavior follow the application's established authentication flow.
-- Refresh tokens are handled using secure HTTP-only cookies.
-- Frontend route guards enforce authenticated and role-based navigation.
-- Environment-specific configuration is kept outside source control.
-- Real secrets must remain outside the Git repository.
+Passwords and refresh tokens are not manually stored in browser `localStorage` or `sessionStorage`.
 
 ## Testing
 
-The frontend contains automated tests covering major application areas including:
+Automated frontend tests cover important areas such as:
 
 - Authentication
 - Routing
 - Route guards
-- Public job functionality
-- Job seeker workflows
-- Recruiter workflows
+- Public jobs
+- Job seeker functionality
+- Recruiter functionality
 - Applications
 - Interviews
 - Notifications
 - Administrator functionality
 - API integration
-- Validation
+- Form validation
 - Utilities
+- Responsive navigation
+- Accessibility behavior
 
-The established frontend quality gate is:
+Current verified frontend test result:
 
 ```text
 59/59 test files passed
@@ -310,16 +274,70 @@ ESLint passed
 Production build passed
 ```
 
-## Project Context
+## CI/CD
 
-This frontend is part of the complete CareerForge Job Recruitment and Application Management System.
+GitHub Actions is used to automatically check the frontend code.
 
-Additional project-wide architecture, backend setup, deployment details, API integration documentation, testing documentation, security information, and handover information are maintained at the repository level.
+The frontend CI process includes:
 
-See:
+1. Installing dependencies
+2. Running ESLint
+3. Running automated tests
+4. Creating a production build
+
+The workflow runs for pushes to `main` and pull requests targeting `main`.
+
+The production frontend is deployed through Vercel from the `main` branch.
+
+## Production Deployment
+
+The CareerForge frontend is deployed on Vercel.
+
+Production application:
+
+https://job-recruitment-and-application-man.vercel.app
+
+The production frontend communicates with the deployed CareerForge backend using environment-based API configuration.
+
+The project also contains:
+
+```text
+vercel.json
+```
+
+This configuration supports frontend routes when users directly open or refresh application pages.
+
+## Project Status
+
+The CareerForge frontend is complete for the planned project scope.
+
+Completed areas include:
+
+- Frontend implementation
+- Backend API integration
+- Authentication
+- Job seeker workflows
+- Recruiter workflows
+- Administrator workflows
+- Responsive design
+- Accessibility improvements
+- Automated testing
+- Production build
+- CI/CD
+- Production deployment
+
+## Related Documentation
+
+For complete project and backend information, see:
 
 ```text
 ../README.md
 ../server/README.md
 ../server/src/docs/
 ```
+
+## About This Project
+
+CareerForge was built as a full-stack portfolio project to apply and demonstrate practical development concepts including React application development, REST API integration, authentication, role-based access, testing, deployment, and CI/CD.
+
+The project is designed to demonstrate skills relevant to entry-level and junior full-stack software development roles.

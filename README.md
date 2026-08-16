@@ -1,18 +1,16 @@
 ﻿# CareerForge
 
-CareerForge is a production-ready **Job Recruitment and Application Management System** designed to support the complete recruitment lifecycle for public visitors, job seekers, recruiters, and administrators.
+CareerForge is a full-stack **Job Recruitment and Application Management System** built as a portfolio project to demonstrate practical full-stack development skills.
 
-The platform provides secure authentication, role-based access control, public job discovery, company and job management, saved jobs, applications, interview scheduling and management, notifications, file uploads, reporting, moderation, audit logging, and administrative workflows.
+The application supports the complete recruitment workflow for public visitors, job seekers, recruiters, and administrators.
 
----
+CareerForge includes secure authentication, job discovery, company and job management, applications, interviews, notifications, file uploads, reporting, moderation, testing, CI/CD, and production deployment.
 
 ## Live Application
 
 ### Frontend
 
-CareerForge frontend is deployed on **Vercel**.
-
-**Production URL:**
+The CareerForge frontend is deployed on Vercel.
 
 ```text
 https://job-recruitment-and-application-man.vercel.app
@@ -20,353 +18,23 @@ https://job-recruitment-and-application-man.vercel.app
 
 ### Backend
 
-CareerForge backend is deployed on **Render**.
-
-**Production Base URL:**
+The CareerForge backend is deployed on Render.
 
 ```text
 https://job-recruitment-and-application.onrender.com
 ```
 
-**Health Endpoint:**
+Backend health endpoint:
 
 ```text
 https://job-recruitment-and-application.onrender.com/api/health
 ```
 
-**Readiness Endpoint:**
+Backend readiness endpoint:
 
 ```text
 https://job-recruitment-and-application.onrender.com/api/health/ready
 ```
-
----
-
-## Repository Structure
-
-```text
-Job-Recruitment-And-Application-Management-System/
-â”œâ”€â”€ .github/
-â”‚   â””â”€â”€ workflows/
-â”œâ”€â”€ client/
-â”‚   â”œâ”€â”€ src/
-â”‚   â”œâ”€â”€ README.md
-â”‚   â””â”€â”€ vercel.json
-â”œâ”€â”€ server/
-â”‚   â”œâ”€â”€ src/
-â”‚   â””â”€â”€ README.md
-â””â”€â”€ README.md
-```
-
-### Frontend
-
-The complete React/Vite frontend is located in:
-
-```text
-client/
-```
-
-Frontend-specific documentation is available in:
-
-```text
-client/README.md
-```
-
-### Backend
-
-The complete Node.js/Express backend is located in:
-
-```text
-server/
-```
-
-Backend-specific documentation is available in:
-
-```text
-server/README.md
-```
-
-Additional backend technical and API documentation is maintained under:
-
-```text
-server/src/docs/
-```
-
-### CI/CD
-
-GitHub Actions workflows are maintained under:
-
-```text
-.github/workflows/
-```
-
----
-
-## User Roles
-
-CareerForge supports four major user groups.
-
-### Public Visitor
-
-Public visitors can:
-
-* Browse available jobs
-* Search jobs
-* Filter and sort job listings
-* Use pagination
-* View job details
-* View company information
-* View similar jobs
-
-### Job Seeker
-
-Job seekers can:
-
-* Register an account
-* Verify their email address
-* Resend verification emails
-* Log in securely
-* Restore authenticated sessions
-* Manage profile information
-* Upload and manage profile images
-* Upload and manage resumes/documents
-* Configure job preferences
-* Save and unsave jobs
-* Apply for jobs
-* View applications
-* Track application status
-* View application history
-* Withdraw eligible applications
-* View interviews
-* View interview details
-* Confirm interview attendance
-* Decline interviews
-* Manage interview rescheduling
-* Receive notifications
-* Manage account sessions
-* Change password
-* Change email
-* Log out
-* Log out from all sessions
-
-### Recruiter
-
-Recruiters can:
-
-* Access a recruiter dashboard
-* Manage recruiter profile information
-* Create and manage companies
-* Submit companies for verification
-* Create jobs
-* Edit jobs
-* Publish jobs
-* Close jobs
-* Manage recruiter job listings
-* Review applicants
-* View applicant details
-* View applicant resumes
-* Maintain recruiter notes
-* Update application statuses
-* Schedule interviews
-* Reschedule interviews
-* Manage interview history
-* Receive recruitment-related notifications
-
-### Administrator
-
-Administrators can:
-
-* Access the administrator dashboard
-* Manage users
-* View user details
-* Enable users
-* Disable users
-* Moderate jobs
-* Remove jobs
-* Restore jobs
-* Manage reports
-* Review report details
-* Verify companies
-* Reject companies
-* Review audit logs
-* View audit-log details
-* Perform administrative moderation actions
-
----
-
-## Technology Stack
-
-### Frontend
-
-* React
-* Vite
-* React Router
-* Axios
-* Tailwind CSS
-* Lucide React
-* Sonner
-* date-fns
-* Vitest
-* React Testing Library
-* ESLint
-
-### Backend
-
-* Node.js
-* Express
-* Sequelize
-* MySQL
-* JWT authentication
-* HTTP-only refresh-token cookies
-* bcrypt
-* Express Validator
-* CORS
-* Multer
-* Cloudinary
-* Brevo Transactional Email API
-* Jest
-* Supertest
-* ESLint
-
-### Infrastructure and Deployment
-
-* Git
-* GitHub
-* GitHub Actions
-* Vercel
-* Render
-* MySQL
-* Cloudinary
-* Brevo
-
----
-
-## High-Level Architecture
-
-```text
-Browser
-   |
-   v
-React / Vite Frontend
-   |
-   v
-Axios
-   |
-   v
-Express REST API
-   |
-   v
-Controllers / Services
-   |
-   v
-Repositories / Sequelize
-   |
-   v
-MySQL
-```
-
-External integrations:
-
-```text
-CareerForge Backend
-â”œâ”€â”€ Cloudinary
-â”‚   â””â”€â”€ File and image storage
-â”‚
-â””â”€â”€ Brevo
-    â””â”€â”€ Transactional email delivery
-```
-
-The frontend and backend are deployed independently and communicate through the production REST API.
-
----
-
-## Core Functional Areas
-
-### Authentication and Account Management
-
-CareerForge provides a complete authentication and session lifecycle:
-
-* Registration
-* Email verification
-* Verification resend
-* Login
-* JWT access-token authentication
-* Refresh-token session handling
-* Session restoration
-* Logout
-* Logout from all sessions
-* Session management
-* Session revocation
-* Forgot password
-* Reset password
-* Change password
-* Email change
-* Protected frontend routes
-* Role-based authorization
-
-### Public Job Discovery
-
-* Job listings
-* Search
-* Filtering
-* Sorting
-* Pagination
-* Job details
-* Company details
-* Similar jobs
-
-### Job-Seeker Workflows
-
-* Dashboard
-* Profile management
-* Profile image management
-* Resume/document management
-* Job preferences
-* Saved jobs
-* Applications
-* Application details
-* Application tracking
-* Application timeline/history
-* Application withdrawal
-* Interview management
-* Interview attendance confirmation
-* Interview decline
-* Interview rescheduling
-* Notifications
-
-### Recruiter Workflows
-
-* Dashboard
-* Recruiter profile
-* Company management
-* Company verification workflow
-* Job creation
-* Job editing
-* Job publishing
-* Job closing
-* Applicant management
-* Applicant details
-* Resume viewing
-* Recruiter notes
-* Application status management
-* Interview scheduling
-* Interview rescheduling
-* Interview management/history
-
-### Administrator Workflows
-
-* Dashboard
-* User management
-* User details
-* User enable/disable actions
-* Job moderation
-* Job removal/restoration
-* Report management
-* Report actions
-* Company verification/rejection
-* Audit logs
-* Audit-log details
-* Moderation validation
 
 ## Application Screenshots
 
@@ -374,7 +42,7 @@ CareerForge provides a complete authentication and session lifecycle:
 
 ![CareerForge Home Page](docs/screenshots/01-home-page.png)
 
-### Public Job Discovery
+### Public Jobs
 
 ![CareerForge Public Jobs](docs/screenshots/02-public-jobs.png)
 
@@ -390,45 +58,166 @@ CareerForge provides a complete authentication and session lifecycle:
 
 ![CareerForge Administrator Dashboard](docs/screenshots/05-admin-dashboard.png)
 
----
+## Main Features
 
-## Authentication and Security
+### Public Users
 
-CareerForge includes security-focused implementation across the frontend and backend.
+- View the home page
+- Browse available jobs
+- Search jobs
+- Filter and sort jobs
+- Use pagination
+- View job details
+- View company information
+- View similar jobs
 
-Security features include:
+### Authentication and Account Management
 
-* Password hashing
-* JWT-based access authentication
-* HTTP-only refresh-token cookies
-* Secure production cookies
-* Role-based authorization
-* Backend ownership validation
-* Protected frontend routes
-* Trusted-origin validation
-* CORS protection
-* Input validation
-* Session management
-* Session revocation
-* Environment-based secrets
-* Administrative audit logging
-* Production-safe error handling
+- User registration
+- Job seeker and recruiter registration
+- Email verification
+- Resend email verification
+- Login and logout
+- Session restoration
+- Session management
+- Logout from all sessions
+- Forgot password
+- Reset password
+- Change password
+- Change email
+- Protected routes
+- Role-based authorization
 
-Refresh tokens are stored in secure HTTP-only cookies and are not manually stored in frontend `localStorage` or `sessionStorage`.
+### Job Seekers
 
-Production credentials, passwords, API keys, tokens, database credentials, and private secrets must never be committed to the repository.
+- Job seeker dashboard
+- Profile management
+- Profile image management
+- Education management
+- Experience management
+- Skills management
+- Projects and certifications
+- Social links
+- Job preferences
+- Resume and document management
+- Save and unsave jobs
+- Apply for jobs
+- View applications
+- Track application status
+- View application history
+- Withdraw eligible applications
+- View interviews
+- Confirm interview attendance
+- Decline interviews
+- Manage interview rescheduling
+- Receive notifications
 
----
+### Recruiters
 
-## Frontend
+- Recruiter dashboard
+- Recruiter profile management
+- Company creation and management
+- Company verification workflow
+- Create and edit jobs
+- Publish and close jobs
+- Manage job listings
+- View applicants
+- View applicant details
+- View applicant resumes
+- Add recruiter notes
+- Update application status
+- Schedule interviews
+- Reschedule interviews
+- Manage interview history
+- Receive notifications
 
-The frontend application is located in:
+### Administrators
+
+- Administrator dashboard
+- User management
+- View user details
+- Enable and disable users
+- Company verification and rejection
+- Job moderation
+- Remove and restore jobs
+- Report management
+- Audit logs
+- View audit log details
+- Administrative moderation
+
+## Technology Stack
+
+### Frontend
+
+- React
+- Vite
+- JavaScript
+- React Router
+- Axios
+- Tailwind CSS
+- Lucide React
+- Sonner
+- date-fns
+- Vitest
+- React Testing Library
+- ESLint
+
+### Backend
+
+- Node.js
+- Express
+- JavaScript ES Modules
+- MySQL
+- Sequelize
+- JWT
+- HTTP-only Cookies
+- bcrypt
+- Express Validator
+- Helmet
+- CORS
+- Multer
+- Cloudinary
+- Brevo Transactional Email API
+- Jest
+- Supertest
+- ESLint
+
+### Development and Deployment
+
+- Git
+- GitHub
+- GitHub Actions
+- Vercel
+- Render
+- MySQL
+- Cloudinary
+- Brevo
+
+## Repository Structure
+
+```text
+Job-Recruitment-And-Application-Management-System/
+|-- .github/
+|   `-- workflows/
+|-- client/
+|   |-- src/
+|   |-- README.md
+|   `-- vercel.json
+|-- docs/
+|   `-- screenshots/
+|-- server/
+|   |-- src/
+|   `-- README.md
+`-- README.md
+```
+
+### Frontend
+
+The React/Vite frontend is located in:
 
 ```text
 client/
 ```
-
-The frontend is fully implemented and integrated with the CareerForge backend REST API.
 
 Frontend documentation:
 
@@ -436,54 +225,172 @@ Frontend documentation:
 client/README.md
 ```
 
----
+### Backend
 
-## Backend
-
-The backend application is located in:
+The Node.js/Express backend is located in:
 
 ```text
 server/
 ```
 
-For backend-specific installation, environment configuration, database migrations, testing, API documentation, and technical details, see:
+Backend documentation:
 
 ```text
 server/README.md
 ```
 
----
+Additional backend API and technical documentation is available in:
+
+```text
+server/src/docs/
+```
+
+### CI/CD
+
+GitHub Actions workflows are located in:
+
+```text
+.github/workflows/
+```
+
+## Application Architecture
+
+CareerForge follows a client-server architecture.
+
+```text
+Browser
+   |
+   v
+React / Vite Frontend
+   |
+   v
+Axios
+   |
+   v
+Express REST API
+   |
+   v
+Controllers
+   |
+   v
+Services
+   |
+   v
+Repositories
+   |
+   v
+Sequelize
+   |
+   v
+MySQL
+```
+
+External services are used for file storage and transactional email:
+
+```text
+CareerForge Backend
+       |
+       |-- Cloudinary -> File and image storage
+       |
+       `-- Brevo -> Transactional email
+```
+
+## Authentication and Security
+
+CareerForge includes authentication and security features across the frontend and backend.
+
+Important security features include:
+
+- Password hashing
+- JWT access-token authentication
+- HTTP-only refresh-token cookies
+- Secure production cookies
+- Role-based authorization
+- Resource ownership validation
+- Protected frontend routes
+- Request validation
+- CORS protection
+- Trusted-origin validation
+- Rate limiting
+- Session management
+- Session revocation
+- Helmet security headers
+- Administrative audit logging
+- Production-safe error handling
+- Environment-based secrets
+
+Refresh tokens are handled through secure HTTP-only cookies and are not manually stored in frontend `localStorage` or `sessionStorage`.
+
+Real passwords, database credentials, JWT secrets, API keys, tokens, and other private configuration must never be committed to Git.
+
+## Database
+
+CareerForge uses MySQL with Sequelize.
+
+Database schema changes are managed through Sequelize migrations.
+
+Development migrations:
+
+```bash
+npm run db:migrate
+```
+
+Test database migrations:
+
+```bash
+npm run db:migrate:test
+```
+
+Development and test environments use separate database configuration.
+
+## File Uploads
+
+CareerForge uses Multer and Cloudinary for applicable file and image upload workflows.
+
+Supported functionality includes:
+
+- Profile images
+- Resumes
+- Documents
+
+Cloudinary credentials are stored through environment configuration and remain outside source control.
+
+## Transactional Email
+
+CareerForge uses the Brevo Transactional Email API.
+
+Email functionality is used for supported account workflows such as:
+
+- Email verification
+- Password-related communication
+- Other authentication-related notifications
+
+Brevo credentials remain outside source control.
 
 ## Local Development
 
 ### Prerequisites
 
-Ensure the required local development environment is available:
+Install:
 
-* Node.js
-* npm
-* MySQL
-* Git
+- Node.js
+- npm
+- MySQL
+- Git
 
-External services must also be configured when testing functionality that depends on them.
-
----
-
-## Clone the Repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/chandu7000/Job-Recruitment-And-Application-Management-System.git
 ```
 
-Enter the repository:
+Enter the project:
 
 ```bash
 cd "Job-Recruitment-And-Application-Management-System"
 ```
 
----
-
-## Backend Setup
+### 2. Backend Setup
 
 Enter the backend directory:
 
@@ -497,31 +404,35 @@ Install dependencies:
 npm ci
 ```
 
-Use the backend environment template:
+Use:
 
 ```text
-server/.env.example
+.env.example
 ```
 
-Configure the required local environment variables and database connection.
+as the reference for local environment configuration.
 
-Run the required database migrations.
+Create the development and test databases and run the required migrations.
 
-Start the backend development server:
+Start the backend:
 
 ```bash
 npm run dev
 ```
 
-For complete backend setup information, see:
+The default local backend URL is:
+
+```text
+http://localhost:5000
+```
+
+For detailed backend setup instructions, see:
 
 ```text
 server/README.md
 ```
 
----
-
-## Frontend Setup
+### 3. Frontend Setup
 
 From the repository root:
 
@@ -535,141 +446,86 @@ Install dependencies:
 npm ci
 ```
 
-Use the frontend environment template:
+Use:
 
 ```text
-client/.env.example
+.env.example
 ```
 
-Start the frontend development server:
+as the reference for frontend environment configuration.
+
+Start the frontend:
 
 ```bash
 npm run dev
 ```
 
----
+For detailed frontend information, see:
+
+```text
+client/README.md
+```
 
 ## Environment Configuration
 
 Environment-specific configuration must remain outside source control.
 
-Secret-free templates:
+The project provides secret-free examples:
 
 ```text
 client/.env.example
 server/.env.example
 ```
 
-### Frontend Environment
-
-The frontend uses:
+The frontend API URL is configured using:
 
 ```text
 VITE_API_BASE_URL
 ```
 
-to configure the CareerForge API base URL.
+Backend environment configuration includes database settings, authentication secrets, cookies, frontend origins, Cloudinary, and Brevo.
 
-### Backend Environment
-
-Backend environment variable names and configuration requirements are documented through:
-
-```text
-server/.env.example
-```
-
-and:
+Detailed backend environment documentation is available in:
 
 ```text
 server/src/docs/ENVIRONMENT_VARIABLES.md
 ```
 
-Real passwords, JWT secrets, database credentials, API keys, Cloudinary credentials, Brevo credentials, and other private configuration must never be committed to Git.
+## Testing
 
----
+CareerForge contains automated frontend and backend tests.
 
-## Frontend Commands
+### Frontend
 
-Run frontend commands from:
-
-```text
-client/
-```
-
-### Development
-
-```bash
-npm run dev
-```
-
-### ESLint
-
-```bash
-npm run lint
-```
-
-### Automated Tests
-
-```bash
-npm test
-```
-
-### Production Build
-
-```bash
-npm run build
-```
-
----
-
-## Backend Commands
-
-Run backend commands from:
-
-```text
-server/
-```
-
-### Development
-
-```bash
-npm run dev
-```
-
-### Automated Tests
-
-```bash
-npm test
-```
-
-### ESLint
-
-```bash
-npm run lint
-```
-
-Database migration and seed commands are available through the backend package scripts.
-
----
-
-## Automated Testing
-
-CareerForge contains comprehensive frontend and backend automated test suites.
-
-### Frontend Quality Gate
-
-Established frontend verification:
+Current verified frontend result:
 
 ```text
 59/59 test files passed
 225/225 tests passed
 ESLint passed
-Production Vite build passed
+Production build passed
 ```
 
-### Backend Quality Gate
+Frontend tests cover areas such as:
 
-Established backend verification:
+- Authentication
+- Routing
+- Route guards
+- Public jobs
+- Job seeker workflows
+- Recruiter workflows
+- Applications
+- Interviews
+- Notifications
+- Administrator functionality
+- Validation
+- API integration
+- Responsive navigation
+- Accessibility behavior
+
+### Backend
+
+Current verified backend result:
 
 ```text
 107/107 test suites passed
@@ -677,261 +533,64 @@ Established backend verification:
 ESLint passed
 ```
 
-Testing covers areas including:
+Backend tests cover areas such as:
 
-* Authentication
-* Authorization
-* Session behavior
-* Routing
-* Route guards
-* Public jobs
-* Job-seeker workflows
-* Recruiter workflows
-* Administrator workflows
-* Applications
-* Saved jobs
-* Interviews
-* Notifications
-* Validation
-* API integration
-* Business rules
-* Security behavior
-* Administrative moderation
+- Authentication
+- Authorization
+- Session behavior
+- Jobs
+- Companies
+- Applications
+- Saved jobs
+- Interviews
+- Notifications
+- Recruiter functionality
+- Administrator functionality
+- Validation
+- Security behavior
+- API behavior
+- Business rules
 
----
+## Quality Commands
 
-## Continuous Integration
+### Frontend
 
-CareerForge uses GitHub Actions for continuous integration.
+Run from `client/`:
 
-Frontend CI workflow:
-
-```text
-.github/workflows/frontend-ci.yml
+```bash
+npm run lint
+npm test
+npm run build
 ```
 
-The frontend CI pipeline performs:
+### Backend
 
-```text
-Dependency Installation
-        |
-        v
-ESLint
-        |
-        v
-Automated Tests
-        |
-        v
-Production Build
+Run from `server/`:
+
+```bash
+npm run lint
+npm test
 ```
 
-Frontend CI runs for:
+## CI/CD
 
-* Pushes to `main`
-* Pull requests targeting `main`
+CareerForge uses GitHub Actions for automated code validation.
 
-The repository also contains backend CI validation.
+The CI process checks areas such as:
 
-A healthy frontend GitHub Actions run has been successfully verified against the stable `main` branch.
+- Dependency installation
+- ESLint
+- Automated tests
+- Frontend production build
 
----
+The workflows run against the GitHub repository and help verify changes before or during integration with the `main` branch.
 
-## Production Deployment
+The production application is connected to the `main` branch for deployment.
 
-### Frontend Deployment
-
-Platform:
-
-**Vercel**
-
-Production URL:
+High-level flow:
 
 ```text
-https://job-recruitment-and-application-man.vercel.app
-```
-
-The Vercel Production environment tracks:
-
-```text
-main
-```
-
-Frontend production configuration uses:
-
-```text
-VITE_API_BASE_URL
-```
-
-SPA routing is configured through:
-
-```text
-client/vercel.json
-```
-
-This allows direct browser navigation and refreshes on frontend application routes.
-
-### Backend Deployment
-
-Platform:
-
-**Render**
-
-Production URL:
-
-```text
-https://job-recruitment-and-application.onrender.com
-```
-
-Production backend configuration includes:
-
-* MySQL connectivity
-* Approved frontend-origin CORS handling
-* HTTPS
-* Secure authentication cookies
-* Cloudinary integration
-* Brevo transactional email
-* Production logging
-* Health checks
-* Readiness checks
-
----
-
-## Production Verification
-
-The deployed CareerForge application has been manually verified across important production workflows.
-
-Verification includes:
-
-* Frontend loading
-* Frontend/backend communication
-* SPA route refresh
-* CORS
-* HTTPS
-* Secure refresh cookies
-* `SameSite=None`
-* Session restoration
-* Login
-* Logout
-* Role-based access
-* Invalid credential handling
-* Profile image upload
-* Resume upload
-* Resume preview/download
-* Upload persistence
-* Transactional email
-* Public jobs
-* Search
-* Filters
-* Pagination
-* Job details
-* Company information
-* Saved jobs
-* Applications
-* Duplicate-application handling
-* Application tracking
-* Application withdrawal
-* Interview scheduling
-* Candidate interview actions
-* Interview rescheduling
-* Interview history
-* Recruiter workflows
-* Notifications
-* Administrative moderation
-* Error handling
-* Responsive UI
-* Multi-tab session isolation verified for simultaneous Admin, Recruiter, and Job Seeker sessions in the same browser
-
----
-
-## API Documentation
-
-Backend API and technical documentation is maintained under:
-
-```text
-server/src/docs/
-```
-
-Important documents include:
-
-* `API.md`
-* `API_CONTRACT.md`
-* `ARCHITECTURE.md`
-* `ENDPOINT_INVENTORY.md`
-* `ENVIRONMENT_VARIABLES.md`
-* `FRONTEND_API_HANDOFF.md`
-* `MODEL_INVENTORY.md`
-* `PRODUCTION_CONFIGURATION.md`
-* `TEST-DATA-STRATEGY.md`
-* `TESTING.md`
-
-## API Handover
-
-CareerForge does not maintain a separate Postman collection as the primary API handover artifact.
-
-The backend API handover is maintained through the repository's version-controlled documentation:
-
-```text
-server/src/docs/API.md
-server/src/docs/API_CONTRACT.md
-server/src/docs/ENDPOINT_INVENTORY.md
-server/src/docs/FRONTEND_API_HANDOFF.md
-server/src/docs/ENVIRONMENT_VARIABLES.md
-
----
-
-## API Contract
-
-The CareerForge backend API contract is established and integrated with the production frontend.
-
-Frontend functionality follows the existing backend:
-
-* Routes
-* Request formats
-* Response formats
-* Authentication requirements
-* Authorization rules
-* Pagination behavior
-* Business rules
-
-Established backend contracts should not be changed unnecessarily.
-
----
-
-## File Storage
-
-CareerForge uses **Cloudinary** for applicable file and image storage.
-
-This includes functionality such as:
-
-* Profile images
-* Resumes/documents
-
-Cloudinary credentials are maintained through secure environment configuration.
-
----
-
-## Transactional Email
-
-CareerForge uses **Brevo** for transactional email functionality.
-
-Email-related authentication and account workflows use the configured Brevo integration.
-
-Brevo credentials remain outside source control.
-
----
-
-## CI/CD Flow
-
-The stable production branch is:
-
-```text
-main
-```
-
-High-level delivery flow:
-
-```text
-Development
+Code Changes
      |
      v
 Git Commit
@@ -945,124 +604,250 @@ GitHub Actions
      v
 Validated main
      |
-     +-------------------+
-     |                   |
-     v                   v
-   Vercel              Render
-  Frontend             Backend
+     +----------------+
+     |                |
+     v                v
+  Vercel            Render
+ Frontend           Backend
 ```
 
----
-
-## Documentation
-
-Project documentation is maintained across:
-
-```text
-README.md
-client/README.md
-server/README.md
-server/src/docs/
-```
-
-These resources provide project-level, frontend, backend, API, architecture, environment, testing, security, and production documentation.
-
----
-
-## Known Non-Blocking Limitation
-
-The current frontend production build may report a Vite warning that the primary JavaScript bundle exceeds **500 kB after minification**.
-
-This is currently considered a performance optimization opportunity rather than a functional or deployment blocker.
-
----
-
-## Future Improvements
-
-The following improvements are optional future enhancements and are not required for the completed CareerForge application:
-
-- Frontend bundle splitting and lazy-loading optimization
-- Additional accessibility auditing
-- End-to-end browser automation
-- Expanded production monitoring and observability
-- Additional performance optimization
-- Expanded reporting and analytics
-- Automated visual-regression testing
-- Further UI/UX refinements based on user feedback
-
-These improvements are intentionally separate from the completed project requirements and do not represent current functional or deployment blockers.
-
-## Project Status
-
-* Backend implementation — Complete
-* Frontend implementation — Complete
-* Authentication and authorization — Complete
-* Public job discovery — Complete
-* Job-seeker workflows — Complete
-* Recruiter workflows — Complete
-* Administrator workflows — Complete
-* Company management — Complete
-* Job management — Complete
-* Applications and saved jobs — Complete
-* Interview management — Complete
-* Notifications — Complete
-* Reporting and moderation — Complete
-* File uploads — Complete
-* Transactional email — Complete
-* Frontend automated testing — Complete
-* Backend automated testing — Complete
-* Frontend production build — Complete
-* Frontend production deployment — Complete
-* Backend production deployment — Complete
-* Production frontend/backend integration — Complete
-* Frontend CI/CD — Complete
-* Backend CI/CD — Complete
-* API contract — Frozen
-* Final documentation — Complete
-* Final handover — Complete
-
----
-
-## Production URLs
+## Production Deployment
 
 ### Frontend
+
+Platform:
+
+```text
+Vercel
+```
+
+Production application:
 
 ```text
 https://job-recruitment-and-application-man.vercel.app
 ```
 
+The frontend uses environment-based configuration to communicate with the production backend.
+
+SPA routing is configured using:
+
+```text
+client/vercel.json
+```
+
 ### Backend
+
+Platform:
+
+```text
+Render
+```
+
+Production backend:
 
 ```text
 https://job-recruitment-and-application.onrender.com
 ```
 
-### Backend Health
+Health endpoint:
 
 ```text
 https://job-recruitment-and-application.onrender.com/api/health
 ```
 
-### Backend Readiness
+Readiness endpoint:
 
 ```text
 https://job-recruitment-and-application.onrender.com/api/health/ready
 ```
 
----
+Production configuration includes:
+
+- HTTPS
+- MySQL connectivity
+- CORS configuration
+- Secure authentication cookies
+- Environment-based secrets
+- Cloudinary
+- Brevo
+- Production logging
+- Health and readiness checks
+
+## Production Verification
+
+The deployed application has been manually checked across important workflows.
+
+Verified areas include:
+
+- Frontend loading
+- Frontend and backend communication
+- Login and logout
+- Session restoration
+- Role-based access
+- Protected routes
+- Invalid credential handling
+- Public jobs
+- Search and filters
+- Pagination
+- Job details
+- Company information
+- Profile management
+- Profile image upload
+- Resume and document upload
+- Saved jobs
+- Job applications
+- Application tracking
+- Application withdrawal
+- Interview scheduling
+- Candidate interview actions
+- Interview rescheduling
+- Recruiter workflows
+- Notifications
+- Administrator workflows
+- File persistence
+- Transactional email
+- CORS
+- HTTPS
+- Secure authentication cookies
+- Responsive UI
+- Multi-tab session behavior
+
+## API Documentation
+
+Backend API and technical documentation is available in:
+
+```text
+server/src/docs/
+```
+
+Important files include:
+
+```text
+API.md
+API_CONTRACT.md
+ARCHITECTURE.md
+ENDPOINT_INVENTORY.md
+ENVIRONMENT_VARIABLES.md
+FRONTEND_API_HANDOFF.md
+MODEL_INVENTORY.md
+PRODUCTION_CONFIGURATION.md
+TEST-DATA-STRATEGY.md
+TESTING.md
+```
+
+The API documentation covers routes, request and response formats, authentication, authorization, validation, pagination, and important business rules.
+
+## Known Limitation
+
+The current frontend production build may show a Vite warning because the main JavaScript bundle is larger than 500 kB after minification.
+
+This does not prevent the application from building or running successfully.
+
+Bundle splitting and lazy loading can be considered as future performance improvements.
+
+## Future Improvements
+
+Possible future improvements include:
+
+- Frontend bundle splitting
+- Lazy loading
+- Additional accessibility testing
+- End-to-end browser testing
+- Additional production monitoring
+- Performance optimization
+- Expanded analytics and reporting
+- Visual regression testing
+- Further UI/UX improvements
+
+These are optional improvements and are not required for the current planned project scope.
+
+## Project Status
+
+CareerForge is complete for the planned project scope.
+
+Completed areas include:
+
+- Backend implementation
+- Frontend implementation
+- Database integration
+- Authentication and authorization
+- Public job discovery
+- Job seeker workflows
+- Recruiter workflows
+- Administrator workflows
+- Company management
+- Job management
+- Applications and saved jobs
+- Interview management
+- Notifications
+- Reporting and moderation
+- File uploads
+- Transactional email
+- Frontend automated testing
+- Backend automated testing
+- Frontend production build
+- Frontend production deployment
+- Backend production deployment
+- Frontend and backend production integration
+- CI/CD
+- API integration
+- Documentation
+- Production verification
+
+## Related Documentation
+
+Frontend documentation:
+
+```text
+client/README.md
+```
+
+Backend documentation:
+
+```text
+server/README.md
+```
+
+Additional backend documentation:
+
+```text
+server/src/docs/
+```
+
+## About This Project
+
+CareerForge was built as a full-stack portfolio project to apply and demonstrate practical software development concepts.
+
+The project demonstrates experience with:
+
+- React frontend development
+- Node.js and Express backend development
+- REST API development and integration
+- MySQL and Sequelize
+- Authentication and authorization
+- Role-based application workflows
+- File uploads
+- Transactional email
+- Automated testing
+- Security practices
+- Git and GitHub
+- CI/CD
+- Production deployment
+
+The project is intended to demonstrate skills relevant to **entry-level and junior full-stack or backend software development roles**.
 
 ## Security Notice
 
 Never commit:
 
-* Production passwords
-* Database credentials
-* JWT secrets
-* Cloudinary credentials
-* Brevo credentials
-* Private API keys
-* Access tokens
-* Refresh tokens
-* Other sensitive production configuration
+- Production passwords
+- Database credentials
+- JWT secrets
+- Cloudinary credentials
+- Brevo credentials
+- Private API keys
+- Access tokens
+- Refresh tokens
+- Other sensitive production configuration
 
-Use the provided `.env.example` files as secret-free configuration references and maintain real values through secure local or deployment-platform environment settings.
+Use the provided `.env.example` files as references and keep real configuration in local or deployment-platform environment settings.
